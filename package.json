@@ -1,0 +1,13 @@
+{
+  "name": "base",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "clientUpsertPackages": "cd ./client && npm i",
+    "clientDev": "cd ./client && npm run dev",
+    "serverUpsertPackages": "cd ./server && npm i",
+    "serverDev": "cd ./server && npm run dev",
+    "serverSeed": "cd ./server && npx prisma db seed",
+    "init": "node ./utility/populateImagesAndEnv.js && npm run clientUpsertPackages && npm run serverUpsertPackages && npm run serverSeed"
+  }
+}
