@@ -6,10 +6,50 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @unique @default(uuid())
+  username  String   @unique
+  password  String
+  online    Boolean
+  createdAt DateTime @default(now())
+
+  userId  String
+  user    User   @relation("UserFriends", fields: [userId], references: [id])
+  friends User[] @relation("UserFriends")
+
+  messageAuthor Message? @relation("AuthorMessage")
+
+  messageRecipient   Message? @relation("RecipientMessage", fields: [messageRecipientId], references: [id])
+  messageRecipientId String?
+
+  roomOwner          Room[] @relation("OwnerUser")
+  participatingRooms Room[] @relation("ParticipatingRooms")
+}
+
+model Message {
+  id           String   @id @default(uuid())
+  text         String
+  createdAt    DateTime @default(now())
+  groupMessage Boolean  @default(false)
+
+  author   User   @relation("AuthorMessage", fields: [authorId], references: [id])
+  authorId String @unique
+
+  recipient   User[] @relation("RecipientMessage")
+  recipientId String
+}
+
+model Room {
+  id          String   @id @default(uuid())
+  createdAt   DateTime @default(now())
+  ownerId     String
+  owner       User     @relation("OwnerUser", fields: [ownerId], references: [id])
+  participant User[]   @relation("ParticipatingRooms")
 }
