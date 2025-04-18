@@ -1,10 +1,11 @@
 import styles from "./App.module.css";
 import { Outlet } from "react-router-dom";
+import NavigationMenu from "./components/NavigationMenu";
 
 function App() {
   return (
     <>
-      <p className={styles["p-test"]}>Hello world!</p>
+    <NavigationMenu />
       <Outlet />
     </>
   );
