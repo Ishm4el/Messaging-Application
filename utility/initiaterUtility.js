@@ -7,7 +7,7 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
-const envGenerator = async () => {
+export const envGenerator = async () => {
   const port = await rl.question("Enter Port (enter blank for 3000): ");
   const jwtSecretKey = await rl.question(
     "Enter Secret Key (enter blank for 'secret'): "
@@ -49,5 +49,3 @@ const envGenerator = async () => {
     `${portString}\n${jwtSecretKeyString}\n${dbURLString}`
   );
 };
-
-module.export = { envGenerator };

@@ -8,7 +8,13 @@ const routes: RouteObject[] = [
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    children: [{ index: true, element: <Home /> }],
+    children: [
+      { index: true, element: <Home /> },
+      { path: "sign_up" },
+      { path: "friends" },
+      { path: "profile" },
+      { path: "sign_out" },
+    ],
   },
 ];
 

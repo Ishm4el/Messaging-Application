@@ -38,5 +38,5 @@
 .right a:hover,
 .right a:active {
   text-decoration: underline;
-  color: hsl(var(--color2), 100%, 70%);
+  color: hsl(var(--color3), 100%, 70%);
 }

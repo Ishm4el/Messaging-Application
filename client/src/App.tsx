@@ -3,15 +3,22 @@ import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
 
 const addresses: { title: string; address: string }[] = [
-  { title: "Home", address: "/home" },
+  { title: "Home", address: "/" },
+  { title: "Sign Up", address: "/sign_up" },
+];
+
+const addressesUser: { title: string; address: string }[] = [
+  { title: "braid", address: "/braid" },
+  { title: "Friends", address: "/friends" },
   { title: "Profile", address: "/profile" },
+  { title: "Sign Out", address: "/sign_out" },
 ];
 
 const websiteTitle: {
   title: string;
   svgLink: string;
   homeRoute: string;
-} = { title: "Braid", homeRoute: "/home", svgLink: "" };
+} = { title: "Braid", homeRoute: "/", svgLink: "" };
 
 function App() {
   return (
