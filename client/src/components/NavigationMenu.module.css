@@ -1,0 +1,42 @@
+.nav {
+  display: flex;
+  justify-content: space-around;
+  background-color: black;
+  color: hsl(var(--color1), 100%, 50%);
+}
+
+.left {
+  display: flex;
+  gap: 10px;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
+}
+
+.right {
+  flex: 1;
+}
+.right ul {
+  list-style-type: none;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+}
+
+.right a {
+  list-style: none;
+  text-decoration: none;
+  color: hsl(var(--color1), 100%, 50%);
+}
+
+.right a:visited {
+  text-decoration: none;
+}
+
+.right a:hover,
+.right a:active {
+  text-decoration: underline;
+  color: hsl(var(--color2), 100%, 70%);
+}

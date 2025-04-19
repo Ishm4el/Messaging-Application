@@ -37,9 +37,11 @@ function WebsiteTitle({
 
 function PrintLink({ title, address }: { title: string; address: string }) {
   return (
-    <Link to={address} className={styles["navigation-link"]}>
-      {title}
-    </Link>
+    <li>
+      <Link to={address} className={styles["navigation-link"]}>
+        {title}
+      </Link>
+    </li>
   );
 }
 
@@ -60,9 +62,11 @@ export default function NavigationMenu({
         />
       </div>
       <div className={styles["right"]}>
-        {addresses.map((link) => (
-          <PrintLink title={link.title} address={link.address} />
-        ))}
+        <ul>
+          {addresses.map((link) => (
+            <PrintLink title={link.title} address={link.address} />
+          ))}
+        </ul>
       </div>
     </nav>
   );
