@@ -53,3 +53,10 @@ model Room {
   owner       User     @relation("OwnerUser", fields: [ownerId], references: [id])
   participant User[]   @relation("ParticipatingRooms")
 }
+
+model Session {
+  id        String   @id
+  sid       String   @unique
+  data      String
+  expiresAt DateTime
+}
