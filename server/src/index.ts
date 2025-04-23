@@ -3,17 +3,58 @@ import dotevn from "dotenv";
 import cors from "cors";
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import prisma from "../prisma/prisma";
+import prisma, { PrismaClient } from "../prisma/prisma";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import routerAuthorization from "./routes/routesAuthorization";
+import bcrypt from "bcryptjs";
 
-// import routers
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+    }
+  }
+}
 
 dotevn.config({ path: "../.env" });
 const app: Express = express();
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET_KEY || "secret";
+
+passport.use(
+  new Strategy(async (username, password, done) => {
+    try {
+      const rows = await prisma.user.findUnique({
+        where: { username: username },
+      });
+
+      if (!rows) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+      const match = await bcrypt.compare(password, rows.password);
+      if (!match) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+      return done(null, rows);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const rows = await prisma.user.findUnique({ where: { id: id } });
+    done(null, rows);
+  } catch (err) {
+    done(err);
+  }
+});
 
 app.use(cors());
 app.use(express.json());
