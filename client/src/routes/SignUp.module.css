@@ -1,0 +1,17 @@
+.main {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  background-color: azure;
+  padding: 5dvh 0 10dvh;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: lavender;
+  width: 50dvw;
+}

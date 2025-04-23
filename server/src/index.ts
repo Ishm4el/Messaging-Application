@@ -6,6 +6,7 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import prisma from "../prisma/prisma";
 import passport from "passport";
 import { Strategy } from "passport-local";
+import routerAuthorization from "./routes/routesAuthorization";
 
 // import routers
 
@@ -34,6 +35,7 @@ app.use(
 app.use(passport.session());
 
 // use routers
+app.use("/authorization", routerAuthorization);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);
