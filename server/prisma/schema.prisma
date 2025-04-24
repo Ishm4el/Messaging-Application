@@ -21,7 +21,7 @@ model User {
   online    Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  userId  String
+  userId  String?
   user    User?  @relation("UserFriends", fields: [userId], references: [id])
   friends User[] @relation("UserFriends")
 
