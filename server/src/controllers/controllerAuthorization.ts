@@ -38,7 +38,7 @@ const logout = (req: Request, res: Response, next: NextFunction) => {
     if (err) {
       return next(err);
     }
-    res.json({message: "logout success!"})
+    res.json({res: "logout success!"})
   })
 }
 
