@@ -5,6 +5,7 @@ import NavigationMenu from "./components/NavigationMenu";
 const addresses: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
   { title: "Sign Up", address: "/sign_up" },
+  { title: "Log In", address: "/log_in" },
 ];
 
 const addressesUser: { title: string; address: string }[] = [

@@ -1,4 +1,4 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 import dotevn from "dotenv";
 import cors from "cors";
 import expressSession from "express-session";
@@ -22,40 +22,6 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET_KEY || "secret";
 
-passport.use(
-  new Strategy(async (username, password, done) => {
-    try {
-      const rows = await prisma.user.findUnique({
-        where: { username: username },
-      });
-
-      if (!rows) {
-        return done(null, false, { message: "Incorrect username" });
-      }
-      const match = await bcrypt.compare(password, rows.password);
-      if (!match) {
-        return done(null, false, { message: "Incorrect password" });
-      }
-      return done(null, rows);
-    } catch (err) {
-      return done(err);
-    }
-  })
-);
-
-passport.serializeUser((user, done) => {
-  done(null, user.id);
-});
-
-passport.deserializeUser(async (id: string, done) => {
-  try {
-    const rows = await prisma.user.findUnique({ where: { id: id } });
-    done(null, rows);
-  } catch (err) {
-    done(err);
-  }
-});
-
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -75,8 +41,50 @@ app.use(
 );
 app.use(passport.session());
 
+passport.use(
+  new Strategy(async (username, password, done) => {
+    console.log("[passport]: in the use method");
+    try {
+      const user = await prisma.user.findUnique({
+        where: { username: username },
+      });
+
+      if (!user) {
+        return done(null, false, { message: "Incorrect username" });
+      }
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) {
+        return done(null, false, { message: "Incorrect password" });
+      }
+
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  })
+);
+
+passport.serializeUser((user, done) => {
+  done(null, user.id);
+});
+
+passport.deserializeUser(async (id: string, done) => {
+  try {
+    const rows = await prisma.user.findUnique({ where: { id: id } });
+    done(null, rows);
+  } catch (err) {
+    done(err);
+  }
+});
+
 // use routers
 app.use("/authorization", routerAuthorization);
+
+app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
+  console.log(err);
+  res.status(500).json({ message: err.message });
+});
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

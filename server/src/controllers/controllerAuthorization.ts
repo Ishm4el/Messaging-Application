@@ -1,4 +1,4 @@
-import { Request, RequestHandler, Response } from "express";
+import { NextFunction, Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
@@ -33,4 +33,13 @@ const signUp: RequestHandler = asyncHandler(
   }
 );
 
-export { signUp };
+const logout = (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.json({message: "logout success!"})
+  })
+}
+
+export { signUp, logout };

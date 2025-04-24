@@ -3,6 +3,7 @@ import type { RouteObject } from "react-router-dom";
 import ErrorPage from "./ErrorPage";
 import Home from "./routes/Home";
 import SignUp from "./routes/SignUp";
+import LogIn from "./routes/LogIn";
 
 const routes: RouteObject[] = [
   {
@@ -12,6 +13,7 @@ const routes: RouteObject[] = [
     children: [
       { index: true, element: <Home /> },
       { path: "sign_up", element: <SignUp /> },
+      { path: "log_in", element: <LogIn /> },
       { path: "friends" },
       { path: "profile" },
       { path: "sign_out" },
