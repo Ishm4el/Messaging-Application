@@ -1,25 +1,42 @@
 import styles from "./LogIn.module.css";
+import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 export default function LogIn() {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   return (
     <main className={styles["main"]}>
       <h1 className={styles["header"]}>Logging In</h1>
       <form
         className={styles["form"]}
-        onSubmit={(event) => {
+        onSubmit={async (event) => {
           event.preventDefault();
-          alert(email + " " + password);
+          // alert(email + " " + password);
+          const response = await fetch(
+            "http://localhost:3000/authorization/log_in",
+            {
+              method: "POST",
+              mode: "cors",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ username, password }),
+            }
+          );
+          const status = response.status;
+          // const res = await response.json();
+          console.log(response);
+          if (status === 200) {
+            navigate("/");
+          }
         }}
       >
-        <label htmlFor="email">email</label>
+        <label htmlFor="username">Username</label>
         <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Email"
-          onChange={(event) => setEmail(event.target.value)}
+          type="username"
+          name="username"
+          id="username"
+          placeholder="Username"
+          onChange={(event) => setUsername(event.target.value)}
         />
         <label htmlFor="password">Password</label>
         <input

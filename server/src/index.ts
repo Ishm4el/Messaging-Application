@@ -44,6 +44,7 @@ app.use(passport.session());
 passport.use(
   new Strategy(async (username, password, done) => {
     console.log("[passport]: in the use method");
+    console.log(username, " ", password);
     try {
       const user = await prisma.user.findUnique({
         where: { username: username },
