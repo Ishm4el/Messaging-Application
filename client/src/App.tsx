@@ -9,7 +9,8 @@ const addresses: { title: string; address: string }[] = [
 ];
 
 const addressesUser: { title: string; address: string }[] = [
-  { title: "braid", address: "/braid" },
+  { title: "Home", address: "/" },
+  { title: "Braid", address: "/braid" },
   { title: "Friends", address: "/friends" },
   { title: "Profile", address: "/profile" },
   { title: "Sign Out", address: "/sign_out" },
@@ -24,7 +25,10 @@ const websiteTitle: {
 function App() {
   return (
     <>
-      <NavigationMenu addresses={addresses} websiteTitle={websiteTitle} />
+      <NavigationMenu
+        addresses={localStorage.getItem("username") ? addressesUser : addresses}
+        websiteTitle={websiteTitle}
+      />
       <Outlet />
     </>
   );

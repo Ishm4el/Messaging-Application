@@ -3,7 +3,7 @@ import dotevn from "dotenv";
 import cors from "cors";
 import expressSession from "express-session";
 import { PrismaSessionStore } from "@quixo3/prisma-session-store";
-import prisma, { PrismaClient } from "../prisma/prisma";
+import prisma from "../prisma/prisma";
 import passport from "passport";
 import { Strategy } from "passport-local";
 import routerAuthorization from "./routes/routesAuthorization";

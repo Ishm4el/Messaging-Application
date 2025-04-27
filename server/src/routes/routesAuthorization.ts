@@ -17,6 +17,7 @@ routerAuthorization.post("/log_in", async (req, res, next) => {
           throw Error(err);
         }
       });
+      res.locals.currentUser = user.id;
       res.json(user);
       return;
     }
