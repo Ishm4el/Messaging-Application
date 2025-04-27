@@ -1,6 +1,7 @@
 import styles from "./App.module.css";
 import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
+import mainIcon from "/knot-svgrepo-com.svg";
 
 const addresses: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
@@ -17,16 +18,16 @@ const addressesUser: { title: string; address: string }[] = [
 ];
 
 const websiteTitle: {
-  title: string;
+  title: string;  
   svgLink: string;
   homeRoute: string;
-} = { title: "Braid", homeRoute: "/", svgLink: "" };
+} = { title: "Braid", homeRoute: "/", svgLink: mainIcon };
 
 function App() {
   return (
     <>
       <NavigationMenu
-        addresses={localStorage.getItem("username") ? addressesUser : addresses}
+        addresses={localStorage.username ? addressesUser : addresses}
         websiteTitle={websiteTitle}
       />
       <Outlet />
