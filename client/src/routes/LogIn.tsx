@@ -23,8 +23,15 @@ export default function LogIn() {
             }
           );
           const status = response.status;
-          // const res = await response.json();
+          const res = await response.json();
           console.log(response);
+          console.log(res);
+
+          if (status === 401) {
+            if (res.message === "username") alert("No matching username");
+            if (res.message === "password") alert("Incorrect password");
+          }
+
           if (status === 200) {
             navigate("/");
           }
