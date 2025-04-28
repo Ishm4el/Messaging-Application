@@ -33,6 +33,7 @@ export default function LogIn() {
           }
 
           if (status === 200) {
+            // alert("setting local storage username!");
             localStorage.setItem("username", res.username);
             navigate("/");
           }

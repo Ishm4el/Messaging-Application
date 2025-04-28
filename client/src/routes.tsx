@@ -4,6 +4,7 @@ import ErrorPage from "./ErrorPage";
 import Home from "./routes/Home";
 import SignUp from "./routes/SignUp";
 import LogIn from "./routes/LogIn";
+import Logout from "./routes/Logout";
 
 const routes: RouteObject[] = [
   {
@@ -16,7 +17,7 @@ const routes: RouteObject[] = [
       { path: "log_in", element: <LogIn /> },
       { path: "friends" },
       { path: "profile" },
-      { path: "sign_out" },
+      { path: "logout", element: <Logout /> },
     ],
   },
 ];

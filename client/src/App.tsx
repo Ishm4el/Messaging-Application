@@ -14,7 +14,7 @@ const addressesUser: { title: string; address: string }[] = [
   { title: "Braid", address: "/braid" },
   { title: "Friends", address: "/friends" },
   { title: "Profile", address: "/profile" },
-  { title: "Sign Out", address: "/sign_out" },
+  { title: "Logout", address: "/logout" },
 ];
 
 const websiteTitle: {
