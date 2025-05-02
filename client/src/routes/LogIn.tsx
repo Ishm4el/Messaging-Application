@@ -1,10 +1,13 @@
 import styles from "./LogIn.module.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 export default function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const outProps: {
+    setLogged: React.Dispatch<React.SetStateAction<boolean>>;
+  } = useOutletContext();
   return (
     <main className={styles["main"]}>
       <h1 className={styles["header"]}>Logging In</h1>
@@ -20,21 +23,27 @@ export default function LogIn() {
               mode: "cors",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({ username, password }),
+              credentials: "include",
             }
           );
           const status = response.status;
           const res = await response.json();
+          console.log("finished the login!");
+
           console.log(response);
           console.log(res);
 
-          if (status === 401) {
-            if (res.message === "username") alert("No matching username");
-            if (res.message === "password") alert("Incorrect password");
-          }
+          // if (status === 401) {
+          //   if (res.message === "username") alert("No matching username");
+          //   if (res.message === "password") alert("Incorrect password");
+          // }
 
           if (status === 200) {
             // alert("setting local storage username!");
             localStorage.setItem("username", res.username);
+            // localStorage.setItem("userId", res.userId);
+            // localStorage.setItem("id", res.id);
+            outProps.setLogged(true);
             navigate("/");
           }
         }}

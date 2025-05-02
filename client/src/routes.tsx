@@ -5,6 +5,7 @@ import Home from "./routes/Home";
 import SignUp from "./routes/SignUp";
 import LogIn from "./routes/LogIn";
 import Logout from "./routes/Logout";
+import Test from "./routes/Test";
 
 const routes: RouteObject[] = [
   {
@@ -18,6 +19,7 @@ const routes: RouteObject[] = [
       { path: "friends" },
       { path: "profile" },
       { path: "logout", element: <Logout /> },
+      { path: "Test", element: <Test /> },
     ],
   },
 ];

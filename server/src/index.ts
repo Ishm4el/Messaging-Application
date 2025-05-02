@@ -22,7 +22,14 @@ const app: Express = express();
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET_KEY || "secret";
 
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost4173",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    exposedHeaders: ["Content-Type", "Authorization"],
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -69,12 +76,18 @@ passport.use(
 );
 
 passport.serializeUser((user, done) => {
+  console.log("serializeUser");
+
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id: string, done) => {
+  console.log("deserializeUser");
   try {
-    const rows = await prisma.user.findUnique({ where: { id: id } });
+    const rows = await prisma.user.findUnique({
+      where: { id: id },
+      omit: { password: true },
+    });
     done(null, rows);
   } catch (err) {
     done(err);
