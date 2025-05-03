@@ -34,31 +34,6 @@ const signUp: RequestHandler = asyncHandler(
   }
 );
 
-// const login: RequestHandler = async (req, res, next) => {
-//   console.log("in the login");
-
-//   const myCallback: AuthorizeCallback = (err, user, info) => {
-//     if (err) {
-//       console.error(err);
-//       res.status(409).json({ error: err });
-//       return;
-//     }
-//     if (user) {
-//       req.logIn(user, function (err) {
-//         if (err) {
-//           throw Error(err);
-//         }
-//       });
-//       // res.locals.currentUser = user.id;
-//       res.json(user);
-//       return;
-//     }
-//     res.status(401).json(info);
-//     return;
-//   };
-//   passport.authenticate("local", {}, myCallback)(req, res, next);
-// };
-
 const logout = (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {
     if (err) {
@@ -68,13 +43,36 @@ const logout = (req: Request, res: Response, next: NextFunction) => {
   });
 };
 
-const protectedRoute = asyncHandler(async (req: Request, res: Response) => {
-  console.log("++++++++++++++++++++++++++++++++++++++++++");
-  console.log(req.isAuthenticated());
-  console.log("user: " + JSON.stringify(req.user));
+const loginSuccess: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("done with the auth");
+    console.log(req.isAuthenticated());
+    console.log(req.user);
+    res.json(req.user);
+  }
+);
 
-  console.log(req.session);
-  res.json({ secret: "Cat in the Hat!" });
-});
+declare module "express-session" {
+  interface Session {
+    messages?: Array<String>;
+  }
+}
+const logInFailure: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("[logInFailure] beginning");
+    res.status(401).json({ message: req.session.messages!.pop() });
+  }
+);
 
-export { signUp, logout, protectedRoute };
+const protectedRoute: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    console.log("++++++++++++++++++++++++++++++++++++++++++");
+    console.log(req.isAuthenticated());
+    console.log("user: " + JSON.stringify(req.user));
+
+    console.log(req.session);
+    res.json({ secret: "Cat in the Hat!" });
+  }
+);
+
+export { signUp, logout, loginSuccess, protectedRoute, logInFailure };

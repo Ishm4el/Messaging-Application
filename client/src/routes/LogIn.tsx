@@ -33,16 +33,13 @@ export default function LogIn() {
           console.log(response);
           console.log(res);
 
-          // if (status === 401) {
-          //   if (res.message === "username") alert("No matching username");
-          //   if (res.message === "password") alert("Incorrect password");
-          // }
+          if (status === 401) {
+            if (res.message === "username") alert("No matching username");
+            if (res.message === "password") alert("Incorrect password");
+          }
 
           if (status === 200) {
-            // alert("setting local storage username!");
             localStorage.setItem("username", res.username);
-            // localStorage.setItem("userId", res.userId);
-            // localStorage.setItem("id", res.id);
             outProps.setLogged(true);
             navigate("/");
           }

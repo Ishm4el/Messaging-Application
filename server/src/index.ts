@@ -25,7 +25,7 @@ const secret = process.env.SECRET_KEY || "secret";
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost4173",
+    origin: "http://localhost:4173",
     methods: ["GET", "POST", "PUT", "DELETE"],
     exposedHeaders: ["Content-Type", "Authorization"],
   })
@@ -50,8 +50,8 @@ app.use(passport.session());
 
 passport.use(
   new Strategy(async (username, password, done) => {
-    console.log("[passport]: in the use method");
-    console.log(username, " ", password);
+    // console.log("[passport]: in the use method");
+    // console.log(username, " ", password);
     try {
       const user = await prisma.user.findUnique({
         where: { username: username },
@@ -61,8 +61,6 @@ passport.use(
         return done(null, false, { message: "username" });
       }
 
-      user.userId = user.id;
-
       const match = await bcrypt.compare(password, user.password);
       if (!match) {
         return done(null, false, { message: "password" });
@@ -70,6 +68,7 @@ passport.use(
 
       return done(null, user, { message: "successful authorization!" });
     } catch (err) {
+      console.log("in the err of strategy");
       return done(err);
     }
   })

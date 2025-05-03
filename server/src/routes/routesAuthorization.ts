@@ -7,15 +7,15 @@ const routerAuthorization: Router = Router();
 routerAuthorization.post("/sign_up", controllerAuthorization.signUp);
 routerAuthorization.post(
   "/log_in",
-    passport.authenticate("local", { failureMessage: true }),
-    (req, res) => {
-      console.log("done with the auth");
-      console.log(req.isAuthenticated());
-      console.log(req.user);
-      res.json(req.user);
-    }
-
-  // controllerAuthorization.login
+  passport.authenticate("local", {
+    failureMessage: true,
+    failureRedirect: "/authorization/log_in_failure",
+  }),
+  controllerAuthorization.loginSuccess
+);
+routerAuthorization.get(
+  "/log_in_failure",
+  controllerAuthorization.logInFailure
 );
 routerAuthorization.post("/logout", controllerAuthorization.logout);
 routerAuthorization.get("/protected", controllerAuthorization.protectedRoute);
