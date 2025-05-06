@@ -1,8 +1,7 @@
 import { useEffect } from "react";
-import { useNavigate, useOutletContext } from "react-router-dom";
+import { Navigate, useOutletContext } from "react-router-dom";
 
 export default function Logout() {
-  const navigate = useNavigate();
   const outProps: { setLogged: React.Dispatch<React.SetStateAction<boolean>> } =
     useOutletContext();
   localStorage.clear();
@@ -22,8 +21,7 @@ export default function Logout() {
       })
       .finally(() => {
         outProps.setLogged(false);
-        navigate("/");
       });
   });
-  return <></>;
+  return <Navigate to={"/"} />;
 }

@@ -52,6 +52,7 @@ export default function LogIn() {
           id="username"
           placeholder="Username"
           onChange={(event) => setUsername(event.target.value)}
+          required
         />
         <label htmlFor="password">Password</label>
         <input
@@ -60,6 +61,7 @@ export default function LogIn() {
           id="password"
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
+          required
         />
         <button type="submit">Log In</button>
       </form>

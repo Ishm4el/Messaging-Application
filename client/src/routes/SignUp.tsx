@@ -37,6 +37,7 @@ export default function SignUp() {
           name="userEmail"
           placeholder="Email"
           onChange={(event) => setEmail(event.target.value)}
+          required
         />
         <label htmlFor="username">Username</label>
         <input
@@ -45,6 +46,7 @@ export default function SignUp() {
           name="username"
           placeholder="Username"
           onChange={(event) => setUsername(event.target.value)}
+          required
         />
         <label htmlFor="password">Password</label>
         <input
@@ -53,6 +55,7 @@ export default function SignUp() {
           id="password"
           placeholder="Password"
           onChange={(event) => setPassword(event.target.value)}
+          required
         />
         <button type="submit">Sign Up</button>
       </form>

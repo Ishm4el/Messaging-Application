@@ -13,7 +13,6 @@ const addresses: { title: string; address: string }[] = [
 
 const addressesUser: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
-  { title: "Test", address: "/Test" },
   { title: "Braid", address: "/braid" },
   { title: "Friends", address: "/friends" },
   { title: "Profile", address: "/profile" },
