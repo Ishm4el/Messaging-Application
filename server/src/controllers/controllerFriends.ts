@@ -27,18 +27,17 @@ const findUser: RequestHandler = asyncHandler(
       where: {
         username: { startsWith: search },
         NOT: [
+          // exclude the current user from the search
           { id: req.user!.id },
-          // { requests: { some: { id: { equals: req.user.id } } } },
+          // exclude users who are already friended
+          // { friends: { some: { id: { equals: req.user!.id } } } },
         ],
       },
       select: {
         username: true,
         requests: { where: { id: { equals: req.user!.id } } },
-        // requests: { where: { NOT: { id: req.user.id } } },
       },
     });
-
-    // console.log(foundUsers);
 
     res.status(200).json(foundUsers);
   }

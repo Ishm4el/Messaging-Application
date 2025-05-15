@@ -60,6 +60,7 @@ export default function FriendList() {
     <section className={styles.section}>
       <>
         <search className={styles["friend-list-search"]}>
+          <label htmlFor="filterFriends">Filter Search: </label>
           <input
             type="text"
             name="filterFriends"

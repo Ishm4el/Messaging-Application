@@ -38,9 +38,21 @@ export default function SearchUser() {
             id="seekingUser"
             placeholder="Search Username"
             required
+            value={seekingUser}
             onChange={(event) => setSeekingUser(event.target.value)}
           />
           <button type="submit">Search</button>
+          <div />
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setInitialSearch(false);
+              setFound([]);
+              setSeekingUser("");
+            }}
+          >
+            X
+          </button>
         </form>
       </search>
       {(found.length > 0 && (
