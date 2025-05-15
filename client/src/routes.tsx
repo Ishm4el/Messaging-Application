@@ -5,6 +5,8 @@ import Home from "./routes/Home";
 import SignUp from "./routes/SignUp";
 import LogIn from "./routes/LogIn";
 import Logout from "./routes/Logout";
+import Friends from "./routes/Friends";
+import Test from "./routes/Test";
 
 const routes: RouteObject[] = [
   {
@@ -15,9 +17,10 @@ const routes: RouteObject[] = [
       { index: true, element: <Home /> },
       { path: "sign_up", element: <SignUp /> },
       { path: "log_in", element: <LogIn /> },
-      { path: "friends" },
+      { path: "friends", element: <Friends /> },
       { path: "profile" },
       { path: "logout", element: <Logout /> },
+      { path: "test", element: <Test /> },
     ],
   },
 ];

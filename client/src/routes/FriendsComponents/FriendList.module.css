@@ -1,0 +1,19 @@
+.section {
+  composes: section from "./friendInterface.module.css";
+}
+
+.friend-list {
+  composes: list from "./friendInterface.module.css";
+}
+
+.friend-list-item {
+  composes: list-item from "./friendInterface.module.css";
+  padding: 0.25rem;
+}
+
+.search-user-list-username {
+  composes: list-item-element from "./friendInterface.module.css";
+}
+
+.friend-list-search {
+}

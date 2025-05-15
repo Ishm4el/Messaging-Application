@@ -2,7 +2,6 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
-import passport, { AuthorizeCallback } from "passport";
 
 const signUp: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {

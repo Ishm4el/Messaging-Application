@@ -6,13 +6,15 @@ import { PrismaSessionStore } from "@quixo3/prisma-session-store";
 import prisma from "../prisma/prisma";
 import passport from "passport";
 import { Strategy } from "passport-local";
-import routerAuthorization from "./routes/routesAuthorization";
 import bcrypt from "bcryptjs";
+import routerAuthorization from "./routes/routesAuthorization";
+import routerFriends from "./routes/routesFriends";
 
 declare global {
   namespace Express {
     interface User {
       id: string;
+      username?: string;
     }
   }
 }
@@ -50,11 +52,10 @@ app.use(passport.session());
 
 passport.use(
   new Strategy(async (username, password, done) => {
-    // console.log("[passport]: in the use method");
-    // console.log(username, " ", password);
     try {
       const user = await prisma.user.findUnique({
         where: { username: username },
+        select: { password: true, email: true, id: true },
       });
 
       if (!user) {
@@ -83,11 +84,11 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id: string, done) => {
   console.log("deserializeUser");
   try {
-    const rows = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: id },
-      omit: { password: true },
+      select: { id: true, username: true },
     });
-    done(null, rows);
+    done(null, user);
   } catch (err) {
     done(err);
   }
@@ -95,6 +96,7 @@ passport.deserializeUser(async (id: string, done) => {
 
 // use routers
 app.use("/authorization", routerAuthorization);
+app.use("/friends", routerFriends);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err);

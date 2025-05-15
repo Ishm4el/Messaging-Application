@@ -1,0 +1,40 @@
+.section {
+  display: flex;
+  flex-flow: column;
+  margin: 5dvh 10dvw;
+  padding: 3dvh 6dvw;
+  gap: 3dvh;
+  background-color: hsl(var(--color2), 50%, 85%);
+  border: 1dvh solid hsl(var(--color1), 100%, 30%);
+  border-radius: 10px;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  background-color: hsl(var(--color1), 100%, 70%);
+  border: 0.5dvh solid hsl(var(--color3), 50%, 30%);
+  border-radius: 10px;
+  display: flex;
+  flex-flow: column;
+  gap: 2dvh;
+  padding: 5dvh;
+}
+
+.list-item {
+  border: 1px solid black;
+  border-radius: 10px;
+  background-color: hsl(var(--color1), 100%, 90%);
+  font-size: 1.25rem;
+  display: flex;
+  padding: 0.25rem;
+  align-items: center;
+  &:hover {
+    background-color: hsl(var(--color2), 100%, 90%);
+    user-select: none;
+  }
+}
+
+.list-item-element {
+  flex: 1 1 auto;
+}

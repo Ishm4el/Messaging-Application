@@ -1,0 +1,15 @@
+.search-user-section {
+  composes: section from "./friendInterface.module.css";
+}
+
+.search-user-list {
+  composes: list from "./friendInterface.module.css";
+}
+
+.search-user-list-item {
+  composes: list-item from "./friendInterface.module.css";
+}
+
+.search-user-list-username {
+  composes: list-item-element from "./friendInterface.module.css";
+}

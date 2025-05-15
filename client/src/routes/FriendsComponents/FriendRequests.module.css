@@ -1,0 +1,15 @@
+.friend-request-section {
+  composes: section from "./friendInterface.module.css";
+}
+
+.friend-request-list {
+  composes: list from "./friendInterface.module.css";
+}
+
+.friend-request-list-item {
+  composes: list-item from "./friendInterface.module.css";
+}
+
+.friend-request-list-username {
+  composes: list-item-element from "./friendInterface.module.css";
+}

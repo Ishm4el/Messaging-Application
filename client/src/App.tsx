@@ -9,6 +9,7 @@ const addresses: { title: string; address: string }[] = [
   { title: "Test", address: "/Test" },
   { title: "Sign Up", address: "/sign_up" },
   { title: "Log In", address: "/log_in" },
+  { title: "Test", address: "/test" },
 ];
 
 const addressesUser: { title: string; address: string }[] = [
@@ -17,6 +18,7 @@ const addressesUser: { title: string; address: string }[] = [
   { title: "Friends", address: "/friends" },
   { title: "Profile", address: "/profile" },
   { title: "Logout", address: "/logout" },
+  { title: "Test", address: "/test" },
 ];
 
 const websiteTitle: {

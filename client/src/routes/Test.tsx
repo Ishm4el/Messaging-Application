@@ -7,7 +7,9 @@ export default function Test() {
     fetch("http://localhost:3000/authorization/protected", {
       method: "GET",
       mode: "cors",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+      },
       credentials: "include",
     })
       .then((res) => res.json())
