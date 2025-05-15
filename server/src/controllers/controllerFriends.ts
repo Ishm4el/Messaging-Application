@@ -35,7 +35,16 @@ const findUser: RequestHandler = asyncHandler(
       },
       select: {
         username: true,
-        requests: { where: { id: { equals: req.user!.id } } },
+        requests: {
+          where: { id: { equals: req.user!.id } },
+          select: { username: true },
+          take: 1,
+        },
+        friends: {
+          where: { id: { equals: req.user!.id } },
+          select: { username: true },
+          take: 1,
+        },
       },
     });
 
