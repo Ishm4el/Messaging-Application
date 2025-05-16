@@ -3,21 +3,31 @@ import { useFetchGet } from "../../components/useFetchGet";
 import { useFriendContext } from "../Friends";
 import styles from "./FriendRequests.module.css";
 
+interface Fetched {
+  fetchedData: {
+    [key: string]: any;
+  };
+  setFetchedData: React.Dispatch<any>;
+}
+
+interface HandleClick extends Fetched {
+  link: string;
+  username: string;
+  index: number;
+}
+
+interface FriendRequestButton extends HandleClick {
+  label: string;
+  style: string;
+}
+
 const handleClick = ({
   link,
   username,
   index,
   fetchedData,
   setFetchedData,
-}: {
-  link: string;
-  username: string;
-  index: number;
-  fetchedData: {
-    [key: string]: any;
-  };
-  setFetchedData: React.Dispatch<any>;
-}): void => {
+}: HandleClick): void => {
   fetchPut({
     link,
     body: { username },
@@ -41,15 +51,7 @@ const FriendRequestButton = ({
   link,
   fetchedData,
   setFetchedData,
-}: {
-  index: number;
-  username: string;
-  label: string;
-  style: string;
-  link: string;
-  fetchedData: { [key: string]: any };
-  setFetchedData: React.Dispatch<any>;
-}) => {
+}: FriendRequestButton) => {
   const { setRefreshFriendList, refreshFriendList } = useFriendContext();
   return (
     <button
