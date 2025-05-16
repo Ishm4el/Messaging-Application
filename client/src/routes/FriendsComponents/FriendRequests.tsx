@@ -27,20 +27,23 @@ const handleClick = ({
   index,
   fetchedData,
   setFetchedData,
-}: HandleClick): void => {
-  fetchPut({
-    link,
-    body: { username },
-  })
-    .then((res) => {
-      res.json();
+}: HandleClick): Promise<string> => {
+  return new Promise((res) => {
+    fetchPut({
+      link,
+      body: { username },
     })
-    .then(() => {
-      fetchedData.requests.splice(index, 1);
-      setFetchedData({
-        ...fetchedData,
-      });
-    });
+      .then((res) => {
+        res.json();
+      })
+      .then(() => {
+        fetchedData.requests.splice(index, 1);
+        setFetchedData({
+          ...fetchedData,
+        });
+      })
+      .finally(() => res("done"));
+  });
 };
 
 const FriendRequestButton = ({
@@ -56,15 +59,17 @@ const FriendRequestButton = ({
   return (
     <button
       className={styles[style]}
-      onClick={() => {
+      onClick={async () => {
         handleClick({
           index,
           link,
           username,
           fetchedData,
           setFetchedData,
+        }).then((res) => {
+          console.log(res);
+          if (label === "Accept") setRefreshFriendList(refreshFriendList + 1);
         });
-        if (label === "Accept") setRefreshFriendList({ ...refreshFriendList });
       }}
     >
       {label}

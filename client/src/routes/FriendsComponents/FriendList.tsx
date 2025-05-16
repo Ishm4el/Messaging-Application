@@ -23,15 +23,20 @@ export default function FriendList() {
 
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
   const { friendList, setFriendList, refreshFriendList } = useFriendContext();
-  const { loading, error, fetchedData } = useFetchGet({
-    link: "http://localhost:3000/friends/",
-    dependecy: [refreshFriendList],
-  });
+  const [fetchedData, setFetchedData] = useState<any>(null);
+  const { loading, error } = useFetchGet(
+    {
+      link: "http://localhost:3000/friends/",
+      dependecy: [refreshFriendList],
+    },
+    setFetchedData
+  );
 
   useEffect(() => {
     console.log("in use effect again!");
+    console.log(JSON.stringify(fetchedData));
 
-    if (loading === false) {
+    if (loading === false && typeof fetchedData === "object") {
       const friends: { username: string }[] = fetchedData.friends.friends;
       if (Array.isArray(friends))
         console.log("checking if friends is an array");

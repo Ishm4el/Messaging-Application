@@ -7,7 +7,7 @@ import { createContext, useContext, useState } from "react";
 const FriendContext = createContext<{
   friendList: Array<any>;
   setFriendList: React.Dispatch<any>;
-  refreshFriendList: any;
+  refreshFriendList: number;
   setRefreshFriendList: React.Dispatch<any>;
 } | null>(null);
 
@@ -23,7 +23,7 @@ export function useFriendContext() {
 
 export default function Friends() {
   const [friendList, setFriendList] = useState<Array<any>>([]);
-  const [refreshFriendList, setRefreshFriendList] = useState({});
+  const [refreshFriendList, setRefreshFriendList] = useState(0);
 
   return (
     <main className={styles["main"]}>
