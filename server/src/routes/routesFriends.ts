@@ -25,5 +25,9 @@ routerFriends.put(
   controllerFriends.acceptFriendRequest
 );
 routerFriends.put("/remove_friend", controllerFriends.removeFriend);
+routerFriends.put(
+  "/decline_friend_request",
+  controllerFriends.declineFriendRequest
+);
 
 export default routerFriends;

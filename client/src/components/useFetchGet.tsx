@@ -22,5 +22,5 @@ export default function useFecthGet({
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [...dependecy]);
-  return { loading, error, fetchedData };
+  return { loading, error, fetchedData, setFetchedData };
 }

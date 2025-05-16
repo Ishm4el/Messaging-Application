@@ -112,6 +112,14 @@ const cancelFriendRequest: RequestHandler = asyncHandler(async (req, res) => {
     .json({ res: `Friend request has been canceld for: ${req.body.username}` });
 });
 
+const declineFriendRequest: RequestHandler = asyncHandler(async (req, res) => {
+  await prisma.user.update({
+    where: { username: req.user!.username },
+    data: { requests: { disconnect: { username: req.body.username } } },
+  });
+  res.status(200).json({ message: "Friend Request Declined" });
+});
+
 const removeFriend: RequestHandler = asyncHandler(async (req, res) => {
   console.log("remove Friend");
 
@@ -145,5 +153,6 @@ export {
   sendFriendRequest,
   acceptFriendRequest,
   cancelFriendRequest,
+  declineFriendRequest,
   removeFriend,
 };
