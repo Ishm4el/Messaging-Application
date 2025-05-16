@@ -1,9 +1,9 @@
 import { useParams } from "react-router-dom";
-import useFecthGet from "../components/useFetchGet";
+import { useFetchGet } from "../components/useFetchGet";
 
 export default function Profile() {
   const { username } = useParams();
-  const { error, loading, fetchedData } = useFecthGet({
+  const { error, loading, fetchedData } = useFetchGet({
     link: `http://localhost:3000/profile/:${username}`,
   });
   if (loading) return <span>loading</span>;

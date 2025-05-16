@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
-import useFecthGet from "../../components/useFetchGet";
+import { useFetchGet } from "../../components/useFetchGet";
+import { useFriendContext } from "../Friends";
 
 export default function FriendList() {
   type NewType = {
@@ -21,27 +22,31 @@ export default function FriendList() {
   }
 
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
-  const [friendList, setFriendList] = useState<Array<any>>([]);
-  const { loading, error, fetchedData } = useFecthGet({
+  const { friendList, setFriendList, refreshFriendList } = useFriendContext();
+  const { loading, error, fetchedData } = useFetchGet({
     link: "http://localhost:3000/friends/",
-    dependecy: [],
+    dependecy: [refreshFriendList],
   });
 
   useEffect(() => {
+    console.log("in use effect again!");
+
     if (loading === false) {
       const friends: { username: string }[] = fetchedData.friends.friends;
       if (Array.isArray(friends))
-        if (friends.length > 0) {
-          setFriendList(
-            filterList({
-              filterOnProperty: "username",
-              list: friends,
-              search: filterFriendsOn,
-            })
-          );
-        }
+        console.log("checking if friends is an array");
+
+      if (friends.length > 0) {
+        setFriendList(
+          filterList({
+            filterOnProperty: "username",
+            list: friends,
+            search: filterFriendsOn,
+          })
+        );
+      }
     }
-  }, [filterFriendsOn, fetchedData]);
+  }, [filterFriendsOn, fetchedData, refreshFriendList]);
 
   if (loading)
     return (
