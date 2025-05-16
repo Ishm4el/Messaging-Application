@@ -21,17 +21,11 @@ model User {
   online    Boolean  @default(false)
   createdAt DateTime @default(now())
 
-  userId  String?
-  user    User?   @relation("UserFriends", fields: [userId], references: [id])
-  friends User[]  @relation("UserFriends")
+  friends         User[] @relation("friends")
+  friendsRelation User[] @relation("friends")
 
-  requestId String?
-  request   User?   @relation("friendRequests", fields: [requestId], references: [id])
-  requests  User[]  @relation("friendRequests")
-
-  sentRequestId String?
-  sentRequest   User?   @relation("sentFriendRequests", fields: [sentRequestId], references: [id])
-  sentRequests  User[]  @relation("sentFriendRequests")
+  requests         User[] @relation("requests")
+  requestsRelation User[] @relation("requests")
 
   messageAuthor      Message? @relation("AuthorMessage")
   messageRecipient   Message? @relation("RecipientMessage", fields: [messageRecipientId], references: [id])

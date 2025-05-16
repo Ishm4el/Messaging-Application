@@ -7,6 +7,7 @@ import LogIn from "./routes/LogIn";
 import Logout from "./routes/Logout";
 import Friends from "./routes/Friends";
 import Test from "./routes/Test";
+import Profile from "./routes/Profile";
 
 const routes: RouteObject[] = [
   {
@@ -21,6 +22,7 @@ const routes: RouteObject[] = [
       { path: "profile" },
       { path: "logout", element: <Logout /> },
       { path: "test", element: <Test /> },
+      { path: "profile/:username", element: <Profile /> },
     ],
   },
 ];

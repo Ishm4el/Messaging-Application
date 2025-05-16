@@ -17,8 +17,13 @@ routerFriends.get("/request(s)?", controllerFriends.getAllFriendRequests);
 routerFriends.get("/search/:user", controllerFriends.findUser);
 routerFriends.put("/request(s)?", controllerFriends.sendFriendRequest);
 routerFriends.put(
+  "/cancel_friend_request",
+  controllerFriends.cancelFriendRequest
+);
+routerFriends.put(
   "/acceptFriendRequest",
   controllerFriends.acceptFriendRequest
 );
+routerFriends.put("/remove_friend", controllerFriends.removeFriend);
 
 export default routerFriends;

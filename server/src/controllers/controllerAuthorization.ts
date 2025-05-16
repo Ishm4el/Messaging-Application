@@ -44,10 +44,7 @@ const logout = (req: Request, res: Response, next: NextFunction) => {
 
 const loginSuccess: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    console.log("done with the auth");
-    console.log(req.isAuthenticated());
-    console.log(req.user);
-    res.json(req.user);
+    res.json({ username: req.user?.username });
   }
 );
 

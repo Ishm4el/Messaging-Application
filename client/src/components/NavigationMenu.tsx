@@ -60,6 +60,15 @@ export default function NavigationMenu({
               </Link>
             </li>
           ))}
+          {localStorage.getItem("username") ? (
+            <li className="username">
+              <Link to={`/profile/${localStorage.getItem("username")}`}>
+                {localStorage.getItem("username")}
+              </Link>
+            </li>
+          ) : (
+            <></>
+          )}
         </ul>
       </div>
     </nav>

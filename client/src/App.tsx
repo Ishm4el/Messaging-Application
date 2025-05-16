@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 
 const addresses: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
-  { title: "Test", address: "/Test" },
   { title: "Sign Up", address: "/sign_up" },
   { title: "Log In", address: "/log_in" },
   { title: "Test", address: "/test" },

@@ -59,8 +59,6 @@ const getAllFriendRequests: RequestHandler = asyncHandler(
       include: { requests: true },
     });
 
-    console.log(userIncomingFriendRequests);
-
     res.status(200).json(userIncomingFriendRequests);
   }
 );
@@ -72,6 +70,8 @@ const sendFriendRequest: RequestHandler = asyncHandler(
       where: { username: req.body.username },
       data: { requests: { connect: { username: req.user!.username } } },
     });
+
+    console.log(addingRequestResult);
 
     res.status(200).json(addingRequestResult);
   }
@@ -101,10 +101,49 @@ const acceptFriendRequest: RequestHandler = asyncHandler(
   }
 );
 
+const cancelFriendRequest: RequestHandler = asyncHandler(async (req, res) => {
+  await prisma.user.update({
+    where: { username: req.body.username },
+    data: { requests: { disconnect: { username: req.user!.username } } },
+  });
+
+  res
+    .status(200)
+    .json({ res: `Friend request has been canceld for: ${req.body.username}` });
+});
+
+const removeFriend: RequestHandler = asyncHandler(async (req, res) => {
+  console.log("remove Friend");
+
+  // remove friend on the other user
+  await prisma.user.update({
+    where: { username: req.body.username },
+    data: { friends: { disconnect: { username: req.user!.username } } },
+  });
+
+  // remove friend on current user
+  await prisma.user.update({
+    where: { username: req.user!.username },
+    data: { friends: { disconnect: { username: req.body.username } } },
+  });
+
+  const currentUser = await prisma.user.findUnique({
+    where: { username: req.body.username },
+    include: { friends: true },
+  });
+
+  console.log("friend was removed");
+  console.log(currentUser);
+
+  res.status(200).json({ message: "Friend Removed" });
+});
+
 export {
   getAllFriends,
   findUser,
   getAllFriendRequests,
   sendFriendRequest,
   acceptFriendRequest,
+  cancelFriendRequest,
+  removeFriend,
 };
