@@ -120,7 +120,11 @@ export default function FriendRequests() {
     link: "http://localhost:3000/friends/requests",
   });
 
-  if (loading) return <span>loading</span>;
+  if (loading)
+    return (
+      // <span>loading</span>
+      <></>
+    );
   if (error) return <span>Error</span>;
   return (
     <>

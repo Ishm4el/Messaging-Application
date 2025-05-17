@@ -55,9 +55,10 @@ export default function FriendList() {
 
   if (loading)
     return (
-      <section>
-        <h3>LOADING</h3>
-      </section>
+      // <section>
+      //   <h3>LOADING</h3>
+      // </section>
+      <></>
     );
   if (error)
     return (
@@ -68,39 +69,35 @@ export default function FriendList() {
 
   return (
     <section className={styles.section}>
-      <>
-        <search className={styles["friend-list-search"]}>
-          <label htmlFor="filterFriends">Filter Search: </label>
-          <input
-            type="text"
-            name="filterFriends"
-            id="filterFriends"
-            placeholder="Filter Friends"
-            onChange={(event) => setFilterFriendsOn(event.target.value)}
-          />
-        </search>
+      <h2>Friend List</h2>
+      <search className={styles["friend-list-search"]}>
+        <label htmlFor="filterFriends">Filter Search: </label>
+        <input
+          type="text"
+          name="filterFriends"
+          id="filterFriends"
+          placeholder="Filter Friends"
+          onChange={(event) => setFilterFriendsOn(event.target.value)}
+        />
+      </search>
 
-        <div className={styles["friend-list-container"]}>
-          {friendList.length !== 0 ? (
-            <ul className={styles["friend-list"]}>
-              {friendList.map((value) => {
-                return (
-                  <li
-                    key={value.username}
-                    className={styles["friend-list-item"]}
-                  >
-                    <span className={styles["friend-list-item-value"]}>
-                      {value.username}
-                    </span>
-                  </li>
-                );
-              })}
-            </ul>
-          ) : (
-            <span>No friends were found</span>
-          )}
-        </div>
-      </>
+      <div className={styles["friend-list-container"]}>
+        {friendList.length !== 0 ? (
+          <ul className={styles["friend-list"]}>
+            {friendList.map((value) => {
+              return (
+                <li key={value.username} className={styles["friend-list-item"]}>
+                  <span className={styles["friend-list-item-value"]}>
+                    {value.username}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <span>No friends were found</span>
+        )}
+      </div>
     </section>
   );
 }

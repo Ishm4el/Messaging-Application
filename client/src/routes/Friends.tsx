@@ -24,6 +24,7 @@ export function useFriendContext() {
 export default function Friends() {
   const [friendList, setFriendList] = useState<Array<any>>([]);
   const [refreshFriendList, setRefreshFriendList] = useState(0);
+  const [view, setView] = useState<string>("Friend List");
 
   return (
     <main className={styles["main"]}>
@@ -36,9 +37,24 @@ export default function Friends() {
           setRefreshFriendList,
         }}
       >
-        <SearchUser />
-        <FriendRequests />
-        <FriendList />
+        <button value="Search" onClick={(e) => setView(e.currentTarget.value)}>
+          Search User
+        </button>
+        <button
+          value="Friend Request"
+          onClick={(e) => setView(e.currentTarget.value)}
+        >
+          Friend Request
+        </button>
+        <button
+          value="Friend List"
+          onClick={(e) => setView(e.currentTarget.value)}
+        >
+          Friend List
+        </button>
+        {view === "Friend List" && <FriendList />}
+        {view === "Search" && <SearchUser />}
+        {view === "Friend Request" && <FriendRequests />}
       </FriendContext.Provider>
     </main>
   );
