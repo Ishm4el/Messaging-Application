@@ -45,6 +45,10 @@ const findUser: RequestHandler = asyncHandler(
           select: { username: true },
           take: 1,
         },
+        requestsRelation: {
+          where: { id: { equals: req.user!.id } },
+          take: 1,
+        },
       },
     });
 
@@ -79,11 +83,31 @@ const sendFriendRequest: RequestHandler = asyncHandler(
 
 const acceptFriendRequest: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {
+    const confirmFriendRequest = await prisma.user.findUnique({
+      where: { id: req.user!.id },
+      select: {
+        requests: {
+          where: { username: { equals: req.body.username } },
+          take: 1,
+        },
+      },
+    });
+    if (confirmFriendRequest?.requests[0].username !== req.user?.username) {
+      console.log("stopped new friend making");
+      res.status(403).json({
+        error: "Friend could not be found in requests of the primary user",
+      });
+      return;
+    }
+
     // remove user from the requestee
-    await prisma.user.update({
+    const settleUsers = await prisma.user.update({
       where: { id: req.user!.id },
       data: { requests: { disconnect: [{ username: req.body.username }] } },
     });
+
+    console.log("[settleUsers]: ");
+    console.log(settleUsers);
 
     // add friend to the current user
     await prisma.user.update({

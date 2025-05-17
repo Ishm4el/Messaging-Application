@@ -5,6 +5,7 @@ interface Found {
   username: string;
   requests: { username?: string }[];
   friends: { username?: string }[];
+  requestsRelation: { username?: string }[];
 }
 
 type FoundArray = Array<Found>;
@@ -69,7 +70,16 @@ function DisplaySearch({ found }: { found: FoundArray }) {
               {e.username}
             </span>
             {JSON.stringify(e)}
-            {e.friends[0]?.username ? (
+            {e.requestsRelation[0]?.username ? (
+              <PutButton
+                buttonName="Add Friend"
+                fetchAt="http://localhost:3000/friends/acceptFriendRequest"
+                label="Add Friend"
+                username={e.username}
+                found={found}
+                index={index}
+              />
+            ) : e.friends[0]?.username ? (
               <PutButton
                 buttonName="Remove Friend"
                 fetchAt="http://localhost:3000/friends/remove_friend"
