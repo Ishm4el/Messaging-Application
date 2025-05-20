@@ -13,7 +13,11 @@ routerFriends.use(async (req, res, next) => {
 });
 
 routerFriends.get("/(friends)?", controllerFriends.getAllFriends);
-routerFriends.get("/request(s)?", controllerFriends.getAllFriendRequests);
+routerFriends.get("/requests?", controllerFriends.getAllFriendRequests);
+routerFriends.get(
+  "/requests?_count",
+  controllerFriends.getAllFriendRequestsCount
+);
 routerFriends.get("/search/:user", controllerFriends.findUser);
 routerFriends.put("/request(s)?", controllerFriends.sendFriendRequest);
 routerFriends.put(

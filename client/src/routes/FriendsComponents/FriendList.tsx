@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
 import { useFetchGet } from "../../components/useFetchGet";
 import { useFriendContext } from "../Friends";
+import { Link } from "react-router-dom";
 
 export default function FriendList() {
   type NewType = {
@@ -33,10 +34,13 @@ export default function FriendList() {
   );
 
   useEffect(() => {
-    console.log("in use effect again!");
-    console.log(JSON.stringify(fetchedData));
-
+    if (loading === false && fetchedData.err) {
+      localStorage.clear();
+      return;
+    }
     if (loading === false && typeof fetchedData === "object") {
+      console.log("render");
+
       const friends: { username: string }[] = fetchedData.friends.friends;
       if (Array.isArray(friends))
         console.log("checking if friends is an array");
@@ -66,6 +70,17 @@ export default function FriendList() {
         <h3>ERROR!</h3>
       </section>
     );
+
+  if (fetchedData.err === "Currently not signed in") {
+    return (
+      <section>
+        <span>You are currently not signed in! </span>
+        <Link to="/log_in">Log in here</Link>
+        <span> or </span>
+        <Link to="/sign_up">Sign up here</Link>
+      </section>
+    );
+  }
 
   return (
     <section className={styles.section}>

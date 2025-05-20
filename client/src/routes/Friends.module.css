@@ -1,0 +1,6 @@
+.friend-requests-button {
+  background-color: gray;
+  &:hover {
+    background-color: darkgray;
+  }
+}

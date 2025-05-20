@@ -42,19 +42,13 @@ function useFetchGetExternal(
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>(null);
   useEffect(() => {
-    const temp = [...dependecy];
-    console.log("dependency: " + JSON.stringify(temp));
     fetchGet(link)
       .then((res) => res.json())
-      .then((resJson) => {
-        console.log("getting again!");
-        console.log(resJson);
-        setFetchedData(resJson);
-      })
+      .then((resJson) => setFetchedData(resJson))
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [...dependecy]);
-  return { loading, error };
+  return { error, loading };
 }
 
 function useFetchGetInternal({

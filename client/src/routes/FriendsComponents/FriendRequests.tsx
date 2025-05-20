@@ -55,7 +55,8 @@ const FriendRequestButton = ({
   fetchedData,
   setFetchedData,
 }: FriendRequestButton) => {
-  const { setRefreshFriendList, refreshFriendList } = useFriendContext();
+  const { setRefreshFriendList, refreshFriendList, setFriendRequestCount } =
+    useFriendContext();
   return (
     <button
       className={styles[style]}
@@ -68,7 +69,10 @@ const FriendRequestButton = ({
           setFetchedData,
         }).then((res) => {
           console.log(res);
-          if (label === "Accept") setRefreshFriendList(refreshFriendList + 1);
+          if (label === "Accept") {
+            setRefreshFriendList(refreshFriendList + 1);
+            setFriendRequestCount((prev: number) => prev - 1);
+          }
         });
       }}
     >
@@ -127,22 +131,22 @@ export default function FriendRequests() {
     );
   if (error) return <span>Error</span>;
   return (
-    <>
-      {Array.isArray(fetchedData.requests) &&
+    <section className={styles["friend-request-section"]}>
+      <h2>Your Friend Requests</h2>
+      {(Array.isArray(fetchedData.requests) &&
         fetchedData.requests.length > 0 && (
-          <section className={styles["friend-request-section"]}>
-            <h2>Your Friend Requests</h2>
-            <FriendRequestList
-              fetchedData={
-                fetchedData as {
-                  [key: string]: any;
-                  requests: { username: string }[];
-                }
+          <FriendRequestList
+            fetchedData={
+              fetchedData as {
+                [key: string]: any;
+                requests: { username: string }[];
               }
-              setFetchedData={setFetchedData}
-            />
-          </section>
-        )}
-    </>
+            }
+            setFetchedData={setFetchedData}
+          />
+        )) || (
+        <h3>You currently do not have any friend requests at this moment</h3>
+      )}
+    </section>
   );
 }

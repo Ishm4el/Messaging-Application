@@ -67,6 +67,21 @@ const getAllFriendRequests: RequestHandler = asyncHandler(
   }
 );
 
+const getAllFriendRequestsCount: RequestHandler = asyncHandler(
+  async (req: Request, res: Response) => {
+    const allFriendRequestsCount = await prisma.user.findUnique({
+      where: { username: req.user!.username },
+      select: { _count: { select: { requests: true } } },
+    });
+    if (allFriendRequestsCount === null) {
+      res.end();
+      return;
+    }
+    res.json(allFriendRequestsCount._count.requests);
+    return;
+  }
+);
+
 const sendFriendRequest: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {
     // create friend relationship
@@ -92,7 +107,8 @@ const acceptFriendRequest: RequestHandler = asyncHandler(
         },
       },
     });
-    if (confirmFriendRequest?.requests[0].username !== req.user?.username) {
+
+    if (confirmFriendRequest?.requests[0].username !== req.body.username) {
       console.log("stopped new friend making");
       res.status(403).json({
         error: "Friend could not be found in requests of the primary user",
@@ -174,6 +190,7 @@ export {
   getAllFriends,
   findUser,
   getAllFriendRequests,
+  getAllFriendRequestsCount,
   sendFriendRequest,
   acceptFriendRequest,
   cancelFriendRequest,
