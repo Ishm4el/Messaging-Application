@@ -1,12 +1,21 @@
 import { useParams } from "react-router-dom";
-import { useFetchGet } from "../components/useFetchGet";
+import { OtherUserProfile } from "./ProfileComponents/OtherUserProfile";
+import { CurrentUserProfile } from "./ProfileComponents/CurrentUserProfile";
 
 export default function Profile() {
   const { username } = useParams();
-  const { error, loading, fetchedData } = useFetchGet({
-    link: `http://localhost:3000/profile/:${username}`,
-  });
-  if (loading) return <span>loading</span>;
-  if (error) return <span>error!</span>;
-  return <main>{JSON.stringify(fetchedData)}</main>;
+  return (
+    <main>
+      {(username === undefined && localStorage.getItem("username")) ||
+      (username !== undefined &&
+        username === localStorage.getItem("username")) ? (
+        <CurrentUserProfile />
+      ) : username !== undefined &&
+        username !== localStorage.getItem("username") ? (
+        <OtherUserProfile username={username} />
+      ) : (
+        <>Error</>
+      )}
+    </main>
+  );
 }

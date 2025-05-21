@@ -27,7 +27,7 @@ export default function FriendList() {
   const [fetchedData, setFetchedData] = useState<any>(null);
   const { loading, error } = useFetchGet(
     {
-      link: "http://localhost:3000/friends/",
+      link: "friends/",
       dependecy: [refreshFriendList],
     },
     setFetchedData

@@ -121,7 +121,7 @@ function FriendRequestList({
 
 export default function FriendRequests() {
   const { error, fetchedData, loading, setFetchedData } = useFetchGet({
-    link: "http://localhost:3000/friends/requests",
+    link: "friends/requests",
   });
 
   if (loading)

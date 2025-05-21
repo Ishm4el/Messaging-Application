@@ -1,5 +1,6 @@
 import { createContext, useContext, useState } from "react";
 import styles from "./SearchUser.module.css";
+import { useNavigate } from "react-router-dom";
 
 interface Found {
   username: string;
@@ -60,13 +61,17 @@ function PutButton({
 }
 
 function DisplaySearch({ found }: { found: FoundArray }) {
+  const navigate = useNavigate();
   return (
     <div className={styles["search-user-list-container"]}>
       {JSON.stringify(found)}
       <ul className={styles["search-user-list"]}>
         {found.map((e, index, array) => (
           <li className={styles["search-user-list-item"]} key={e.username}>
-            <span className={styles["search-user-list-username"]}>
+            <span
+              className={styles["search-user-list-username"]}
+              onClick={() => navigate(`/profile/${e.username}`)}
+            >
               {e.username}
             </span>
             {JSON.stringify(e)}

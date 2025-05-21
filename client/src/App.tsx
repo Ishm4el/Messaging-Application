@@ -15,7 +15,7 @@ const addressesUser: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
   { title: "Braid", address: "/braid" },
   { title: "Friends", address: "/friends" },
-  { title: "Profile", address: "/profile" },
+  { title: "Profile", address: `/profile/${localStorage.getItem("username")}` },
   { title: "Logout", address: "/logout" },
   { title: "Test", address: "/test" },
 ];

@@ -1,3 +1,5 @@
+const API_URL = import.meta.env.VITE_APP_API_URL;
+
 export default function fetchPut({
   link,
   body,
@@ -5,7 +7,8 @@ export default function fetchPut({
   link: string;
   body: { [key: string]: any };
 }) {
-  return fetch(link, {
+  const url = API_URL + link;
+  return fetch(url, {
     credentials: "include",
     headers: { "Content-Type": "application/json" },
     mode: "cors",

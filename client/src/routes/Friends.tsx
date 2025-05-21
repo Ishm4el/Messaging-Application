@@ -29,7 +29,7 @@ export default function Friends() {
   const [view, setView] = useState<string>("Friend List");
   const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
   const { error, loading } = useFetchGet(
-    { link: "http://localhost:3000/friends/requests_count", dependecy: [view] },
+    { link: "friends/requests_count", dependecy: [view] },
     setFriendRequestCount
   );
 

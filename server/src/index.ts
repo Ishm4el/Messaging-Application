@@ -9,6 +9,7 @@ import { Strategy } from "passport-local";
 import bcrypt from "bcryptjs";
 import routerAuthorization from "./routes/routesAuthorization";
 import routerFriends from "./routes/routesFriends";
+import routerProfile from "./routes/routesProfile";
 
 declare global {
   namespace Express {
@@ -97,6 +98,7 @@ passport.deserializeUser(async (id: string, done) => {
 // use routers
 app.use("/authorization", routerAuthorization);
 app.use("/friends", routerFriends);
+app.use("/profile", routerProfile);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err);
