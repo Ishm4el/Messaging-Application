@@ -4,3 +4,8 @@
     background-color: darkgray;
   }
 }
+
+.main {
+  margin: 0 10dvw;
+  padding: 3dvh 6dvw;
+}

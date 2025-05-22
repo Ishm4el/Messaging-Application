@@ -9,7 +9,7 @@ interface LinkDep {
 interface UseFetchInternal {
   loading: boolean;
   error: string;
-  fetchedData: { [key: string]: any };
+  fetchedData: { [key: string]: any } | null;
   setFetchedData: React.Dispatch<any>;
 }
 

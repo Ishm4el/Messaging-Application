@@ -133,7 +133,8 @@ export default function FriendRequests() {
   return (
     <section className={styles["friend-request-section"]}>
       <h2>Your Friend Requests</h2>
-      {(Array.isArray(fetchedData.requests) &&
+      {(fetchedData !== null &&
+        Array.isArray(fetchedData.requests) &&
         fetchedData.requests.length > 0 && (
           <FriendRequestList
             fetchedData={

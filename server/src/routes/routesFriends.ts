@@ -4,14 +4,6 @@ import * as controllerFriends from "../controllers/controllerFriends";
 const routerFriends: Router = Router();
 
 // all of the following routes require a session
-routerFriends.use(async (req, res, next) => {
-  if (!req.user) {
-    res.status(401).json({ err: "Currently not signed in" });
-    return;
-  }
-  next();
-});
-
 routerFriends.get("/(friends)?", controllerFriends.getAllFriends);
 routerFriends.get("/requests?", controllerFriends.getAllFriendRequests);
 routerFriends.get(

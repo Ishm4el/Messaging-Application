@@ -1,0 +1,16 @@
+.main {
+  margin: 0 10dvw;
+  padding: 3dvh 6dvw;
+}
+
+.section {
+  display: flex;
+  flex-flow: column;
+  margin: 0 0;
+  padding: 1dvh 1dvw;
+  gap: 3dvh;
+  background-color: hsl(var(--color2), 50%, 85%);
+  border: 1dvh solid hsl(var(--color1), 100%, 30%);
+  border-radius: 10px;
+}
+

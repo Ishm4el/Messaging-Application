@@ -97,6 +97,13 @@ passport.deserializeUser(async (id: string, done) => {
 
 // use routers
 app.use("/authorization", routerAuthorization);
+app.use(async (req, res, next) => {
+  if (!req.user) {
+    res.status(401).json({ err: "Currently not signed in" });
+    return;
+  }
+  next();
+});
 app.use("/friends", routerFriends);
 app.use("/profile", routerProfile);
 

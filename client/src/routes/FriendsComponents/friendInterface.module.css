@@ -1,8 +1,8 @@
 .section {
   display: flex;
   flex-flow: column;
-  margin: 5dvh 10dvw;
-  padding: 3dvh 6dvw;
+  margin: 0 0;
+  padding: 1dvh 1dvw;
   gap: 3dvh;
   background-color: hsl(var(--color2), 50%, 85%);
   border: 1dvh solid hsl(var(--color1), 100%, 30%);

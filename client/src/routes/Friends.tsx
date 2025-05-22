@@ -2,9 +2,9 @@ import styles from "./Friends.module.css";
 import SearchUser from "./FriendsComponents/SearchUser";
 import FriendRequests from "./FriendsComponents/FriendRequests";
 import FriendList from "./FriendsComponents/FriendList";
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useFetchGet } from "../components/useFetchGet";
-
+ 
 const FriendContext = createContext<{
   friendList: Array<any>;
   setFriendList: React.Dispatch<any>;
