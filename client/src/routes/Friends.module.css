@@ -5,7 +5,24 @@
   }
 }
 
+.ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  background-color: hsl(var(--color3), 100%, 67%);
+  padding: 3dvh;
+  border: solid hsl(var(--color1), 100%, 40%) 1dvh;
+  border-radius: 10px;
+}
+
 .main {
-  margin: 0 10dvw;
-  padding: 3dvh 6dvw;
+  composes: main from "./main.module.css";
+}
+
+.main-dark {
+  composes: main-dark from "./main.module.css";
 }

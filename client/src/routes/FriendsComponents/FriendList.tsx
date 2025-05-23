@@ -2,26 +2,27 @@ import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
 import { useFetchGet } from "../../components/useFetchGet";
 import { useFriendContext } from "../Friends";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+
+type NewType = {
+  list: {
+    [key: string]: string;
+  }[];
+  search: string;
+  filterOnProperty: string;
+};
+
+function filterList({ list, search, filterOnProperty }: NewType) {
+  if (search !== "") {
+    return list.filter((e) =>
+      e[filterOnProperty].toLowerCase().startsWith(search.toLowerCase())
+    );
+  }
+  return list;
+}
 
 export default function FriendList() {
-  type NewType = {
-    list: {
-      [key: string]: string;
-    }[];
-    search: string;
-    filterOnProperty: string;
-  };
-
-  function filterList({ list, search, filterOnProperty }: NewType) {
-    if (search !== "") {
-      return list.filter((e) =>
-        e[filterOnProperty].toLowerCase().startsWith(search.toLowerCase())
-      );
-    }
-    return list;
-  }
-
+  const navigate = useNavigate();
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
   const { friendList, setFriendList, refreshFriendList } = useFriendContext();
   const [fetchedData, setFetchedData] = useState<any>(null);
@@ -57,13 +58,7 @@ export default function FriendList() {
     }
   }, [filterFriendsOn, fetchedData, refreshFriendList]);
 
-  if (loading)
-    return (
-      // <section>
-      //   <h3>LOADING</h3>
-      // </section>
-      <></>
-    );
+  if (loading) return <></>;
   if (error)
     return (
       <section>
@@ -101,8 +96,15 @@ export default function FriendList() {
           <ul className={styles["friend-list"]}>
             {friendList.map((value) => {
               return (
-                <li key={value.username} className={styles["friend-list-item"]}>
-                  <span className={styles["friend-list-item-value"]}>
+                <li
+                  key={value.username}
+                  className={styles["friend-list-item"]}
+                  onClick={() => navigate(`/profile/${value.username}`)}
+                >
+                  <span
+                    className={styles["friend-list-item-value"]}
+                    onClick={() => navigate(`/profile/${value.username}`)}
+                  >
                     {value.username}
                   </span>
                 </li>

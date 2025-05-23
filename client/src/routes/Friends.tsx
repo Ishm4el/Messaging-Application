@@ -4,7 +4,7 @@ import FriendRequests from "./FriendsComponents/FriendRequests";
 import FriendList from "./FriendsComponents/FriendList";
 import { createContext, useContext, useState } from "react";
 import { useFetchGet } from "../components/useFetchGet";
- 
+
 const FriendContext = createContext<{
   friendList: Array<any>;
   setFriendList: React.Dispatch<any>;
@@ -39,39 +39,56 @@ export default function Friends() {
   if (loading) return <>loading</>;
 
   return (
-    <main className={styles["main"]}>
-      <h1>Friends</h1>
-      <FriendContext.Provider
-        value={{
-          friendList,
-          setFriendList,
-          refreshFriendList,
-          setRefreshFriendList,
-          setFriendRequestCount,
-        }}
-      >
-        <button
-          value="Friend List"
-          onClick={(e) => setView(e.currentTarget.value)}
+    <main
+      className={
+        styles[localStorage.getItem("backgroundColorSettings") || "main"]
+      }
+    >
+      <div className={styles["container"]}>
+        <h1>Friends</h1>
+        <FriendContext.Provider
+          value={{
+            friendList,
+            setFriendList,
+            refreshFriendList,
+            setRefreshFriendList,
+            setFriendRequestCount,
+          }}
         >
-          Friend List
-        </button>
-        <button value="Search" onClick={(e) => setView(e.currentTarget.value)}>
-          Search User
-        </button>
-        <button
-          className={
-            styles[friendRequestCount > 0 ? "friend-requests-button" : ""]
-          }
-          value="Friend Request"
-          onClick={(e) => setView(e.currentTarget.value)}
-        >
-          Friend Request
-        </button>
-        {view === "Friend List" && <FriendList />}
-        {view === "Search" && <SearchUser />}
-        {view === "Friend Request" && <FriendRequests />}
-      </FriendContext.Provider>
+          <ul className={styles["ul"]}>
+            <li className={styles["li"]}>
+              <button
+                value="Friend List"
+                onClick={(e) => setView(e.currentTarget.value)}
+              >
+                Friend List
+              </button>
+            </li>
+            <li>
+              <button
+                value="Search"
+                onClick={(e) => setView(e.currentTarget.value)}
+              >
+                Search User
+              </button>
+            </li>
+            <li>
+              <button
+                className={
+                  styles[friendRequestCount > 0 ? "friend-requests-button" : ""]
+                }
+                value="Friend Request"
+                onClick={(e) => setView(e.currentTarget.value)}
+              >
+                Friend Request
+              </button>
+            </li>
+          </ul>
+          {view === "Friend List" && <FriendList />}
+          {view === "Search" && <SearchUser />}
+          {view === "Friend Request" && <FriendRequests />}
+        </FriendContext.Provider>
+      </div>
     </main>
   );
 }

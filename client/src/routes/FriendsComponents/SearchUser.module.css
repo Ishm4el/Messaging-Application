@@ -8,10 +8,12 @@
 
 .search-user-list-item {
   composes: list-item from "./friendInterface.module.css";
+  cursor: pointer;
 }
 
 .search-user-list-username {
   composes: list-item-element from "./friendInterface.module.css";
+  cursor: pointer;
 }
 
 .search-user-form {

@@ -64,7 +64,6 @@ function DisplaySearch({ found }: { found: FoundArray }) {
   const navigate = useNavigate();
   return (
     <div className={styles["search-user-list-container"]}>
-      {JSON.stringify(found)}
       <ul className={styles["search-user-list"]}>
         {found.map((e, index, array) => (
           <li className={styles["search-user-list-item"]} key={e.username}>
@@ -74,7 +73,6 @@ function DisplaySearch({ found }: { found: FoundArray }) {
             >
               {e.username}
             </span>
-            {JSON.stringify(e)}
             {e.requestsRelation[0]?.username ? (
               <PutButton
                 buttonName="Add Friend"
