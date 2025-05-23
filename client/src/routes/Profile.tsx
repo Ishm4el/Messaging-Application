@@ -6,10 +6,14 @@ import { CurrentUserProfile } from "./ProfileComponents/CurrentUserProfile";
 export default function Profile() {
   const { username } = useParams();
 
-  console.log();
+  console.log(localStorage.getItem("backgroundColorSettings"));
 
   return (
-    <main className={styles["main"]}>
+    <main
+      className={
+        styles[localStorage.getItem("backgroundColorSettings") || "main"]
+      }
+    >
       {username !== undefined &&
       localStorage.getItem("username") !== undefined &&
       username !== undefined &&

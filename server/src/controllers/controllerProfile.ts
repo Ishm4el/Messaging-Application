@@ -37,4 +37,45 @@ const getOtherUserProfile = asyncHandler(
   }
 );
 
-export { getPrimaryUserProfile, getOtherUserProfile };
+const postSettings = asyncHandler(async (req: Request, res: Response) => {
+  // there should be a validator to make sure users
+  // post their own settings that are not part of the application.
+  const currentProfileSettings = await prisma.user.findUnique({
+    where: { username: req.user?.username },
+    select: { settings: true },
+  });
+
+  if (currentProfileSettings === null) {
+    // throw new Error("currentProfileSettings is null!");
+    res.json({ error: "Settings could not be applied" });
+    return;
+  }
+
+  const currentProfileSettingsString = JSON.stringify(
+    currentProfileSettings.settings
+  );
+  console.log("currentProfileSettingsString: ");
+  console.log(currentProfileSettingsString);
+
+  const jsonData = JSON.parse(
+    currentProfileSettingsString === undefined
+      ? "{}"
+      : currentProfileSettingsString
+  );
+
+  const newProfileSettings = {
+    ...jsonData,
+    ...req.body,
+  };
+
+  const postedProfileSettings = await prisma.user.update({
+    where: { username: req.user?.username },
+    data: { settings: newProfileSettings },
+    select: { settings: true },
+  });
+
+  res.json(postedProfileSettings.settings);
+  return;
+});
+
+export { getPrimaryUserProfile, getOtherUserProfile, postSettings };

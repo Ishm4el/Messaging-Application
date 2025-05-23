@@ -14,9 +14,11 @@ export function OtherUserProfile({ username }: { username: string }) {
           <h2 className={styles["section-title"]}>
             User {fetchedData.username}'s Profile Page
           </h2>
-          <h3>Username: {fetchedData.username}</h3>
-          <h3>Created: {fetchedData.createdAt}</h3>
-          <h3>Online: {fetchedData.online.toString()}</h3>
+          <div className={styles["card"]}>
+            <h3>Username: {fetchedData.username}</h3>
+            <h3>Created: {fetchedData.createdAt}</h3>
+            <h3>Online: {fetchedData.online.toString()}</h3>
+          </div>
         </>
       )}
     </section>

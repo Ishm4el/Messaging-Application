@@ -8,5 +8,6 @@ routerProfile.get(
   "/other_profile/:username",
   controllerProfile.getOtherUserProfile
 );
+routerProfile.post("/settings?", controllerProfile.postSettings);
 
 export default routerProfile;

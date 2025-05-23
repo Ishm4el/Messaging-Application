@@ -20,6 +20,7 @@ model User {
   password  String
   online    Boolean  @default(false)
   createdAt DateTime @default(now())
+  settings  Json?
 
   friends         User[] @relation("friends")
   friendsRelation User[] @relation("friends")

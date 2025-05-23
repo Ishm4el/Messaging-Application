@@ -1,0 +1,35 @@
+.main {
+  padding: 5dvh 20dvw;
+  min-height: var(--main-height);
+  width: 100dvw;
+  display: flex;
+  flex-flow: column;
+  gap: 3dvh;
+  background-color: blue;
+}
+
+.main-dark {
+  composes: main;
+  background-color: darkblue;
+}
+
+.section {
+  position: relative;
+  display: flex;
+  flex-flow: column;
+  margin: 0 0;
+  padding: 1dvh 1dvw;
+  gap: 3dvh;
+  background-color: hsl(var(--color2), 50%, 85%);
+  border: 1dvh solid hsl(var(--color1), 100%, 30%);
+  border-radius: 10px;
+}
+
+.card {
+  display: flex;
+  flex-flow: column;
+  padding: 1dvh 1dvw;
+  gap: 2dvh;
+  background-color: white;
+  border: 1dvh solid hsl(var(--color3), 100%, 50%);
+}

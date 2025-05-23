@@ -10,12 +10,14 @@ import bcrypt from "bcryptjs";
 import routerAuthorization from "./routes/routesAuthorization";
 import routerFriends from "./routes/routesFriends";
 import routerProfile from "./routes/routesProfile";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 declare global {
   namespace Express {
     interface User {
       id: string;
-      username?: string;
+      username: string;
+      settings?: JsonValue;
     }
   }
 }
@@ -56,7 +58,13 @@ passport.use(
     try {
       const user = await prisma.user.findUnique({
         where: { username: username },
-        select: { password: true, email: true, id: true, username: true },
+        select: {
+          password: true,
+          email: true,
+          id: true,
+          username: true,
+          settings: true,
+        },
       });
 
       if (!user) {

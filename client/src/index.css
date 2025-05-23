@@ -68,5 +68,7 @@ h6 {
 }
 
 :root {
-  --navigation-height: 2rem;
+  --navigation-height: 5dvh;
+  --main-height: 95dvh;
+  background-color: black;
 }

@@ -1,23 +1,72 @@
 import styles from "./Profile.module.css";
-import { useState } from "react";
 import { useFetchGet } from "../../components/useFetchGet";
+import { useNavigate } from "react-router-dom";
+import fetchPost from "../../components/fetchPost";
 
 export function CurrentUserProfile() {
+  const navigate = useNavigate();
   const { error, fetchedData, loading } = useFetchGet({
     link: "profile/primary_profile",
   });
   if (loading) return <>Loading!</>;
   if (error) return <>Error: {JSON.stringify(error)}</>;
   return (
-    <section className={styles["section"]}>
-      <h2 className={styles["section-title"]}>Your Profile Page</h2>
-      {fetchedData !== null && (
-        <>
-          <h3 className={styles["cool"]}>Username: {fetchedData.username}</h3>
-          <h3>Created: {fetchedData.createdAt}</h3>
-          <h3>Online: {fetchedData.online.toString()}</h3>
-        </>
-      )}
-    </section>
+    <>
+      <section className={styles["section"]}>
+        <h2 className={styles["section-title"]}>Personal Profile</h2>
+        {fetchedData !== null && (
+          <div className={styles["card"]}>
+            <h3 className={styles["cool"]}>Username: {fetchedData.username}</h3>
+            <h3>Created: {fetchedData.createdAt}</h3>
+            <h3>Online: {fetchedData.online.toString()}</h3>
+          </div>
+        )}
+      </section>
+      <section className={styles["section"]}>
+        <h2>Profile Settings</h2>
+        <div className={styles["card"]}>
+          <form
+            className={styles["form"]}
+            onSubmit={(ev) => {
+              ev.preventDefault();
+              const formData = new FormData(ev.currentTarget);
+              console.log(formData.get("background-color-settings"));
+              fetchPost({
+                link: "profile/settings",
+                body: {
+                  backgroundColorSettings: formData.get(
+                    "background-color-settings"
+                  ),
+                },
+              })
+                .then((res) => res.json())
+                .then((res) => {
+                  console.log(res);
+                  localStorage.setItem(
+                    "backgroundColorSettings",
+                    res.backgroundColorSettings
+                  );
+                  navigate(0);
+                });
+            }}
+          >
+            <label htmlFor="background-color-settings">
+              Background Color Settings
+            </label>
+            <select
+              name="background-color-settings"
+              id="background-color-settings"
+              defaultValue={
+                localStorage.getItem("backgroundColorSettings") || "main"
+              }
+            >
+              <option value="main">Light</option>
+              <option value="main-dark">Dark</option>
+            </select>
+            <button type="submit">Apply Settings</button>
+          </form>
+        </div>
+      </section>
+    </>
   );
 }

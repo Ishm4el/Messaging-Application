@@ -44,7 +44,7 @@ const logout = (req: Request, res: Response, next: NextFunction) => {
 
 const loginSuccess: RequestHandler = asyncHandler(
   async (req: Request, res: Response) => {
-    res.json({ username: req.user?.username });
+    res.json({ username: req.user?.username, settings: req.user?.settings });
   }
 );
 
