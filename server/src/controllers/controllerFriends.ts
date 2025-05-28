@@ -141,6 +141,15 @@ const acceptFriendRequest: RequestHandler = asyncHandler(
   }
 );
 
+const rejectFriendRequest: RequestHandler = asyncHandler(async (req, res) => {
+  const rejectFriendRequestResult = await prisma.user.update({
+    where: { username: req.user?.username },
+    data: { requestsRelation: { disconnect: { username: req.body.username } } },
+  });
+
+  res.status(200).json({ message: "Friend Request has been rejected" });
+});
+
 const cancelFriendRequest: RequestHandler = asyncHandler(async (req, res) => {
   await prisma.user.update({
     where: { username: req.body.username },

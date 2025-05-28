@@ -32,6 +32,20 @@ const getOtherUserProfile = asyncHandler(
 
     const otherUserProfile = await prisma.user.findUnique({
       where: { username: otherUserUsername },
+      include: {
+        friends: {
+          where: { username: { equals: req.user?.username } },
+          select: { username: true },
+        },
+        requests: {
+          where: { username: { equals: req.user?.username } },
+          select: { username: true },
+        },
+        requestsRelation: {
+          where: { username: { equals: req.user?.username } },
+          select: { username: true },
+        },
+      },
     });
     nullChecker(otherUserProfile, res, "Other user was not found");
   }

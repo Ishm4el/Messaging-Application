@@ -13,3 +13,19 @@
 .card {
   composes: card from "./../main.module.css";
 }
+
+.notification-show {
+  opacity: 0;
+  transition: all 250ms linear 2s;
+}
+
+.friend-options {
+  display: flex;
+  width: 100%;
+  gap: 0.25dvw;
+}
+
+.friend-options button {
+  flex: 1;
+  cursor: pointer;
+}

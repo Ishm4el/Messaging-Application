@@ -42,7 +42,7 @@ export default function LogIn() {
             localStorage.setItem("username", res.username);
             localStorage.setItem(
               "backgroundColor",
-              res.settings.backgroundColorSettings || "main"
+              res.settings?.backgroundColorSettings || "main"
             );
             outProps.setLogged(true);
             navigate("/");
