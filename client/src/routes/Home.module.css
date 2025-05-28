@@ -1,3 +1,21 @@
-.container-main {
-  border: 1px dashed black;
+.main {
+  composes: main from "./main.module.css";
+}
+
+.main-dark {
+  composes: main-dark from "./main.module.css";
+}
+
+.section {
+  composes: section from "./main.module.css";
+}
+
+.card {
+  composes: card from "./main.module.css";
+}
+
+.section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

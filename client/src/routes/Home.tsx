@@ -2,10 +2,17 @@ import styles from "./Home.module.css";
 
 export default function Home() {
   return (
-    <main className={styles["container-main"]}>
-      <header className={styles["container-header"]}>
+    <main
+      className={
+        styles[localStorage.getItem("backgroundColorSettings") || "main"]
+      }
+    >
+      <section className={styles.section}>
         <h1>Welcome to the homepage!</h1>
-      </header>
+        <article>
+          <p>A messaging application</p>
+        </article>
+      </section>
     </main>
   );
 }
