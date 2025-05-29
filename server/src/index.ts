@@ -10,6 +10,7 @@ import bcrypt from "bcryptjs";
 import routerAuthorization from "./routes/routesAuthorization";
 import routerFriends from "./routes/routesFriends";
 import routerProfile from "./routes/routesProfile";
+import routerMessages from "./routes/routesMessages";
 import { JsonValue } from "@prisma/client/runtime/library";
 
 declare global {
@@ -114,9 +115,10 @@ app.use(async (req, res, next) => {
 });
 app.use("/friends", routerFriends);
 app.use("/profile", routerProfile);
+app.use("/messages", routerMessages);
 
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.log(err);
+  console.error(err);
   res.status(500).json({ res: err.message });
 });
 

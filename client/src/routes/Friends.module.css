@@ -15,8 +15,8 @@
 .container {
   background-color: hsl(var(--color3), 100%, 67%);
   padding: 3dvh;
-  border: solid hsl(var(--color1), 100%, 40%) 1dvh;
-  border-radius: 10px;
+  /* border: solid hsl(var(--color1), 100%, 40%) 1dvh;
+  border-radius: 10px; */
 }
 
 .main {

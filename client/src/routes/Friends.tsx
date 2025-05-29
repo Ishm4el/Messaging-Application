@@ -45,7 +45,7 @@ export default function Friends() {
       }
     >
       <div className={styles["container"]}>
-        <h1>Friends</h1>
+        <h1>Braid</h1>
         <FriendContext.Provider
           value={{
             friendList,
@@ -61,7 +61,7 @@ export default function Friends() {
                 value="Friend List"
                 onClick={(e) => setView(e.currentTarget.value)}
               >
-                Friend List
+                Friends
               </button>
             </li>
             <li>

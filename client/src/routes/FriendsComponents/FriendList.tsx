@@ -21,8 +21,73 @@ function filterList({ list, search, filterOnProperty }: NewType) {
   return list;
 }
 
-export default function FriendList() {
+function SearchFilter({
+  setFilterFriendsOn,
+}: {
+  setFilterFriendsOn: React.Dispatch<any>;
+}) {
+  return (
+    <search className={styles["friend-list-search"]}>
+      <label htmlFor="filterFriends">Filter Search: </label>
+      <input
+        type="text"
+        name="filterFriends"
+        id="filterFriends"
+        placeholder="Filter Friends"
+        onChange={(event) => setFilterFriendsOn(event.target.value)}
+      />
+    </search>
+  );
+}
+
+function FriendListContainer({ friendList }: { friendList: Array<any> }) {
   const navigate = useNavigate();
+  return (
+    <div className={styles["friend-list-container"]}>
+      {friendList.length !== 0 ? (
+        <ul className={styles["friend-list"]}>
+          {friendList.map((value) => {
+            return (
+              <li
+                key={value.username}
+                className={styles["friend-list-item"]}
+                onClick={() => navigate(`/message/${value.username}`)}
+              >
+                <span
+                  className={styles["friend-list-item-value"]}
+                  onClick={() => navigate(`/profile/${value.username}`)}
+                >
+                  {value.username}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      ) : (
+        <span>No friends were found</span>
+      )}
+    </div>
+  );
+}
+
+interface FriendListSection {
+  setFilterFriendsOn: React.Dispatch<any>;
+  friendList: Array<any>;
+}
+function FriendListSection({
+  setFilterFriendsOn,
+  friendList,
+}: FriendListSection) {
+  return (
+    <section className={styles.section}>
+      <h2 id="Page-Title">Friend List</h2>
+      <SearchFilter setFilterFriendsOn={setFilterFriendsOn} />
+      <FriendListContainer friendList={friendList} />
+    </section>
+  );
+}
+
+export default function FriendList() {
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
   const { friendList, setFriendList, refreshFriendList } = useFriendContext();
   const [fetchedData, setFetchedData] = useState<any>(null);
@@ -35,7 +100,7 @@ export default function FriendList() {
   );
 
   useEffect(() => {
-    if (loading === false && fetchedData.err) {
+    if (loading === false && fetchedData.error) {
       localStorage.clear();
       return;
     }
@@ -58,15 +123,8 @@ export default function FriendList() {
     }
   }, [filterFriendsOn, fetchedData, refreshFriendList]);
 
-  if (loading) return <></>;
+  if (loading) return <>Loading</>;
   if (error)
-    return (
-      <section>
-        <h3>ERROR!</h3>
-      </section>
-    );
-
-  if (fetchedData.err === "Currently not signed in") {
     return (
       <section>
         <span>You are currently not signed in! </span>
@@ -75,46 +133,11 @@ export default function FriendList() {
         <Link to="/sign_up">Sign up here</Link>
       </section>
     );
-  }
 
   return (
-    <section className={styles.section}>
-      <h2>Friend List</h2>
-      <search className={styles["friend-list-search"]}>
-        <label htmlFor="filterFriends">Filter Search: </label>
-        <input
-          type="text"
-          name="filterFriends"
-          id="filterFriends"
-          placeholder="Filter Friends"
-          onChange={(event) => setFilterFriendsOn(event.target.value)}
-        />
-      </search>
-
-      <div className={styles["friend-list-container"]}>
-        {friendList.length !== 0 ? (
-          <ul className={styles["friend-list"]}>
-            {friendList.map((value) => {
-              return (
-                <li
-                  key={value.username}
-                  className={styles["friend-list-item"]}
-                  onClick={() => navigate(`/profile/${value.username}`)}
-                >
-                  <span
-                    className={styles["friend-list-item-value"]}
-                    onClick={() => navigate(`/profile/${value.username}`)}
-                  >
-                    {value.username}
-                  </span>
-                </li>
-              );
-            })}
-          </ul>
-        ) : (
-          <span>No friends were found</span>
-        )}
-      </div>
-    </section>
+    <FriendListSection
+      friendList={friendList}
+      setFilterFriendsOn={setFilterFriendsOn}
+    />
   );
 }

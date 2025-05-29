@@ -43,8 +43,16 @@ function useFetchGetExternal(
   const [error, setError] = useState<any>(null);
   useEffect(() => {
     fetchGet(link)
-      .then((res) => res.json())
-      .then((resJson) => setFetchedData(resJson))
+      .then((res) => {
+        console.log(res);
+
+        if (res.status !== 200)
+          return Promise.reject({ error: "Currently not signed in" });
+        return res.json();
+      })
+      .then((resJson) => {
+        setFetchedData(resJson);
+      })
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
   }, [...dependecy]);

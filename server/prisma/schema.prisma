@@ -28,8 +28,8 @@ model User {
   requests         User[] @relation("requests")
   requestsRelation User[] @relation("requests")
 
-  messageAuthor      Message? @relation("AuthorMessage")
-  messageRecipient   Message? @relation("RecipientMessage", fields: [messageRecipientId], references: [id])
+  messageAuthor      Message[] @relation("AuthorMessage")
+  messageRecipient   Message?  @relation("RecipientMessage", fields: [messageRecipientId], references: [id])
   messageRecipientId String?
 
   roomOwner          Room[] @relation("OwnerUser")
@@ -43,10 +43,9 @@ model Message {
   groupMessage Boolean  @default(false)
 
   author   User   @relation("AuthorMessage", fields: [authorId], references: [id])
-  authorId String @unique
+  authorId String
 
-  recipient   User[] @relation("RecipientMessage")
-  recipientId String
+  recipient User[] @relation("RecipientMessage")
 }
 
 model Room {
