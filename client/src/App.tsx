@@ -12,9 +12,9 @@ const addresses: { title: string; address: string }[] = [
 ];
 
 const addressesUser: { title: string; address: string }[] = [
-  { title: "Home", address: "/" },
   { title: "Braid", address: "/friends" },
   { title: "Logout", address: "/logout" },
+  { title: "About", address: "/" },
 ];
 
 const websiteTitle: {

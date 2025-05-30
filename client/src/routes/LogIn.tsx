@@ -45,7 +45,7 @@ export default function LogIn() {
               res.settings?.backgroundColorSettings || "main"
             );
             outProps.setLogged(true);
-            navigate("/");
+            navigate("/friends");
           }
         }}
       >
