@@ -100,7 +100,7 @@ function FriendRequestList({
             label="Accept"
             style="friend-request-accept"
             username={value.username}
-            link="http://localhost:3000/friends/acceptFriendRequest"
+            link="friends/acceptFriendRequest"
             fetchedData={fetchedData}
             setFetchedData={setFetchedData}
           />
@@ -109,7 +109,7 @@ function FriendRequestList({
             label="Reject"
             style="friend-request-reject"
             username={value.username}
-            link="http://localhost:3000/friends/decline_friend_request"
+            link="friends/decline_friend_request"
             fetchedData={fetchedData}
             setFetchedData={setFetchedData}
           />

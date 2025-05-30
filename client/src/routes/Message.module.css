@@ -21,7 +21,7 @@
 .list {
   composes: card from "./main.module.css";
   width: 100%;
-  max-height: 80.3dvh;
+  height: 80.3dvh;
   border-color: hsl(var(--color2), 50%, 80%);
   overflow: scroll;
   display: flex;
@@ -55,6 +55,7 @@
   flex: 1;
   resize: none;
   outline: 1px solid hsl(var(--color1), 100%, 50%);
+  height: 6dvh;
 }
 
 .send-button {
