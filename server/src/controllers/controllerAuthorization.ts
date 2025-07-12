@@ -3,6 +3,7 @@ import prisma from "../../prisma/prisma";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import { body, validationResult, matchedData } from "express-validator";
+import passport from "passport";
 
 type username = { username: string };
 type password = { password: string };
@@ -31,7 +32,7 @@ const signUpValidator = [
 
 const signUp = [
   ...signUpValidator,
-  async (req: Request, res: Response) => {
+  asyncHandler(async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       res
@@ -58,7 +59,28 @@ const signUp = [
     }
 
     res.status(200).json({ res: "success!" });
-  },
+  }),
+];
+
+const validateLogin = [createPasswordChain(), createUsernameChain()];
+
+const login = [
+  ...validateLogin,
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      res.status(400).json({ error: "login failed" });
+      return;
+    }
+    next();
+  }),
+  passport.authenticate("local", {
+    failureMessage: true,
+    failureRedirect: "/authorization/log_in_failure",
+  }),
+  asyncHandler(async (req: Request, res: Response) => {
+    res.json({ username: req.user?.username, settings: req.user?.settings });
+  }),
 ];
 
 const logout = (req: Request, res: Response, next: NextFunction) => {
@@ -69,12 +91,6 @@ const logout = (req: Request, res: Response, next: NextFunction) => {
     res.json({ message: "logout success!" });
   });
 };
-
-const loginSuccess: RequestHandler = asyncHandler(
-  async (req: Request, res: Response) => {
-    res.json({ username: req.user?.username, settings: req.user?.settings });
-  }
-);
 
 declare module "express-session" {
   interface Session {
@@ -99,4 +115,4 @@ const protectedRoute: RequestHandler = asyncHandler(
   }
 );
 
-export { signUp, logout, loginSuccess, protectedRoute, logInFailure };
+export { signUp, logout, login, protectedRoute, logInFailure };
