@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import styles from "./Message.module.css";
-import { useFetchGet } from "../components/useFetchGet";
+import { useFetchGetExternal } from "../components/useFetchGet";
 import { useState } from "react";
 import fetchPost from "../components/fetchPost";
 
@@ -19,13 +19,13 @@ type Message = {
 type MessageList = {
   username: string;
   loading: boolean;
-  error: any;
+  error: unknown;
   messages: Messages | null;
 };
 
 type MessageInput = {
   username: string;
-  setMessages: React.Dispatch<any>;
+  setMessages: React.Dispatch<React.SetStateAction<Messages | null>>;
 };
 
 function MessageList({ loading, error, messages }: MessageList) {
@@ -62,7 +62,7 @@ function MessageInput({ username, setMessages }: MessageInput) {
       className={styles["input-container"]}
       onSubmit={(ev) => {
         ev.preventDefault();
-        const form = ev.currentTarget
+        const form = ev.currentTarget;
         const formData = new FormData(form);
         const jsonFormData = Object.fromEntries(formData.entries());
         fetchPost({
@@ -71,7 +71,13 @@ function MessageInput({ username, setMessages }: MessageInput) {
         })
           .then((res) => res.json())
           .then((resJson: Message) =>
-            setMessages((prev: Messages) => [resJson, ...prev])
+            setMessages((prev: Messages | null) => {
+              if (prev === null) {
+                return [resJson];
+              } else {
+                return [resJson, ...prev];
+              }
+            })
           )
           .finally(() => {
             console.log("reseting");
@@ -96,10 +102,11 @@ function MessageInput({ username, setMessages }: MessageInput) {
 
 function MessageBody({ username }: { username: string | undefined }) {
   const [messages, setMessages] = useState<Messages | null>(null);
-  const { loading, error } = useFetchGet(
-    { link: `messages/direct_messages/${username}`, dependecy: [] },
-    setMessages
-  );
+  const { loading, error } = useFetchGetExternal({
+    link: `messages/direct_messages/${username}`,
+    dependecy: [],
+    setFetchedData: setMessages,
+  });
 
   if (!username) return <p>Loading...</p>;
   return (

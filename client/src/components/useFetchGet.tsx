@@ -1,46 +1,37 @@
 import { useEffect, useState } from "react";
 import fetchGet from "./fetchGet";
 
-interface LinkDep {
+interface UseFetchInternalArguments {
   link: string;
-  dependecy?: Array<any>;
+  dependecy?: Array<unknown>;
 }
 
-interface UseFetchInternal {
-  loading: boolean;
-  error: string;
-  fetchedData: { [key: string]: any } | null;
-  setFetchedData: React.Dispatch<any>;
+interface UseFetchExternalArguments extends UseFetchInternalArguments {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFetchedData: React.Dispatch<React.SetStateAction<any>>;
 }
 
 interface UseFetchExternal {
   loading: boolean;
-  error: string;
+  error: unknown;
 }
 
-export function useFetchGet(
-  linkDep: LinkDep,
-  setFetchedData: React.Dispatch<any>
-): UseFetchExternal;
-
-export function useFetchGet(linkDep: LinkDep): UseFetchInternal;
-
-export function useFetchGet(
-  linkDep: LinkDep,
-  setFetchedData?: React.Dispatch<any>
-) {
-  if (typeof setFetchedData !== "undefined") {
-    return useFetchGetExternal(linkDep, setFetchedData);
-  }
-  return useFetchGetInternal(linkDep);
+interface UseFetchInternal extends UseFetchExternal {
+  fetchedData: { [key: string]: unknown } | null;
+  setFetchedData: React.Dispatch<
+    React.SetStateAction<{
+      [key: string]: unknown;
+    }>
+  >;
 }
 
-function useFetchGetExternal(
-  { link, dependecy = [null] }: LinkDep,
-  setFetchedData: React.Dispatch<any>
-): UseFetchExternal {
+export function useFetchGetExternal({
+  link,
+  dependecy = [null],
+  setFetchedData,
+}: UseFetchExternalArguments): UseFetchExternal {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
+  const [error, setError] = useState<unknown>(null);
   useEffect(() => {
     fetchGet(link)
       .then((res) => {
@@ -62,23 +53,27 @@ function useFetchGetExternal(
         setError(err);
       })
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependecy]);
   return { error, loading };
 }
 
-function useFetchGetInternal({
+export function useFetchGetInternal({
   link,
   dependecy = [null],
-}: LinkDep): UseFetchInternal {
+}: UseFetchInternalArguments): UseFetchInternal {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<any>(null);
-  const [fetchedData, setFetchedData] = useState<{ [key: string]: any }>({});
+  const [error, setError] = useState<unknown>(null);
+  const [fetchedData, setFetchedData] = useState<{ [key: string]: unknown }>(
+    {}
+  );
   useEffect(() => {
     fetchGet(link)
       .then((res) => res.json())
       .then((resJson) => setFetchedData(resJson))
       .catch((err) => setError(err))
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependecy]);
   return { loading, error, fetchedData, setFetchedData };
 }

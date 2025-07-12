@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect } from "react-router-dom";
 import styles from "./NavigationMenu.module.css";
 
 function WebsiteTitle({
@@ -11,12 +11,11 @@ function WebsiteTitle({
   homeRoute: string;
 }) {
   function returnHomeEvent(ev: React.MouseEvent | React.KeyboardEvent) {
-    const navigate = useNavigate();
     if (
       (ev instanceof KeyboardEvent && (ev.key === " " || ev.key === "Enter")) ||
       ev instanceof MouseEvent
     ) {
-      navigate(homeRoute);
+      redirect(homeRoute);
     }
   }
 

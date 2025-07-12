@@ -1,13 +1,17 @@
 import fetchPut from "../../components/fetchPut";
-import { useFetchGet } from "../../components/useFetchGet";
+import { useFetchGetInternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import styles from "./FriendRequests.module.css";
 
 interface Fetched {
   fetchedData: {
-    [key: string]: any;
+    [key: string]: unknown;
   };
-  setFetchedData: React.Dispatch<any>;
+  setFetchedData: React.Dispatch<
+    React.SetStateAction<{
+      [key: string]: unknown;
+    }>
+  >;
 }
 
 interface HandleClick extends Fetched {
@@ -37,10 +41,17 @@ const handleClick = ({
         res.json();
       })
       .then(() => {
-        fetchedData.requests.splice(index, 1);
-        setFetchedData({
-          ...fetchedData,
-        });
+        if (
+          fetchedData &&
+          typeof fetchedData === "object" &&
+          "requests" in fetchedData &&
+          Array.isArray(fetchedData.requests)
+        ) {
+          fetchedData.requests.splice(index, 1);
+          setFetchedData({
+            ...fetchedData,
+          });
+        }
       })
       .finally(() => res("done"));
   });
@@ -85,8 +96,12 @@ function FriendRequestList({
   fetchedData,
   setFetchedData,
 }: {
-  fetchedData: { [key: string]: any; requests: { username: string }[] };
-  setFetchedData: React.Dispatch<any>;
+  fetchedData: { [key: string]: unknown; requests: { username: string }[] };
+  setFetchedData: React.Dispatch<
+    React.SetStateAction<{
+      [key: string]: unknown;
+    }>
+  >;
 }) {
   return (
     <ul className={styles["friend-request-list"]}>
@@ -120,7 +135,7 @@ function FriendRequestList({
 }
 
 export default function FriendRequests() {
-  const { error, fetchedData, loading, setFetchedData } = useFetchGet({
+  const { error, fetchedData, loading, setFetchedData } = useFetchGetInternal({
     link: "friends/requests",
   });
 
@@ -139,7 +154,7 @@ export default function FriendRequests() {
           <FriendRequestList
             fetchedData={
               fetchedData as {
-                [key: string]: any;
+                [key: string]: unknown;
                 requests: { username: string }[];
               }
             }

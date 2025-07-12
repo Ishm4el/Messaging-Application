@@ -9,7 +9,13 @@ interface Found {
   requestsRelation: { username?: string }[];
 }
 
+type SetFound = React.Dispatch<React.SetStateAction<FoundArray>>;
+
 type FoundArray = Array<Found>;
+
+type SetInitialSearch = React.Dispatch<React.SetStateAction<boolean>>;
+
+type SetSeekingUser = React.Dispatch<React.SetStateAction<string>>;
 
 function PutButton({
   username,
@@ -123,9 +129,9 @@ function SearchForm({
   setSeekingUser,
   seekingUser,
 }: {
-  setFound: React.Dispatch<any>;
-  setInitialSearch: React.Dispatch<any>;
-  setSeekingUser: React.Dispatch<any>;
+  setFound: SetFound;
+  setInitialSearch: SetInitialSearch;
+  setSeekingUser: SetSeekingUser;
   readonly seekingUser: string;
 }) {
   return (
@@ -177,7 +183,7 @@ function SearchForm({
 
 interface SearchUserContext {
   found: FoundArray;
-  setFound: React.Dispatch<any>;
+  setFound: SetFound;
 }
 
 const FoundContext = createContext<SearchUserContext | null>(null);

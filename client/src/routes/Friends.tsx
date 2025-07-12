@@ -3,7 +3,7 @@ import styles from "./Friends.module.css";
 import SearchUser from "./FriendsComponents/SearchUser";
 import FriendRequests from "./FriendsComponents/FriendRequests";
 import FriendList from "./FriendsComponents/FriendList";
-import { useFetchGet } from "../components/useFetchGet";
+import { useFetchGetExternal } from "../components/useFetchGet";
 import { FriendContext } from "./FriendsComponents/FriendContext";
 import { useState } from "react";
 
@@ -71,10 +71,11 @@ export default function Friends() {
   const [refreshFriendList, setRefreshFriendList] = useState(0);
   const [view, setView] = useState<string>("Friend List");
   const [friendRequestCount, setFriendRequestCount] = useState<number>(0);
-  const { error, loading } = useFetchGet(
-    { link: "friends/requests_count", dependecy: [view] },
-    setFriendRequestCount
-  );
+  const { error, loading } = useFetchGetExternal({
+    link: "friends/requests_count",
+    dependecy: [view],
+    setFetchedData: setFriendRequestCount,
+  });
 
   console.log(JSON.stringify(friendRequestCount));
 

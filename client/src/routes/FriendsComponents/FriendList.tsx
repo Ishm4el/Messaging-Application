@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
-import { useFetchGet } from "../../components/useFetchGet";
+import { useFetchGetExternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -24,7 +24,7 @@ function filterList({ list, search, filterOnProperty }: NewType) {
 function SearchFilter({
   setFilterFriendsOn,
 }: {
-  setFilterFriendsOn: React.Dispatch<any>;
+  setFilterFriendsOn: setFilterFriendsOn;
 }) {
   return (
     <search className={styles["friend-list-search"]}>
@@ -40,7 +40,7 @@ function SearchFilter({
   );
 }
 
-function FriendListContainer({ friendList }: { friendList: Array<any> }) {
+function FriendListContainer({ friendList }: { friendList: FriendList }) {
   const navigate = useNavigate();
   return (
     <div className={styles["friend-list-container"]}>
@@ -71,8 +71,8 @@ function FriendListContainer({ friendList }: { friendList: Array<any> }) {
 }
 
 interface FriendListSection {
-  setFilterFriendsOn: React.Dispatch<any>;
-  friendList: Array<any>;
+  setFilterFriendsOn: setFilterFriendsOn;
+  friendList: FriendList;
 }
 function FriendListSection({
   setFilterFriendsOn,
@@ -90,35 +90,44 @@ function FriendListSection({
 export default function FriendList() {
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
   const { friendList, setFriendList, refreshFriendList } = useFriendContext();
-  const [fetchedData, setFetchedData] = useState<any>(null);
-  const { loading, error } = useFetchGet(
-    {
-      link: "friends/",
-      dependecy: [refreshFriendList],
-    },
-    setFetchedData
-  );
+  const [fetchedData, setFetchedData] = useState<unknown>(null);
+  const { loading, error } = useFetchGetExternal({
+    link: "friends/",
+    dependecy: [refreshFriendList],
+    setFetchedData: setFetchedData,
+  });
 
   useEffect(() => {
-    if (loading === false && fetchedData.error) {
-      localStorage.clear();
-      return;
-    }
-    if (loading === false && typeof fetchedData === "object") {
-      console.log("render");
+    if (
+      fetchedData &&
+      typeof fetchedData === "object" &&
+      "error" in fetchedData &&
+      "friends" in fetchedData &&
+      typeof fetchedData.friends === "object" &&
+      fetchedData.friends &&
+      "friends" in fetchedData.friends &&
+      Array.isArray(fetchedData.friends.friends)
+    ) {
+      if (loading === false && fetchedData.error) {
+        localStorage.clear();
+        return;
+      }
+      if (loading === false) {
+        console.log("render");
 
-      const friends: { username: string }[] = fetchedData.friends.friends;
-      if (Array.isArray(friends))
-        console.log("checking if friends is an array");
+        const friends: { username: string }[] = fetchedData.friends.friends;
+        if (Array.isArray(friends))
+          console.log("checking if friends is an array");
 
-      if (friends.length > 0) {
-        setFriendList(
-          filterList({
-            filterOnProperty: "username",
-            list: friends,
-            search: filterFriendsOn,
-          })
-        );
+        if (friends.length > 0) {
+          setFriendList(
+            filterList({
+              filterOnProperty: "username",
+              list: friends,
+              search: filterFriendsOn,
+            })
+          );
+        }
       }
     }
   }, [filterFriendsOn, fetchedData, refreshFriendList]);

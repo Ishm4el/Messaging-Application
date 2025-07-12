@@ -5,7 +5,7 @@ export default function fetchPut({
   body,
 }: {
   link: string;
-  body: { [key: string]: any };
+  body: { [key: string]: unknown };
 }) {
   const url = API_URL + link;
   return fetch(url, {
