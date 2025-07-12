@@ -6,6 +6,7 @@ import FriendList from "./FriendsComponents/FriendList";
 import { useFetchGetExternal } from "../components/useFetchGet";
 import { FriendContext } from "./FriendsComponents/FriendContext";
 import { useState } from "react";
+import { mainStyle } from "../utility/cssDetermine";
 
 function FriendsMain({
   friendList,
@@ -80,11 +81,7 @@ export default function Friends() {
   console.log(JSON.stringify(friendRequestCount));
 
   return (
-    <main
-      className={
-        styles[localStorage.getItem("backgroundColorSettings") || "main"]
-      }
-    >
+    <main className={styles[mainStyle]}>
       {error ? (
         <>{JSON.stringify(error)}</>
       ) : loading ? (

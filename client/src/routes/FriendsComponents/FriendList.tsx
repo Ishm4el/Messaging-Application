@@ -130,6 +130,7 @@ export default function FriendList() {
         }
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterFriendsOn, fetchedData, refreshFriendList]);
 
   if (loading) return <>Loading</>;

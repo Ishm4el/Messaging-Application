@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 import fetchPut from "../../components/fetchPut";
-import { useFetchGet } from "../../components/useFetchGet";
+import { useFetchGetInternal } from "../../components/useFetchGet";
 import styles from "./Profile.module.css";
 
 export function OtherUserProfile({ username }: { username: string }) {
   const [notificationMessage, setNotifcationMessage] = useState("");
-  const { error, loading, fetchedData } = useFetchGet({
+  const { error, loading, fetchedData } = useFetchGetInternal({
     link: `profile/other_profile/${username}`,
     dependecy: [notificationMessage],
   });
@@ -23,85 +23,97 @@ export function OtherUserProfile({ username }: { username: string }) {
 
   if (loading) return <span>loading</span>;
   if (error) return <span>error!</span>;
-  return (
-    <section className={styles["section"]}>
-      {fetchedData !== null && (
-        <>
-          <h2 className={styles["section-title"]}>
-            User {fetchedData.username}'s Profile Page
-          </h2>
-          <div
-            className={`${styles["notification"]} ${
-              styles[notificationMessage ? "notification-show" : ""]
-            }`}
-            onTransitionEnd={() => {
-              setNotifcationMessage("");
-            }}
-          >
-            {notificationMessage}
-          </div>
-          <div className={styles["card"]}>
-            <h3>Username: {fetchedData.username}</h3>
-            <h3>Created: {fetchedData.createdAt}</h3>
-            <h3>Online: {fetchedData.online.toString()}</h3>
-            {fetchedData.friends[0] && <h3>Relationship: Friends</h3>}
-            {fetchedData.requestsRelation[0] ? (
-              <div className={styles["friend-options"]}>
+  if (
+    fetchedData &&
+    typeof fetchedData === "object" &&
+    typeof fetchedData.username === "string" &&
+    typeof fetchedData.createdAt === "string" &&
+    typeof fetchedData.online === "boolean" &&
+    Array.isArray(fetchedData.friends) &&
+    Array.isArray(fetchedData.requestsRelation) &&
+    Array.isArray(fetchedData.requests)
+  ) {
+    return (
+      <section className={styles["section"]}>
+        {fetchedData !== null && (
+          <>
+            <h2 className={styles["section-title"]}>
+              User {fetchedData.username}'s Profile Page
+            </h2>
+            <div
+              className={`${styles["notification"]} ${
+                styles[notificationMessage ? "notification-show" : ""]
+              }`}
+              onTransitionEnd={() => {
+                setNotifcationMessage("");
+              }}
+            >
+              {notificationMessage}
+            </div>
+            <div className={styles["card"]}>
+              <h3>Username: {fetchedData.username}</h3>
+              <h3>Created: {fetchedData.createdAt}</h3>
+              <h3>Online: {fetchedData.online.toString()}</h3>
+              {fetchedData.friends[0] && <h3>Relationship: Friends</h3>}
+              {fetchedData.requestsRelation[0] ? (
+                <div className={styles["friend-options"]}>
+                  <button
+                    onClick={() =>
+                      onClickHandler(
+                        "friends/acceptFriendRequest",
+                        "Accepted Friend Request"
+                      )
+                    }
+                  >
+                    Accept Friend Request
+                  </button>
+                  <button
+                    onClick={() =>
+                      onClickHandler(
+                        "friends/acceptFriendRequest",
+                        "Accepted Friend Request"
+                      )
+                    }
+                  >
+                    Reject Friend Request
+                  </button>
+                </div>
+              ) : fetchedData.friends[0] ? (
                 <button
                   onClick={() =>
                     onClickHandler(
-                      "friends/acceptFriendRequest",
-                      "Accepted Friend Request"
+                      "friends/remove_friend",
+                      "Friend has been removed"
                     )
                   }
                 >
-                  Accept Friend Request
+                  Remove Friend
                 </button>
+              ) : fetchedData.requests[0] ? (
                 <button
                   onClick={() =>
                     onClickHandler(
-                      "friends/acceptFriendRequest",
-                      "Accepted Friend Request"
+                      "friends/cancel_friend_request",
+                      "Friend Request has been canceled"
                     )
                   }
                 >
-                  Reject Friend Request
+                  Cancel Friend Request
                 </button>
-              </div>
-            ) : fetchedData.friends[0] ? (
-              <button
-                onClick={() =>
-                  onClickHandler(
-                    "friends/remove_friend",
-                    "Friend has been removed"
-                  )
-                }
-              >
-                Remove Friend
-              </button>
-            ) : fetchedData.requests[0] ? (
-              <button
-                onClick={() =>
-                  onClickHandler(
-                    "friends/cancel_friend_request",
-                    "Friend Request has been canceled"
-                  )
-                }
-              >
-                Cancel Friend Request
-              </button>
-            ) : (
-              <button
-                onClick={() =>
-                  onClickHandler("friends/request", "Friend Request Sent!")
-                }
-              >
-                Send Friend Request
-              </button>
-            )}
-          </div>
-        </>
-      )}
-    </section>
-  );
+              ) : (
+                <button
+                  onClick={() =>
+                    onClickHandler("friends/request", "Friend Request Sent!")
+                  }
+                >
+                  Send Friend Request
+                </button>
+              )}
+            </div>
+          </>
+        )}
+      </section>
+    );
+  }
+  return <>ERROR</>;
 }
