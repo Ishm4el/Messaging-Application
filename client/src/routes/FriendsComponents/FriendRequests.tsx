@@ -1,6 +1,6 @@
 import fetchPut from "../../components/fetchPut";
 import { useFetchGet } from "../../components/useFetchGet";
-import { useFriendContext } from "../Friends";
+import { useFriendContext } from "../FriendsComponents/FriendContext";
 import styles from "./FriendRequests.module.css";
 
 interface Fetched {

@@ -51,9 +51,16 @@ function useFetchGetExternal(
         return res.json();
       })
       .then((resJson) => {
+        console.log("printing resJson");
+        console.log(resJson);
+
         setFetchedData(resJson);
       })
-      .catch((err) => setError(err))
+      .catch((err) => {
+        console.log("An error was found!");
+        console.log(err);
+        setError(err);
+      })
       .finally(() => setLoading(false));
   }, [...dependecy]);
   return { error, loading };

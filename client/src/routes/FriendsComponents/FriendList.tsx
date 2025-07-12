@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
 import { useFetchGet } from "../../components/useFetchGet";
-import { useFriendContext } from "../Friends";
+import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
 
 type NewType = {

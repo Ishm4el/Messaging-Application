@@ -27,17 +27,18 @@ dotevn.config({ path: "../.env" });
 const app: Express = express();
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET_KEY || "secret";
+const originLink = process.env.ORIGIN || "http://localhost:5173"
 
 app.use(
   cors({
     credentials: true,
-    origin: "http://localhost:4173",
+    origin: originLink,
     methods: ["GET", "POST", "PUT", "DELETE"],
     exposedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.urlencoded({ extended: false }));
 
 app.use(
   expressSession({

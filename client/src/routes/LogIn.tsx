@@ -43,7 +43,8 @@ export default function LogIn() {
               localStorage.setItem("username", res.username);
               localStorage.setItem(
                 "backgroundColor",
-                res.settings?.backgroundColorSettings || "main"
+                // res.settings?.backgroundColorSettings || "main"
+                "main"
               );
               outProps.setLogged(true);
               navigate("/friends");
