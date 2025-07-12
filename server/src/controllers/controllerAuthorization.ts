@@ -2,25 +2,53 @@ import { NextFunction, Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
+import { body, validationResult, matchedData } from "express-validator";
 
-const signUp: RequestHandler = asyncHandler(
+type username = { username: string };
+type password = { password: string };
+type email = { email: string };
+
+type SignUpReqData = username & password & email;
+
+const createUsernameChain = () =>
+  body("username").trim().escape().isAlphanumeric();
+const createEmailChain = () => body("email").trim().escape().isEmail();
+
+const createPasswordChain = () =>
+  body("password").trim().escape().isStrongPassword({
+    minLength: 6,
+    minLowercase: 1,
+    minNumbers: 1,
+    minSymbols: 1,
+    minUppercase: 1,
+  });
+
+const signUpValidator = [
+  createUsernameChain(),
+  createEmailChain(),
+  createPasswordChain(),
+];
+
+const signUp = [
+  ...signUpValidator,
   async (req: Request, res: Response) => {
-    const user: { email: string; password: string; username: string } =
-      req.body;
-    if (!user.email || !user.password || !user.username) {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
       res
         .status(400)
         .json({ error: "email, password, or username is missing" });
       return;
     }
 
-    const hashedPassword: string = await bcrypt.hash(user.password, 10);
+    const data = matchedData<SignUpReqData>(req);
+
+    const hashedPassword: string = await bcrypt.hash(data.password, 10);
 
     const row = await prisma.user.create({
       data: {
-        email: user.email,
+        email: data.email,
         password: hashedPassword,
-        username: user.username,
+        username: data.username,
       },
     });
 
@@ -30,8 +58,8 @@ const signUp: RequestHandler = asyncHandler(
     }
 
     res.status(200).json({ res: "success!" });
-  }
-);
+  },
+];
 
 const logout = (req: Request, res: Response, next: NextFunction) => {
   req.logout((err) => {
