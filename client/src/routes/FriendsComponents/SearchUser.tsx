@@ -2,21 +2,6 @@ import { createContext, useContext, useState } from "react";
 import styles from "./SearchUser.module.css";
 import { useNavigate } from "react-router-dom";
 
-interface Found {
-  username: string;
-  requests: { username?: string }[];
-  friends: { username?: string }[];
-  requestsRelation: { username?: string }[];
-}
-
-type SetFound = React.Dispatch<React.SetStateAction<FoundArray>>;
-
-type FoundArray = Array<Found>;
-
-type SetInitialSearch = React.Dispatch<React.SetStateAction<boolean>>;
-
-type SetSeekingUser = React.Dispatch<React.SetStateAction<string>>;
-
 function PutButton({
   username,
   fetchAt,
