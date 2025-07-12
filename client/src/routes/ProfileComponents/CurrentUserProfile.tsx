@@ -60,8 +60,8 @@ export function CurrentUserProfile() {
                 localStorage.getItem("backgroundColorSettings") || "main"
               }
             >
-              <option value="main">Light</option>
-              <option value="main-dark">Dark</option>
+              <option value="">Light</option>
+              <option value="dark">Dark</option>
             </select>
             <button type="submit">Apply Settings</button>
           </form>

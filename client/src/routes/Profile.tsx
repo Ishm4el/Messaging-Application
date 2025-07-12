@@ -2,6 +2,7 @@ import styles from "./ProfileComponents/Profile.module.css";
 import { useParams } from "react-router-dom";
 import { OtherUserProfile } from "./ProfileComponents/OtherUserProfile";
 import { CurrentUserProfile } from "./ProfileComponents/CurrentUserProfile";
+import { mainStyle } from "../utility/cssDetermine";
 
 export default function Profile() {
   const { username } = useParams();
@@ -9,11 +10,7 @@ export default function Profile() {
   console.log(localStorage.getItem("backgroundColorSettings"));
 
   return (
-    <main
-      className={
-        styles[localStorage.getItem("backgroundColorSettings") || "main"]
-      }
-    >
+    <main className={styles[mainStyle]}>
       {username !== undefined &&
       localStorage.getItem("username") !== undefined &&
       username !== undefined &&
