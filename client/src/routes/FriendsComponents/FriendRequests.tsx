@@ -149,6 +149,9 @@ export default function FriendRequests() {
     <section className={styles["friend-request-section"]}>
       <h2>Your Friend Requests</h2>
       {(fetchedData !== null &&
+        fetchedData !== undefined &&
+        typeof fetchedData === "object" &&
+        "requests" in fetchedData &&
         Array.isArray(fetchedData.requests) &&
         fetchedData.requests.length > 0 && (
           <FriendRequestList

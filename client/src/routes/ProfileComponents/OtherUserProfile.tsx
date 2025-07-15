@@ -5,10 +5,12 @@ import styles from "./Profile.module.css";
 
 export function OtherUserProfile({ username }: { username: string }) {
   const [notificationMessage, setNotifcationMessage] = useState("");
-  const { error, loading, fetchedData } = useFetchGetInternal({
-    link: `profile/other_profile/${username}`,
-    dependecy: [notificationMessage],
-  });
+  const { error, loading, fetchedData } = useFetchGetInternal<OtherUserProfile>(
+    {
+      link: `profile/other_profile/${username}`,
+      dependecy: [notificationMessage],
+    }
+  );
 
   const onClickHandler = useCallback(
     (link: string, buttonSetNotification: string) =>
@@ -23,16 +25,7 @@ export function OtherUserProfile({ username }: { username: string }) {
 
   if (loading) return <span>loading</span>;
   if (error) return <span>error!</span>;
-  if (
-    fetchedData &&
-    typeof fetchedData === "object" &&
-    typeof fetchedData.username === "string" &&
-    typeof fetchedData.createdAt === "string" &&
-    typeof fetchedData.online === "boolean" &&
-    Array.isArray(fetchedData.friends) &&
-    Array.isArray(fetchedData.requestsRelation) &&
-    Array.isArray(fetchedData.requests)
-  ) {
+  if (fetchedData) {
     return (
       <section className={styles["section"]}>
         {fetchedData !== null && (
@@ -52,7 +45,7 @@ export function OtherUserProfile({ username }: { username: string }) {
             </div>
             <div className={styles["card"]}>
               <h3>Username: {fetchedData.username}</h3>
-              <h3>Created: {fetchedData.createdAt}</h3>
+              <h3>Created: {JSON.stringify(fetchedData.createdAt)}</h3>
               <h3>Online: {fetchedData.online.toString()}</h3>
               {fetchedData.friends[0] && <h3>Relationship: Friends</h3>}
               {fetchedData.requestsRelation[0] ? (

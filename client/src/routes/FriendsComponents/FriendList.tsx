@@ -4,14 +4,6 @@ import { useFetchGetExternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
 
-type NewType = {
-  list: {
-    [key: string]: string;
-  }[];
-  search: string;
-  filterOnProperty: string;
-};
-
 function filterList({ list, search, filterOnProperty }: NewType) {
   if (search !== "") {
     return list.filter((e) =>

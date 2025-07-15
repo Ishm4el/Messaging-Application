@@ -6,32 +6,27 @@ interface UseFetchInternalArguments {
   dependecy?: Array<unknown>;
 }
 
-interface UseFetchExternalArguments extends UseFetchInternalArguments {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  setFetchedData: React.Dispatch<React.SetStateAction<any>>;
+interface UseFetchExternalArguments<T> extends UseFetchInternalArguments {
+  setFetchedData: React.Dispatch<React.SetStateAction<T>>;
 }
 
 interface UseFetchExternal {
   loading: boolean;
-  error: unknown;
+  error: object | null;
 }
 
-interface UseFetchInternal extends UseFetchExternal {
-  fetchedData: { [key: string]: unknown } | null;
-  setFetchedData: React.Dispatch<
-    React.SetStateAction<{
-      [key: string]: unknown;
-    }>
-  >;
+interface UseFetchInternal<T> extends UseFetchExternal {
+  fetchedData: T | null;
+  setFetchedData: React.Dispatch<React.SetStateAction<T | null>>;
 }
 
-export function useFetchGetExternal({
+export function useFetchGetExternal<T>({
   link,
   dependecy = [null],
   setFetchedData,
-}: UseFetchExternalArguments): UseFetchExternal {
+}: UseFetchExternalArguments<T>): UseFetchExternal {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
+  const [error, setError] = useState<object | null>(null);
   useEffect(() => {
     fetchGet(link)
       .then((res) => {
@@ -58,20 +53,18 @@ export function useFetchGetExternal({
   return { error, loading };
 }
 
-export function useFetchGetInternal({
+export function useFetchGetInternal<T>({
   link,
   dependecy = [null],
-}: UseFetchInternalArguments): UseFetchInternal {
+}: UseFetchInternalArguments): UseFetchInternal<T> {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<unknown>(null);
-  const [fetchedData, setFetchedData] = useState<{ [key: string]: unknown }>(
-    {}
-  );
+  const [error, setError] = useState<object | null>(null);
+  const [fetchedData, setFetchedData] = useState<T | null>(null);
   useEffect(() => {
     fetchGet(link)
       .then((res) => res.json())
       .then((resJson) => setFetchedData(resJson))
-      .catch((err) => setError(err))
+      .catch((err: object) => setError(err))
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependecy]);

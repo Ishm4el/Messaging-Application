@@ -4,30 +4,6 @@ import { useFetchGetExternal } from "../components/useFetchGet";
 import { useState } from "react";
 import fetchPost from "../components/fetchPost";
 
-type Messages = Message[];
-
-type Message = {
-  author: {
-    username: string;
-  };
-} & {
-  id: string;
-  createdAt: Date;
-  text: string;
-};
-
-type MessageList = {
-  username: string;
-  loading: boolean;
-  error: unknown;
-  messages: Messages | null;
-};
-
-type MessageInput = {
-  username: string;
-  setMessages: React.Dispatch<React.SetStateAction<Messages | null>>;
-};
-
 function MessageList({ loading, error, messages }: MessageList) {
   if (loading) return <p>Loading ...</p>;
   if (messages === null || error) return <p>Error ...</p>;
