@@ -1,50 +1,43 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
-import asyncHandler from "express-async-handler";
 import { body, oneOf, ValidationChain } from "express-validator";
 import nullChecker from "./utility/rowChecker";
 import ExpressError from "../errors/ExpressError";
 
 const BACKGROUND_COLORS = ["", "dark"];
 
-const getPrimaryUserProfile = asyncHandler(
-  async (req: Request, res: Response) => {
-    const primaryUserProfile = await prisma.user.findUnique({
-      where: { username: req.user?.username },
-    });
-    nullChecker(primaryUserProfile, res, "Primary user was not found");
+const getPrimaryUserProfile = async (req: Request, res: Response) => {
+  const primaryUserProfile = await prisma.user.findUnique({
+    where: { username: req.user?.username },
+  });
+  nullChecker(primaryUserProfile, res, "Primary user was not found");
+};
+const getOtherUserProfile = async (req: Request, res: Response) => {
+  const otherUserUsername = req.params.username;
+  if (otherUserUsername === req.user?.username) {
+    res.redirect("/primary_profile");
+    return;
   }
-);
 
-const getOtherUserProfile = asyncHandler(
-  async (req: Request, res: Response) => {
-    const otherUserUsername = req.params.username;
-    if (otherUserUsername === req.user?.username) {
-      res.redirect("/primary_profile");
-      return;
-    }
-
-    const otherUserProfile = await prisma.user.findUnique({
-      where: { username: otherUserUsername },
-      include: {
-        friends: {
-          where: { username: { equals: req.user?.username } },
-          select: { username: true },
-        },
-        requests: {
-          where: { username: { equals: req.user?.username } },
-          select: { username: true },
-        },
-        requestsRelation: {
-          where: { username: { equals: req.user?.username } },
-          select: { username: true },
-        },
+  const otherUserProfile = await prisma.user.findUnique({
+    where: { username: otherUserUsername },
+    include: {
+      friends: {
+        where: { username: { equals: req.user?.username } },
+        select: { username: true },
       },
-    });
-    nullChecker(otherUserProfile, res, "Other user was not found");
-  }
-);
-
+      requests: {
+        where: { username: { equals: req.user?.username } },
+        select: { username: true },
+      },
+      requestsRelation: {
+        where: { username: { equals: req.user?.username } },
+        select: { username: true },
+      },
+    },
+  });
+  nullChecker(otherUserProfile, res, "Other user was not found");
+};
 const createBackgroundColorSettingChain = () =>
   body("backgroundColorSettings")
     .escape()
@@ -62,7 +55,7 @@ const postSettingsValidation = () => {
 
 const postSettings = [
   postSettingsValidation,
-  asyncHandler(async (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     // there should be a validator to make sure users
     // post their own settings that are not part of the application.
     const currentProfileSettings = await prisma.user.findUnique({
@@ -71,9 +64,11 @@ const postSettings = [
     });
 
     if (currentProfileSettings === null) {
-      // throw new Error("currentProfileSettings is null!");
-      res.json({ error: "Settings could not be applied" });
-      return;
+      throw new ExpressError(
+        "Settings could not be applied",
+        "Internal Error",
+        500
+      );
     }
 
     const currentProfileSettingsString = JSON.stringify(
@@ -101,7 +96,7 @@ const postSettings = [
 
     res.json(postedProfileSettings.settings);
     return;
-  }),
+  },
 ];
 
 export { getPrimaryUserProfile, getOtherUserProfile, postSettings };

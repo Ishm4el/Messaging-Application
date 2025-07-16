@@ -1,9 +1,9 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
-import asyncHandler from "express-async-handler";
 import bcrypt from "bcryptjs";
 import { body, validationResult, matchedData } from "express-validator";
 import passport from "passport";
+import ExpressError from "../errors/ExpressError";
 
 type username = { username: string };
 type password = { password: string };
@@ -32,12 +32,14 @@ const signUpValidator = [
 
 const signUp = [
   ...signUpValidator,
-  asyncHandler(async (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res
-        .status(400)
-        .json({ error: "email, password, or username is missing" });
+      throw new ExpressError(
+        "email, password, or username is missing",
+        "Icomplete Form",
+        400
+      );
       return;
     }
 
@@ -54,67 +56,63 @@ const signUp = [
     });
 
     if (!row) {
-      res.status(409).json({ error: "Failed to create user in the databse" });
-      return;
+      throw new ExpressError(
+        "Failed to create a new user",
+        "Create Failure",
+        500
+      );
     }
 
     res.status(200).json({ res: "success!" });
-  }),
+  },
 ];
 
 const validateLogin = [createPasswordChain(), createUsernameChain()];
 
 const login = [
   ...validateLogin,
-  asyncHandler(async (req, res, next) => {
+  async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      res.status(400).json({ error: "login failed" });
-      return;
+      throw new ExpressError(
+        "Sign in form is not filled out",
+        "Incomplete Form",
+        400
+      );
     }
     next();
-  }),
+  },
   passport.authenticate("local", {
     failureMessage: true,
     failureRedirect: "/authorization/log_in_failure",
   }),
-  asyncHandler(async (req: Request, res: Response) => {
+  async (req: Request, res: Response) => {
     res.json({ username: req.user?.username, settings: req.user?.settings });
-  }),
+  },
 ];
 
-const logout = asyncHandler(
-  (req: Request, res: Response, next: NextFunction) => {
-    req.logout((err) => {
-      if (err) {
-        return next(err);
-      }
-      res.json({ message: "logout success!" });
-    });
-  }
-);
-
+const logout = (req: Request, res: Response, next: NextFunction) => {
+  req.logout((err) => {
+    if (err) {
+      return next(err);
+    }
+    res.json({ message: "logout success!" });
+  });
+};
 declare module "express-session" {
   interface Session {
     messages?: Array<String>;
   }
 }
-const logInFailure: RequestHandler = asyncHandler(
-  async (req: Request, res: Response) => {
-    console.log("[logInFailure] beginning");
-    res.status(401).json({ message: req.session.messages!.pop() });
-  }
-);
+const logInFailure: RequestHandler = async (req: Request, res: Response) => {
+  throw new ExpressError("Login failed", "Failed to authenticate", 401);
+};
+const protectedRoute: RequestHandler = async (req: Request, res: Response) => {
+  console.log("++++++++++++++++++++++++++++++++++++++++++");
+  console.log(req.isAuthenticated());
+  console.log("user: " + JSON.stringify(req.user));
 
-const protectedRoute: RequestHandler = asyncHandler(
-  async (req: Request, res: Response) => {
-    console.log("++++++++++++++++++++++++++++++++++++++++++");
-    console.log(req.isAuthenticated());
-    console.log("user: " + JSON.stringify(req.user));
-
-    console.log(req.session);
-    res.json({ secret: "Cat in the Hat!" });
-  }
-);
-
+  console.log(req.session);
+  res.json({ secret: "Cat in the Hat!" });
+};
 export { signUp, logout, login, protectedRoute, logInFailure };

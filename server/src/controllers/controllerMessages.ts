@@ -1,8 +1,8 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
-import asyncHandler from "express-async-handler";
+import ExpressError from "../errors/ExpressError";
 
-const getMessagesFrom = asyncHandler(async (req: Request, res: Response) => {
+const getMessagesFrom = async (req: Request, res: Response) => {
   const otherUsername: string = req.params.username;
   const foundMessages = await prisma.message.findMany({
     where: {
@@ -33,14 +33,13 @@ const getMessagesFrom = asyncHandler(async (req: Request, res: Response) => {
   });
 
   if (!foundMessages) {
-    res.status(400).json({ error: "Could not retrieve messages" });
-    return;
+    throw new ExpressError("Could not retrieve messages", "Not Found", 404);
   }
 
   res.status(200).json(foundMessages);
-});
+};
 
-const postMessage = asyncHandler(async (req: Request, res: Response) => {
+const postMessage = async (req: Request, res: Response) => {
   const otherUsername = req.params.username;
   const text: string = req.body.text;
   const authorId = req.user?.id!;
@@ -61,7 +60,7 @@ const postMessage = asyncHandler(async (req: Request, res: Response) => {
     return;
   }
 
-  res.status(400).json({ error: "Message was not created" });
-});
+  throw new ExpressError("Message was not created", "Internal Error", 500);
+};
 
 export { getMessagesFrom, postMessage };
