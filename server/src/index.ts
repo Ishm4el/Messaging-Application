@@ -1,4 +1,4 @@
-import express, { Express, NextFunction, Request, Response } from "express";
+import express from "express";
 import dotevn from "dotenv";
 import cors from "cors";
 import expressSession from "express-session";
@@ -12,6 +12,7 @@ import routerFriends from "./routes/routesFriends";
 import routerProfile from "./routes/routesProfile";
 import routerMessages from "./routes/routesMessages";
 import { JsonValue } from "@prisma/client/runtime/library";
+import mainErrorHandler from "./errors/mainErrorHandler";
 
 declare global {
   namespace Express {
@@ -24,10 +25,10 @@ declare global {
 }
 
 dotevn.config({ path: "../.env" });
-const app: Express = express();
+const app = express();
 const port = process.env.PORT || 3000;
 const secret = process.env.SECRET_KEY || "secret";
-const originLink = process.env.ORIGIN || "http://localhost:5173"
+const originLink = process.env.ORIGIN || "http://localhost:5173";
 
 app.use(
   cors({
@@ -38,7 +39,6 @@ app.use(
   })
 );
 app.use(express.json());
-// app.use(express.urlencoded({ extended: false }));
 
 app.use(
   expressSession({
@@ -118,10 +118,8 @@ app.use("/friends", routerFriends);
 app.use("/profile", routerProfile);
 app.use("/messages", routerMessages);
 
-app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err);
-  res.status(500).json({ res: err.message });
-});
+// error handler
+app.use(mainErrorHandler);
 
 app.listen(port, () => {
   console.log(`[server]: Server is running at http://localhost:${port}`);

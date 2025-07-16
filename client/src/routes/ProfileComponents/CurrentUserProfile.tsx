@@ -5,17 +5,38 @@ import fetchPost from "../../components/fetchPost";
 
 export function CurrentUserProfile() {
   const navigate = useNavigate();
-  const { error, fetchedData, loading } = useFetchGetInternal({
+  const { error, fetchedData, loading } = useFetchGetInternal<{
+    username: string;
+    online: boolean;
+    createdAt: Date;
+  } | null>({
     link: "profile/primary_profile",
   });
+
+  const formUpdateUserSettings = (ev: React.FormEvent<HTMLFormElement>) => {
+    ev.preventDefault();
+    const formData = new FormData(ev.currentTarget);
+    console.log(formData.get("background-color-settings"));
+    fetchPost({
+      link: "profile/settings",
+      body: {
+        backgroundColorSettings: formData.get("background-color-settings"),
+      },
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        localStorage.setItem(
+          "backgroundColorSettings",
+          res.backgroundColorSettings
+        );
+        navigate(0);
+      });
+  };
+
   if (loading) return <>Loading!</>;
   if (error) return <>Error: {JSON.stringify(error)}</>;
-  if (
-    fetchedData &&
-    typeof fetchedData.username === "string" &&
-    typeof fetchedData.createdAt === "string" &&
-    typeof fetchedData.online === "boolean"
-  ) {
+  if (fetchedData) {
     return (
       <>
         <section className={styles["section"]}>
@@ -25,7 +46,7 @@ export function CurrentUserProfile() {
               <h3 className={styles["cool"]}>
                 Username: {fetchedData.username}
               </h3>
-              <h3>Created: {fetchedData.createdAt}</h3>
+              <h3>Created: {fetchedData.createdAt.toString()}</h3>
               <h3>Online: {fetchedData.online.toString()}</h3>
             </div>
           )}
@@ -33,31 +54,7 @@ export function CurrentUserProfile() {
         <section className={styles["section"]}>
           <h2>Profile Settings</h2>
           <div className={styles["card"]}>
-            <form
-              className={styles["form"]}
-              onSubmit={(ev) => {
-                ev.preventDefault();
-                const formData = new FormData(ev.currentTarget);
-                console.log(formData.get("background-color-settings"));
-                fetchPost({
-                  link: "profile/settings",
-                  body: {
-                    backgroundColorSettings: formData.get(
-                      "background-color-settings"
-                    ),
-                  },
-                })
-                  .then((res) => res.json())
-                  .then((res) => {
-                    console.log(res);
-                    localStorage.setItem(
-                      "backgroundColorSettings",
-                      res.backgroundColorSettings
-                    );
-                    navigate(0);
-                  });
-              }}
-            >
+            <form className={styles["form"]} onSubmit={formUpdateUserSettings}>
               <label htmlFor="background-color-settings">
                 Background Color Settings
               </label>

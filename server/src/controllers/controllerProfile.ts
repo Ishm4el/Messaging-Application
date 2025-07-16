@@ -1,17 +1,11 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import asyncHandler from "express-async-handler";
+import { body, oneOf, ValidationChain } from "express-validator";
+import nullChecker from "./utility/rowChecker";
+import ExpressError from "../errors/ExpressError";
 
-const nullChecker = (
-  row: { [key: string]: any } | null,
-  res: Response,
-  errorMessage: string
-) => {
-  console.log(row);
-
-  if (row !== null) res.json(row);
-  else res.json({ error: errorMessage });
-};
+const BACKGROUND_COLORS = ["", "dark"];
 
 const getPrimaryUserProfile = asyncHandler(
   async (req: Request, res: Response) => {
@@ -51,45 +45,63 @@ const getOtherUserProfile = asyncHandler(
   }
 );
 
-const postSettings = asyncHandler(async (req: Request, res: Response) => {
-  // there should be a validator to make sure users
-  // post their own settings that are not part of the application.
-  const currentProfileSettings = await prisma.user.findUnique({
-    where: { username: req.user?.username },
-    select: { settings: true },
-  });
+const createBackgroundColorSettingChain = () =>
+  body("backgroundColorSettings")
+    .escape()
+    .custom(async (value) => {
+      if (!BACKGROUND_COLORS.includes(value)) {
+        throw new Error("Recieved background color is not an option");
+      }
+      return true;
+    })
+    .isEmpty();
 
-  if (currentProfileSettings === null) {
-    // throw new Error("currentProfileSettings is null!");
-    res.json({ error: "Settings could not be applied" });
+const postSettingsValidation = () => {
+  oneOf([createBackgroundColorSettingChain()]);
+};
+
+const postSettings = [
+  postSettingsValidation,
+  asyncHandler(async (req: Request, res: Response) => {
+    // there should be a validator to make sure users
+    // post their own settings that are not part of the application.
+    const currentProfileSettings = await prisma.user.findUnique({
+      where: { username: req.user?.username },
+      select: { settings: true },
+    });
+
+    if (currentProfileSettings === null) {
+      // throw new Error("currentProfileSettings is null!");
+      res.json({ error: "Settings could not be applied" });
+      return;
+    }
+
+    const currentProfileSettingsString = JSON.stringify(
+      currentProfileSettings.settings
+    );
+    console.log("currentProfileSettingsString: ");
+    console.log(currentProfileSettingsString);
+
+    const jsonData = JSON.parse(
+      currentProfileSettingsString === undefined
+        ? "{}"
+        : currentProfileSettingsString
+    );
+
+    const newProfileSettings = {
+      ...jsonData,
+      ...req.body,
+    };
+
+    const postedProfileSettings = await prisma.user.update({
+      where: { username: req.user?.username },
+      data: { settings: newProfileSettings },
+      select: { settings: true },
+    });
+
+    res.json(postedProfileSettings.settings);
     return;
-  }
-
-  const currentProfileSettingsString = JSON.stringify(
-    currentProfileSettings.settings
-  );
-  console.log("currentProfileSettingsString: ");
-  console.log(currentProfileSettingsString);
-
-  const jsonData = JSON.parse(
-    currentProfileSettingsString === undefined
-      ? "{}"
-      : currentProfileSettingsString
-  );
-
-  const newProfileSettings = {
-    ...jsonData,
-    ...req.body,
-  };
-
-  const postedProfileSettings = await prisma.user.update({
-    where: { username: req.user?.username },
-    data: { settings: newProfileSettings },
-    select: { settings: true },
-  });
-
-  res.json(postedProfileSettings.settings);
-  return;
-});
+  }),
+];
 
 export { getPrimaryUserProfile, getOtherUserProfile, postSettings };
