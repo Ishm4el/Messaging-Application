@@ -13,6 +13,7 @@ import routerProfile from "./routes/routesProfile";
 import routerMessages from "./routes/routesMessages";
 import { JsonValue } from "@prisma/client/runtime/library";
 import mainErrorHandler from "./errors/mainErrorHandler";
+import { isAuthenticatedMiddleware } from "./middleware/middleware";
 
 declare global {
   namespace Express {
@@ -107,13 +108,9 @@ passport.deserializeUser(async (id: string, done) => {
 
 // use routers
 app.use("/authorization", routerAuthorization);
-app.use(async (req, res, next) => {
-  if (!req.user) {
-    res.status(401).json({ err: "Currently not signed in" });
-    return;
-  }
-  next();
-});
+// Protects routes below
+app.use(isAuthenticatedMiddleware);
+// Protected routes
 app.use("/friends", routerFriends);
 app.use("/profile", routerProfile);
 app.use("/messages", routerMessages);
