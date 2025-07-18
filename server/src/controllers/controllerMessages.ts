@@ -2,6 +2,10 @@ import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import ExpressError from "../errors/ExpressError";
 
+interface RequestUpdate extends Request {
+  user: { username: string; id: string };
+}
+
 const getMessagesFrom = async (req: Request, res: Response) => {
   const otherUsername: string = req.params.username;
   const foundMessages = await prisma.message.findMany({
