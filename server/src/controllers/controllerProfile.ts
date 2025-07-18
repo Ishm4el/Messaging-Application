@@ -3,7 +3,7 @@ import prisma from "../../prisma/prisma";
 import { body, oneOf, ValidationChain } from "express-validator";
 import nullChecker from "./utility/rowChecker";
 import ExpressError from "../errors/ExpressError";
-import { gaurdRequestAuthorized } from "./utility/RequestChecker";
+import { gaurdRequestAuthorized } from "./utility/requestChecker";
 
 const BACKGROUND_COLORS = ["", "dark"];
 

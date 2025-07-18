@@ -1,7 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import ExpressError from "../errors/ExpressError";
-import { gaurdRequestAuthorized } from "./utility/RequestChecker";
+import { gaurdRequestAuthorized } from "./utility/requestChecker";
 
 interface RequestUpdate extends Request {
   user: { username: string; id: string };
