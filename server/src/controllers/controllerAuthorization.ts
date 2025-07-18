@@ -14,8 +14,9 @@ import {
   signUpValidator,
   validateLogin,
 } from "./validators/validateAuthorization";
+import { RequestValidateAndHandler } from "./controllers-env";
 
-const signUp: (ValidationChain | RequestHandler)[] = [
+const signUp: RequestValidateAndHandler = [
   ...signUpValidator,
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -51,7 +52,7 @@ const signUp: (ValidationChain | RequestHandler)[] = [
   },
 ];
 
-const login: (ValidationChain | RequestHandler)[] = [
+const login: RequestValidateAndHandler = [
   ...validateLogin,
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);

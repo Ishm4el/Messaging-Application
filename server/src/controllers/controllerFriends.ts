@@ -1,12 +1,39 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
-import { gaurdRequestAuthorized } from "./utility/RequestChecker";
+import { gaurdRequestAuthorized } from "./utility/requestChecker";
 import ExpressError from "../errors/ExpressError";
+import {
+  matchedData,
+  param,
+  Result,
+  ValidationError,
+  validationResult,
+} from "express-validator";
+import { RequestValidateAndHandler } from "./controllers-env";
+import rowChecker from "./utility/rowChecker";
+
+const createUserSearchChain = (name: "user" | "username") =>
+  param(name).trim().escape().notEmpty().isString();
+
+const checkIfUserIsEmpty = (errors: Result<ValidationError>) => {
+  console.log(errors);
+
+  if (!errors.isEmpty()) {
+    throw new ExpressError("No username was provided", "Bad Request", 400);
+  }
+};
+
+const validateResultOnlyBodyUser = (req: Request) => {
+  const errors = validationResult(req);
+  checkIfUserIsEmpty(errors);
+};
 
 const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
   gaurdRequestAuthorized(req);
-  req.user.id;
-  req.session.id;
+
+  console.log(req.session.id);
+  console.log(req.user.id);
+
   const userFriends = await prisma.user.findUnique({
     where: { id: req.user.id },
     select: { friends: true },
@@ -17,45 +44,47 @@ const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
   res.status(200).json({ friends: userFriends });
 };
 
-const findUser: RequestHandler = async (req: Request, res: Response) => {
-  gaurdRequestAuthorized(req);
-  if (!req.params.user) {
-    res.status(400).json({ err: "No Search was provided" });
-    return;
-  }
+const findUser: RequestValidateAndHandler = [
+  createUserSearchChain("user"),
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
 
-  const search: string = req.params.user;
-  const foundUsers = await prisma.user.findMany({
-    where: {
-      username: { startsWith: search },
-      NOT: [
-        // exclude the current user from the search
-        { id: req.user.id },
-        // exclude users who are already friended
-        // { friends: { some: { id: { equals: req.user.id } } } },
-      ],
-    },
-    select: {
-      username: true,
-      requests: {
-        where: { id: { equals: req.user.id } },
-        select: { username: true },
-        take: 1,
-      },
-      friends: {
-        where: { id: { equals: req.user.id } },
-        select: { username: true },
-        take: 1,
-      },
-      requestsRelation: {
-        where: { id: { equals: req.user.id } },
-        take: 1,
-      },
-    },
-  });
+    validateResultOnlyBodyUser(req)
 
-  res.status(200).json(foundUsers);
-};
+    const data = matchedData<{ user: string }>(req);
+
+    const foundUsers = await prisma.user.findMany({
+      where: {
+        username: { startsWith: data.user },
+        NOT: [
+          // exclude the current user from the search
+          { id: req.user.id },
+          // exclude users who are already friended
+          // { friends: { some: { id: { equals: req.user.id } } } },
+        ],
+      },
+      select: {
+        username: true,
+        requests: {
+          where: { id: { equals: req.user.id } },
+          select: { username: true },
+          take: 1,
+        },
+        friends: {
+          where: { id: { equals: req.user.id } },
+          select: { username: true },
+          take: 1,
+        },
+        requestsRelation: {
+          where: { id: { equals: req.user.id } },
+          take: 1,
+        },
+      },
+    });
+
+    rowChecker(foundUsers, res, "No users were found");
+  },
+];
 
 const getAllFriendRequests: RequestHandler = async (
   req: Request,
@@ -87,129 +116,155 @@ const getAllFriendRequestsCount: RequestHandler = async (
   return;
 };
 
-const sendFriendRequest: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
-  gaurdRequestAuthorized(req);
-  // create friend relationship
-  const addingRequestResult = await prisma.user.update({
-    where: { username: req.body.username },
-    data: { requests: { connect: { username: req.user.username } } },
-  });
+const sendFriendRequest: RequestValidateAndHandler = [
+  createUserSearchChain("username"),
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
 
-  console.log(addingRequestResult);
+    validateResultOnlyBodyUser(req)
 
-  res.status(200).json(addingRequestResult);
-};
+    const data = matchedData<{ username: string }>(req);
 
-const acceptFriendRequest: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
-  gaurdRequestAuthorized(req);
-  const confirmFriendRequest = await prisma.user.findUnique({
-    where: { id: req.user.id },
-    select: {
-      requests: {
-        where: { username: { equals: req.body.username } },
-        take: 1,
-      },
-    },
-  });
-
-  if (!confirmFriendRequest)
-    throw new ExpressError(
-      "ConfirmFriendRequest is null",
-      "Data not found",
-      404
-    );
-
-  if (confirmFriendRequest.requests[0].username !== req.body.username) {
-    console.log("stopped new friend making");
-    res.status(403).json({
-      error: "Friend could not be found in requests of the primary user",
+    // create friend relationship
+    const addingRequestResult = await prisma.user.update({
+      where: { username: data.username },
+      data: { requests: { connect: { username: req.user.username } } },
     });
-    return;
-  }
 
-  // remove user from the requestee
-  const settleUsers = await prisma.user.update({
-    where: { id: req.user.id },
-    data: { requests: { disconnect: [{ username: req.body.username }] } },
-  });
+    console.log(addingRequestResult);
 
-  console.log("[settleUsers]: ");
-  console.log(settleUsers);
+    rowChecker(addingRequestResult, res, "addingRequestResult is empty");
+  },
+];
 
-  // add friend to the current user
-  await prisma.user.update({
-    where: { id: req.user.id },
-    data: { friends: { connect: { username: req.body.username } } },
-  });
+const acceptFriendRequest: RequestValidateAndHandler = [
+  createUserSearchChain("username"),
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
 
-  // add user to the other user
-  await prisma.user.update({
-    where: { username: req.body.username },
-    data: { friends: { connect: { id: req.user.id } } },
-  });
+    validateResultOnlyBodyUser(req)
 
-  res.status(200).json({ res: "done" });
-};
+    const data = matchedData<{ username: string }>(req);
 
-const cancelFriendRequest: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
-  gaurdRequestAuthorized(req);
-  await prisma.user.update({
-    where: { username: req.body.username },
-    data: { requests: { disconnect: { username: req.user.username } } },
-  });
+    const confirmFriendRequest = await prisma.user.findUnique({
+      where: { id: req.user.id },
+      select: {
+        requests: {
+          where: { username: { equals: data.username } },
+          take: 1,
+        },
+      },
+    });
 
-  res
-    .status(200)
-    .json({ res: `Friend request has been canceld for: ${req.body.username}` });
-};
+    if (!confirmFriendRequest)
+      throw new ExpressError(
+        "ConfirmFriendRequest is null",
+        "Data not found",
+        404
+      );
 
-const declineFriendRequest: RequestHandler = async (
-  req: Request,
-  res: Response
-) => {
-  gaurdRequestAuthorized(req);
-  await prisma.user.update({
-    where: { username: req.user.username },
-    data: { requests: { disconnect: { username: req.body.username } } },
-  });
-  res.status(200).json({ message: "Friend Request Declined" });
-};
+    if (confirmFriendRequest.requests[0].username !== data.username) {
+      console.log("stopped new friend making");
+      res.status(403).json({
+        error: "Friend could not be found in requests of the primary user",
+      });
+      return;
+    }
 
-const removeFriend: RequestHandler = async (req: Request, res: Response) => {
-  gaurdRequestAuthorized(req);
-  console.log("remove Friend");
+    // remove user from the requestee
+    const settleUsers = await prisma.user.update({
+      where: { id: req.user.id },
+      data: { requests: { disconnect: [{ username: data.username }] } },
+    });
 
-  // remove friend on the other user
-  await prisma.user.update({
-    where: { username: req.body.username },
-    data: { friends: { disconnect: { username: req.user.username } } },
-  });
+    console.log("[settleUsers]: ");
+    console.log(settleUsers);
 
-  // remove friend on current user
-  await prisma.user.update({
-    where: { username: req.user.username },
-    data: { friends: { disconnect: { username: req.body.username } } },
-  });
+    // add friend to the current user
+    await prisma.user.update({
+      where: { id: req.user.id },
+      data: { friends: { connect: { username: data.username } } },
+    });
 
-  const currentUser = await prisma.user.findUnique({
-    where: { username: req.body.username },
-    include: { friends: true },
-  });
+    // add user to the other user
+    await prisma.user.update({
+      where: { username: data.username },
+      data: { friends: { connect: { id: req.user.id } } },
+    });
 
-  console.log("friend was removed");
-  console.log(currentUser);
+    res.status(200).json({ res: "done" });
+  },
+];
 
-  res.status(200).json({ message: "Friend Removed" });
-};
+const cancelFriendRequest: RequestValidateAndHandler = [
+  createUserSearchChain("username"),
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
+
+    validateResultOnlyBodyUser(req)
+
+    const data = matchedData<{ username: string }>(req);
+
+    await prisma.user.update({
+      where: { username: data.username },
+      data: { requests: { disconnect: { username: req.user.username } } },
+    });
+
+    res.status(200).json({
+      res: `Friend request has been canceld for: ${data.username}`,
+    });
+  },
+];
+
+const declineFriendRequest: RequestValidateAndHandler = [
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
+
+    validateResultOnlyBodyUser(req)
+
+    const data = matchedData<{ username: string }>(req);
+
+    await prisma.user.update({
+      where: { username: req.user.username },
+      data: { requests: { disconnect: { username: data.username } } },
+    });
+    res.status(200).json({ message: "Friend Request Declined" });
+  },
+];
+
+const removeFriend: RequestValidateAndHandler = [
+  createUserSearchChain("username"),
+  async (req: Request, res: Response) => {
+    gaurdRequestAuthorized(req);
+    console.log("remove Friend");
+
+    validateResultOnlyBodyUser(req)
+
+    const data = matchedData<{ username: string }>(req);
+
+    // remove friend on the other user
+    await prisma.user.update({
+      where: { username: data.username },
+      data: { friends: { disconnect: { username: req.user.username } } },
+    });
+
+    // remove friend on current user
+    await prisma.user.update({
+      where: { username: req.user.username },
+      data: { friends: { disconnect: { username: data.username } } },
+    });
+
+    const currentUser = await prisma.user.findUnique({
+      where: { username: data.username },
+      include: { friends: true },
+    });
+
+    console.log("friend was removed");
+    console.log(currentUser);
+
+    res.status(200).json({ message: "Friend Removed" });
+  },
+];
 
 export {
   getAllFriends,
