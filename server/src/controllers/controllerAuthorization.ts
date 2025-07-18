@@ -41,7 +41,6 @@ const signUp = [
         "Icomplete Form",
         400
       );
-      return;
     }
 
     const data = matchedData<SignUpReqData>(req);
