@@ -3,18 +3,22 @@ import prisma from "../../prisma/prisma";
 import { body, oneOf, ValidationChain } from "express-validator";
 import nullChecker from "./utility/rowChecker";
 import ExpressError from "../errors/ExpressError";
+import { gaurdRequestAuthorized } from "./utility/RequestChecker";
 
 const BACKGROUND_COLORS = ["", "dark"];
 
 const getPrimaryUserProfile = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   const primaryUserProfile = await prisma.user.findUnique({
-    where: { username: req.user?.username },
+    where: { username: req.user.username },
   });
   nullChecker(primaryUserProfile, res, "Primary user was not found");
 };
+
 const getOtherUserProfile = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   const otherUserUsername = req.params.username;
-  if (otherUserUsername === req.user?.username) {
+  if (otherUserUsername === req.user.username) {
     res.redirect("/primary_profile");
     return;
   }
@@ -23,15 +27,15 @@ const getOtherUserProfile = async (req: Request, res: Response) => {
     where: { username: otherUserUsername },
     include: {
       friends: {
-        where: { username: { equals: req.user?.username } },
+        where: { username: { equals: req.user.username } },
         select: { username: true },
       },
       requests: {
-        where: { username: { equals: req.user?.username } },
+        where: { username: { equals: req.user.username } },
         select: { username: true },
       },
       requestsRelation: {
-        where: { username: { equals: req.user?.username } },
+        where: { username: { equals: req.user.username } },
         select: { username: true },
       },
     },
@@ -58,8 +62,9 @@ const postSettings = [
   async (req: Request, res: Response) => {
     // there should be a validator to make sure users
     // post their own settings that are not part of the application.
+    gaurdRequestAuthorized(req);
     const currentProfileSettings = await prisma.user.findUnique({
-      where: { username: req.user?.username },
+      where: { username: req.user.username },
       select: { settings: true },
     });
 
@@ -89,7 +94,7 @@ const postSettings = [
     };
 
     const postedProfileSettings = await prisma.user.update({
-      where: { username: req.user?.username },
+      where: { username: req.user.username },
       data: { settings: newProfileSettings },
       select: { settings: true },
     });
