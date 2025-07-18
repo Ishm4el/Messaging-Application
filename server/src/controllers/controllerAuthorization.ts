@@ -1,37 +1,21 @@
 import { NextFunction, Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import bcrypt from "bcryptjs";
-import { body, validationResult, matchedData } from "express-validator";
+import {
+  validationResult,
+  matchedData,
+  ValidationChain,
+} from "express-validator";
 import passport from "passport";
+import { gaurdRequestAuthorized } from "./utility/requestChecker";
 import ExpressError from "../errors/ExpressError";
-import { gaurdRequestAuthorized } from "./utility/RequestChecker";
+import {
+  SignUpReqData,
+  signUpValidator,
+  validateLogin,
+} from "./validators/validateAuthorization";
 
-type username = { username: string };
-type password = { password: string };
-type email = { email: string };
-
-type SignUpReqData = username & password & email;
-
-const createUsernameChain = () =>
-  body("username").trim().escape().isAlphanumeric();
-const createEmailChain = () => body("email").trim().escape().isEmail();
-
-const createPasswordChain = () =>
-  body("password").trim().escape().isStrongPassword({
-    minLength: 6,
-    minLowercase: 1,
-    minNumbers: 1,
-    minSymbols: 1,
-    minUppercase: 1,
-  });
-
-const signUpValidator = [
-  createUsernameChain(),
-  createEmailChain(),
-  createPasswordChain(),
-];
-
-const signUp = [
+const signUp: (ValidationChain | RequestHandler)[] = [
   ...signUpValidator,
   async (req: Request, res: Response) => {
     const errors = validationResult(req);
@@ -67,9 +51,7 @@ const signUp = [
   },
 ];
 
-const validateLogin = [createPasswordChain(), createUsernameChain()];
-
-const login = [
+const login: (ValidationChain | RequestHandler)[] = [
   ...validateLogin,
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req);
@@ -92,7 +74,11 @@ const login = [
   },
 ];
 
-const logout = (req: Request, res: Response, next: NextFunction) => {
+const logout: RequestHandler = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   req.logout((err) => {
     if (err) {
       return next(err);
@@ -105,9 +91,11 @@ declare module "express-session" {
     messages?: Array<String>;
   }
 }
+
 const logInFailure: RequestHandler = async (req: Request, res: Response) => {
   throw new ExpressError("Login failed", "Failed to authenticate", 401);
 };
+
 const protectedRoute: RequestHandler = async (req: Request, res: Response) => {
   console.log("++++++++++++++++++++++++++++++++++++++++++");
   console.log(req.isAuthenticated());
@@ -116,4 +104,5 @@ const protectedRoute: RequestHandler = async (req: Request, res: Response) => {
   console.log(req.session);
   res.json({ secret: "Cat in the Hat!" });
 };
+
 export { signUp, logout, login, protectedRoute, logInFailure };
