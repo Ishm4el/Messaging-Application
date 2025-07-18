@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { body, validationResult, matchedData } from "express-validator";
 import passport from "passport";
 import ExpressError from "../errors/ExpressError";
+import { gaurdRequestAuthorized } from "./utility/RequestChecker";
 
 type username = { username: string };
 type password = { password: string };
@@ -87,7 +88,8 @@ const login = [
     failureRedirect: "/authorization/log_in_failure",
   }),
   async (req: Request, res: Response) => {
-    res.json({ username: req.user?.username, settings: req.user?.settings });
+    gaurdRequestAuthorized(req);
+    res.json({ username: req.user.username, settings: req.user.settings });
   },
 ];
 

@@ -1,8 +1,9 @@
 import { Request } from "express";
 import ExpressError from "../../errors/ExpressError";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface RequestAuthorized extends Request {
-  user: { username: string; id: string };
+  user: { username: string; id: string; settings?: JsonValue };
 }
 
 function confirmAuthorized(req: Request) {
