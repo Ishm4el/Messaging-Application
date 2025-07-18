@@ -1,6 +1,7 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import { gaurdRequestAuthorized } from "./utility/RequestChecker";
+import ExpressError from "../errors/ExpressError";
 
 const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
   gaurdRequestAuthorized(req);
@@ -17,6 +18,7 @@ const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
 };
 
 const findUser: RequestHandler = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   if (!req.params.user) {
     res.status(400).json({ err: "No Search was provided" });
     return;
@@ -28,25 +30,25 @@ const findUser: RequestHandler = async (req: Request, res: Response) => {
       username: { startsWith: search },
       NOT: [
         // exclude the current user from the search
-        { id: req.user?.id },
+        { id: req.user.id },
         // exclude users who are already friended
-        // { friends: { some: { id: { equals: req.user?.id } } } },
+        // { friends: { some: { id: { equals: req.user.id } } } },
       ],
     },
     select: {
       username: true,
       requests: {
-        where: { id: { equals: req.user?.id } },
+        where: { id: { equals: req.user.id } },
         select: { username: true },
         take: 1,
       },
       friends: {
-        where: { id: { equals: req.user?.id } },
+        where: { id: { equals: req.user.id } },
         select: { username: true },
         take: 1,
       },
       requestsRelation: {
-        where: { id: { equals: req.user?.id } },
+        where: { id: { equals: req.user.id } },
         take: 1,
       },
     },
@@ -54,12 +56,14 @@ const findUser: RequestHandler = async (req: Request, res: Response) => {
 
   res.status(200).json(foundUsers);
 };
+
 const getAllFriendRequests: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   const userIncomingFriendRequests = await prisma.user.findUnique({
-    where: { id: req.user?.id },
+    where: { id: req.user.id },
     include: { requests: true },
   });
 
@@ -70,8 +74,9 @@ const getAllFriendRequestsCount: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   const allFriendRequestsCount = await prisma.user.findUnique({
-    where: { username: req.user?.username },
+    where: { username: req.user.username },
     select: { _count: { select: { requests: true } } },
   });
   if (allFriendRequestsCount === null) {
@@ -86,10 +91,11 @@ const sendFriendRequest: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   // create friend relationship
   const addingRequestResult = await prisma.user.update({
     where: { username: req.body.username },
-    data: { requests: { connect: { username: req.user?.username } } },
+    data: { requests: { connect: { username: req.user.username } } },
   });
 
   console.log(addingRequestResult);
@@ -101,8 +107,9 @@ const acceptFriendRequest: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   const confirmFriendRequest = await prisma.user.findUnique({
-    where: { id: req.user?.id },
+    where: { id: req.user.id },
     select: {
       requests: {
         where: { username: { equals: req.body.username } },
@@ -111,7 +118,14 @@ const acceptFriendRequest: RequestHandler = async (
     },
   });
 
-  if (confirmFriendRequest?.requests[0].username !== req.body.username) {
+  if (!confirmFriendRequest)
+    throw new ExpressError(
+      "ConfirmFriendRequest is null",
+      "Data not found",
+      404
+    );
+
+  if (confirmFriendRequest.requests[0].username !== req.body.username) {
     console.log("stopped new friend making");
     res.status(403).json({
       error: "Friend could not be found in requests of the primary user",
@@ -121,7 +135,7 @@ const acceptFriendRequest: RequestHandler = async (
 
   // remove user from the requestee
   const settleUsers = await prisma.user.update({
-    where: { id: req.user?.id },
+    where: { id: req.user.id },
     data: { requests: { disconnect: [{ username: req.body.username }] } },
   });
 
@@ -130,34 +144,27 @@ const acceptFriendRequest: RequestHandler = async (
 
   // add friend to the current user
   await prisma.user.update({
-    where: { id: req.user?.id },
+    where: { id: req.user.id },
     data: { friends: { connect: { username: req.body.username } } },
   });
 
   // add user to the other user
   await prisma.user.update({
     where: { username: req.body.username },
-    data: { friends: { connect: { id: req.user?.id } } },
+    data: { friends: { connect: { id: req.user.id } } },
   });
 
   res.status(200).json({ res: "done" });
 };
-// const rejectFriendRequest = async (req: RequestAuthorized, res: Response) => {
-//   const rejectFriendRequestResult = await prisma.user.update({
-//     where: { username: req.user??.username },
-//     data: { requestsRelation: { disconnect: { username: req.body.username } } },
-//   });
-
-//   res.status(200).json({ message: "Friend Request has been rejected" });
-// };
 
 const cancelFriendRequest: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   await prisma.user.update({
     where: { username: req.body.username },
-    data: { requests: { disconnect: { username: req.user?.username } } },
+    data: { requests: { disconnect: { username: req.user.username } } },
   });
 
   res
@@ -169,25 +176,27 @@ const declineFriendRequest: RequestHandler = async (
   req: Request,
   res: Response
 ) => {
+  gaurdRequestAuthorized(req);
   await prisma.user.update({
-    where: { username: req.user?.username },
+    where: { username: req.user.username },
     data: { requests: { disconnect: { username: req.body.username } } },
   });
   res.status(200).json({ message: "Friend Request Declined" });
 };
 
 const removeFriend: RequestHandler = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   console.log("remove Friend");
 
   // remove friend on the other user
   await prisma.user.update({
     where: { username: req.body.username },
-    data: { friends: { disconnect: { username: req.user?.username } } },
+    data: { friends: { disconnect: { username: req.user.username } } },
   });
 
   // remove friend on current user
   await prisma.user.update({
-    where: { username: req.user?.username },
+    where: { username: req.user.username },
     data: { friends: { disconnect: { username: req.body.username } } },
   });
 
