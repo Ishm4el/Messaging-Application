@@ -1,12 +1,14 @@
 import { Request, RequestHandler, Response } from "express";
 import prisma from "../../prisma/prisma";
 import ExpressError from "../errors/ExpressError";
+import { gaurdRequestAuthorized } from "./utility/RequestChecker";
 
 interface RequestUpdate extends Request {
   user: { username: string; id: string };
 }
 
 const getMessagesFrom = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   const otherUsername: string = req.params.username;
   const foundMessages = await prisma.message.findMany({
     where: {
@@ -14,17 +16,17 @@ const getMessagesFrom = async (req: Request, res: Response) => {
         OR: [
           {
             username: otherUsername,
-            friends: { some: { username: { equals: req.user?.username } } },
+            friends: { some: { username: { equals: req.user.username } } },
           },
           {
-            username: req.user?.username,
+            username: req.user.username,
             friends: { some: { username: { equals: otherUsername } } },
           },
         ],
       },
       recipient: {
         every: {
-          OR: [{ username: otherUsername }, { username: req.user?.username }],
+          OR: [{ username: otherUsername }, { username: req.user.username }],
         },
       },
       groupMessage: false,
@@ -44,13 +46,14 @@ const getMessagesFrom = async (req: Request, res: Response) => {
 };
 
 const postMessage = async (req: Request, res: Response) => {
+  gaurdRequestAuthorized(req);
   const otherUsername = req.params.username;
   const text: string = req.body.text;
-  const authorId = req.user?.id!;
+  const authorId = req.user.id!;
   console.log(authorId);
   const postMessage = await prisma.message.create({
     data: {
-      authorId: req.user?.id!,
+      authorId: req.user.id!,
       recipient: { connect: { username: otherUsername } },
       text,
       groupMessage: false,
