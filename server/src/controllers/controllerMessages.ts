@@ -7,6 +7,10 @@ interface RequestUpdate extends Request {
   user: { username: string; id: string };
 }
 
+const createParamUsernameChain = () => {
+  
+}
+
 const getMessagesFrom = async (req: Request, res: Response) => {
   gaurdRequestAuthorized(req);
   const otherUsername: string = req.params.username;

@@ -3,6 +3,7 @@ import prisma from "../../prisma/prisma";
 import { gaurdRequestAuthorized } from "./utility/requestChecker";
 import ExpressError from "../errors/ExpressError";
 import {
+  body,
   matchedData,
   param,
   Result,
@@ -12,8 +13,11 @@ import {
 import { RequestValidateAndHandler } from "./controllers-env";
 import rowChecker from "./utility/rowChecker";
 
-const createUserSearchChain = (name: "user" | "username") =>
-  param(name).trim().escape().notEmpty().isString();
+const createUserSearchParamChain = () =>
+  param("user").trim().escape().notEmpty().isString();
+
+const createUsernameSearchBodyChain = () =>
+  body("username").trim().escape().notEmpty().isString();
 
 const checkIfUserIsEmpty = (errors: Result<ValidationError>) => {
   console.log(errors);
@@ -45,11 +49,11 @@ const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
 };
 
 const findUser: RequestValidateAndHandler = [
-  createUserSearchChain("user"),
+  createUserSearchParamChain(),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ user: string }>(req);
 
@@ -117,11 +121,11 @@ const getAllFriendRequestsCount: RequestHandler = async (
 };
 
 const sendFriendRequest: RequestValidateAndHandler = [
-  createUserSearchChain("username"),
+  createUsernameSearchBodyChain(),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ username: string }>(req);
 
@@ -138,11 +142,11 @@ const sendFriendRequest: RequestValidateAndHandler = [
 ];
 
 const acceptFriendRequest: RequestValidateAndHandler = [
-  createUserSearchChain("username"),
+  createUsernameSearchBodyChain(),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ username: string }>(req);
 
@@ -197,11 +201,11 @@ const acceptFriendRequest: RequestValidateAndHandler = [
 ];
 
 const cancelFriendRequest: RequestValidateAndHandler = [
-  createUserSearchChain("username"),
+  createUsernameSearchBodyChain(),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ username: string }>(req);
 
@@ -220,7 +224,7 @@ const declineFriendRequest: RequestValidateAndHandler = [
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ username: string }>(req);
 
@@ -233,12 +237,12 @@ const declineFriendRequest: RequestValidateAndHandler = [
 ];
 
 const removeFriend: RequestValidateAndHandler = [
-  createUserSearchChain("username"),
+  createUsernameSearchBodyChain(),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
     console.log("remove Friend");
 
-    validateResultOnlyBodyUser(req)
+    validateResultOnlyBodyUser(req);
 
     const data = matchedData<{ username: string }>(req);
 
