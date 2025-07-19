@@ -5,15 +5,8 @@ import { gaurdRequestAuthorized } from "./utility/requestChecker";
 import { body, matchedData, param, validationResult } from "express-validator";
 import { RequestValidateAndHandler } from "./controllers-env";
 
-interface RequestUpdate extends Request {
-  user: { username: string; id: string };
-}
-
 const createUserSearchParamChain = () =>
   param("username").trim().escape().notEmpty().isString();
-
-const createUsernameSearchBodyChain = () =>
-  body("username").trim().escape().notEmpty().isString();
 
 const createTextBodyChain = () =>
   body("text").trim().escape().notEmpty().isString();
