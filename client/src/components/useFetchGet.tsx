@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import fetchGet from "./fetchGet";
+import { useNavigate } from "react-router-dom";
 
 interface UseFetchInternalArguments {
   link: string;
@@ -27,24 +28,26 @@ export function useFetchGetExternal<T>({
 }: UseFetchExternalArguments<T>): UseFetchExternal {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<object | null>(null);
+  const navigate = useNavigate();
   useEffect(() => {
     fetchGet(link)
       .then((res) => {
-        console.log(res);
-
-        if (res.status !== 200)
-          return Promise.reject({ error: "Currently not signed in" });
-        return res.json();
+        const json = res.json();
+        if (res.status !== 200) return json.then(Promise.reject.bind(Promise));
+        return json;
       })
       .then((resJson) => {
         console.log("printing resJson");
         console.log(resJson);
-
         setFetchedData(resJson);
       })
       .catch((err) => {
-        console.log("An error was found!");
-        console.log(err);
+        if (
+          err.status === 403 &&
+          err.message === "User must be signed in to access this route"
+        ) {
+          navigate("/log_in");
+        }
         setError(err);
       })
       .finally(() => setLoading(false));
