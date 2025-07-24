@@ -9,6 +9,7 @@ import Friends from "./routes/Friends";
 import Test from "./routes/Test";
 import Profile from "./routes/Profile";
 import Message from "./routes/Message";
+import Unauthorized from "./routes/Unauthorized";
 
 const routes: RouteObject[] = [
   {
@@ -24,6 +25,7 @@ const routes: RouteObject[] = [
       { path: "test", element: <Test /> },
       { path: "profile/:username", element: <Profile /> },
       { path: "message/:username", element: <Message /> },
+      { path: "unauthorized", element: <Unauthorized /> },
     ],
   },
 ];

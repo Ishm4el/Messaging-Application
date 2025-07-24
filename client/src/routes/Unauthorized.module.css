@@ -1,0 +1,15 @@
+.main {
+  composes: main from "./main.module.css";
+}
+
+.main-dark {
+  composes: main-dark from "./main.module.css";
+}
+
+.section {
+  composes: section from "./main.module.css";
+}
+
+.card {
+  composes: card from "./main.module.css";
+}
