@@ -17,13 +17,18 @@ export function CurrentUserProfile() {
     ev.preventDefault();
     const formData = new FormData(ev.currentTarget);
     console.log(formData.get("background-color-settings"));
+    console.log("fetchPosting");
+
     fetchPost({
       link: "profile/settings",
       body: {
         backgroundColorSettings: formData.get("background-color-settings"),
       },
     })
-      .then((res) => res.json())
+      .then((res) => {
+        console.log(res);
+        return res.json();
+      })
       .then((res) => {
         console.log(res);
         localStorage.setItem(
@@ -31,6 +36,10 @@ export function CurrentUserProfile() {
           res.backgroundColorSettings
         );
         navigate(0);
+      })
+      .catch((reason) => {
+        console.log(reason);
+        console.log("in Reason ");
       });
   };
 

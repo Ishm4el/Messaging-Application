@@ -43,7 +43,10 @@ app.use(express.json());
 
 app.use(
   expressSession({
-    cookie: { maxAge: 24 * 60 * 60 * 1000 },
+    cookie: {
+      maxAge: 10 * 60 * 1000,
+      // maxAge: 24 * 60 * 60 * 1000
+    },
     secret: secret,
     resave: false,
     saveUninitialized: false,
