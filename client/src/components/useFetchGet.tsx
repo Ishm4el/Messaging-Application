@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import fetchGet from "./fetchGet";
 import { useNavigate } from "react-router-dom";
+import { useAuthorizedContext } from "./AuthorizedContext";
 
 interface UseFetchInternalArguments {
   link: string;
@@ -21,7 +22,7 @@ interface UseFetchInternal<T> extends UseFetchExternal {
   setFetchedData: React.Dispatch<React.SetStateAction<T | null>>;
 }
 
-export function useFetchGetExternal<T>({
+export function UseFetchGetExternal<T>({
   link,
   dependecy = [null],
   setFetchedData,
@@ -29,6 +30,7 @@ export function useFetchGetExternal<T>({
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<object | null>(null);
   const navigate = useNavigate();
+  const { setLogged } = useAuthorizedContext();
   useEffect(() => {
     fetchGet(link)
       .then((res) => {
@@ -47,6 +49,7 @@ export function useFetchGetExternal<T>({
           err.message === "User must be signed in to access this route"
         ) {
           localStorage.removeItem("username");
+          setLogged(false);
           navigate("/unauthorized");
         }
         setError(err);
@@ -57,7 +60,7 @@ export function useFetchGetExternal<T>({
   return { error, loading };
 }
 
-export function useFetchGetInternal<T>({
+export function UseFetchGetInternal<T>({
   link,
   dependecy = [null],
 }: UseFetchInternalArguments): UseFetchInternal<T> {

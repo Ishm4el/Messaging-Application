@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import NavigationMenu from "./components/NavigationMenu";
 import mainIcon from "/knot-svgrepo-com.svg";
 import { useEffect, useState } from "react";
+import { AuthorizedContext } from "./components/AuthorizedContext";
 
 const addresses: { title: string; address: string }[] = [
   { title: "Home", address: "/" },
@@ -23,7 +24,7 @@ const websiteTitle: {
 } = { title: "Braid", homeRoute: "/", svgLink: mainIcon };
 
 function App() {
-  const [logged, setLogged] = useState(
+  const [logged, setLogged] = useState<boolean>(
     localStorage.getItem("username") ? true : false
   );
   useEffect(() => {
@@ -31,13 +32,13 @@ function App() {
   }, [logged]);
 
   return (
-    <>
+    <AuthorizedContext.Provider value={{ logged, setLogged }}>
       <NavigationMenu
         addresses={localStorage.username ? addressesUser : addresses}
         websiteTitle={websiteTitle}
       />
       <Outlet context={{ setLogged }} />
-    </>
+    </AuthorizedContext.Provider>
   );
 }
 

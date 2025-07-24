@@ -1,11 +1,11 @@
 import { useCallback, useState } from "react";
 import fetchPut from "../../components/fetchPut";
-import { useFetchGetInternal } from "../../components/useFetchGet";
+import { UseFetchGetInternal } from "../../components/useFetchGet";
 import styles from "./Profile.module.css";
 
 export function OtherUserProfile({ username }: { username: string }) {
   const [notificationMessage, setNotifcationMessage] = useState("");
-  const { error, loading, fetchedData } = useFetchGetInternal<OtherUserProfile>(
+  const { error, loading, fetchedData } = UseFetchGetInternal<OtherUserProfile>(
     {
       link: `profile/other_profile/${username}`,
       dependecy: [notificationMessage],

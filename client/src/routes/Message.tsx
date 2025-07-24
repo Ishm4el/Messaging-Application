@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import styles from "./Message.module.css";
-import { useFetchGetExternal } from "../components/useFetchGet";
+import { UseFetchGetExternal } from "../components/useFetchGet";
 import { useState } from "react";
 import fetchPost from "../components/fetchPost";
 
@@ -78,7 +78,7 @@ function MessageInput({ username, setMessages }: MessageInput) {
 
 function MessageBody({ username }: { username: string | undefined }) {
   const [messages, setMessages] = useState<Messages | null>(null);
-  const { loading, error } = useFetchGetExternal({
+  const { loading, error } = UseFetchGetExternal({
     link: `messages/direct_messages/${username}`,
     dependecy: [],
     setFetchedData: setMessages,

@@ -1,5 +1,5 @@
 import fetchPut from "../../components/fetchPut";
-import { useFetchGetInternal } from "../../components/useFetchGet";
+import { UseFetchGetInternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import styles from "./FriendRequests.module.css";
 
@@ -135,7 +135,7 @@ function FriendRequestList({
 }
 
 export default function FriendRequests() {
-  const { error, fetchedData, loading, setFetchedData } = useFetchGetInternal({
+  const { error, fetchedData, loading, setFetchedData } = UseFetchGetInternal({
     link: "friends/requests",
   });
 

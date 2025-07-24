@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styles from "./FriendList.module.css";
-import { useFetchGetExternal } from "../../components/useFetchGet";
+import { UseFetchGetExternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -83,7 +83,7 @@ export default function FriendList() {
   const [filterFriendsOn, setFilterFriendsOn] = useState("");
   const { friendList, setFriendList, refreshFriendList } = useFriendContext();
   const [fetchedData, setFetchedData] = useState<unknown>(null);
-  const { loading, error } = useFetchGetExternal({
+  const { loading, error } = UseFetchGetExternal({
     link: "friends/",
     dependecy: [refreshFriendList],
     setFetchedData: setFetchedData,

@@ -1,11 +1,11 @@
 import styles from "./Profile.module.css";
-import { useFetchGetInternal } from "../../components/useFetchGet";
+import { UseFetchGetInternal } from "../../components/useFetchGet";
 import { useNavigate } from "react-router-dom";
 import fetchPost from "../../components/fetchPost";
 
 export function CurrentUserProfile() {
   const navigate = useNavigate();
-  const { error, fetchedData, loading } = useFetchGetInternal<{
+  const { error, fetchedData, loading } = UseFetchGetInternal<{
     username: string;
     online: boolean;
     createdAt: Date;
