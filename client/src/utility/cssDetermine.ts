@@ -9,4 +9,6 @@ const sectionStyle: string = selectedStyle
 
 const cardStyle: string = selectedStyle ? `card-${selectedStyle}` : "card";
 
-export { mainStyle, sectionStyle, cardStyle };
+const genericStyle: string = selectedStyle ? `-${selectedStyle}` : "";
+
+export { mainStyle, sectionStyle, cardStyle, genericStyle };

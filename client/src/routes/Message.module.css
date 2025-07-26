@@ -1,21 +1,36 @@
+.main-settings {
+  align-self: center;
+  justify-self: center;
+  justify-content: center;
+  align-items: center;
+}
+
 .main {
   composes: main from "./main.module.css";
+  composes: main-settings;
 }
 
 .main-dark {
   composes: main-dark from "./main.module.css";
+  composes: main-settings;
 }
 
-.section {
-  composes: section from "./main.module.css";
+.section-settings {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 0;
+  border-radius: 8px;
+}
+
+.section {
+  composes: section from "./main.module.css";
+  composes: section-settings;
 }
 
 .section-dark {
   composes: section-dark from "./main.module.css";
+  composes: section-settings;
 }
 
 .title {
@@ -83,4 +98,12 @@
     background-color: hsla(var(--color1), 100%, 90%, 10%);
     content: "Braid";
   }
+}
+
+.title {
+  color: black;
+}
+
+.title-dark {
+  color: lightslategray;
 }
