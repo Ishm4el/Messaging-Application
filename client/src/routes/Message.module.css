@@ -15,15 +15,20 @@
 }
 
 .title {
-  color: hsl(var(--color1), 100%, 30%)
+  color: hsl(var(--color1), 100%, 30%);
 }
 
 .list {
-  composes: card from "./main.module.css";
+  padding: 1dvh 1dvw;
+  gap: 2dvh;
+  background-color: white;
+  border: 1dvh solid hsl(var(--color3), 100%, 50%);
+  border-radius: 20px;
+
   width: 100%;
-  height: 80.3dvh;
+  height: 65.3dvh;
   border-color: hsl(var(--color2), 50%, 80%);
-  overflow: scroll;
+  overflow: hidden scroll;
   display: flex;
   flex-flow: column-reverse nowrap;
 }
@@ -32,12 +37,20 @@
   background-color: hsla(var(--ccolor2), 100%, 50%, 30%);
   display: flex;
   justify-content: end;
+  width: 100%;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  hyphens: auto;
 }
 
 .message-other {
   background-color: hsla(var(--color2), 100%, 50%, 30%);
   display: flex;
   justify-content: start;
+  width: 100%;
+  text-overflow: ellipsis;
+  word-break: break-all;
+  hyphens: auto;
 }
 
 .input-container {

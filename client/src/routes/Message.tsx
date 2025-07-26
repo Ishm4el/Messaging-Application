@@ -3,6 +3,7 @@ import styles from "./Message.module.css";
 import { UseFetchGetExternal } from "../components/useFetchGet";
 import { useState } from "react";
 import fetchPost from "../components/fetchPost";
+import { mainStyle, sectionStyle } from "../utility/cssDetermine";
 
 function MessageList({ loading, error, messages }: MessageList) {
   if (loading) return <p>Loading ...</p>;
@@ -86,7 +87,7 @@ function MessageBody({ username }: { username: string | undefined }) {
 
   if (!username) return <p>Loading...</p>;
   return (
-    <section className={styles["section"]}>
+    <section className={styles[sectionStyle]}>
       <h1 className={styles["title"]}>Messaging {username}</h1>
       <MessageList
         username={username}
@@ -102,11 +103,7 @@ function MessageBody({ username }: { username: string | undefined }) {
 export default function Message() {
   const { username } = useParams();
   return (
-    <main
-      className={
-        styles[localStorage.getItem("backgroundColorSettings") || "main"]
-      }
-    >
+    <main className={styles[mainStyle ]}>
       <MessageBody username={username} />
     </main>
   );
