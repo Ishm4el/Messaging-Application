@@ -103,7 +103,7 @@ function MessageBody({ username }: { username: string | undefined }) {
 export default function Message() {
   const { username } = useParams();
   return (
-    <main className={styles[mainStyle ]}>
+    <main className={styles[mainStyle]}>
       <MessageBody username={username} />
     </main>
   );

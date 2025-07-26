@@ -14,6 +14,10 @@
   gap: 0;
 }
 
+.section-dark {
+  composes: section-dark from "./main.module.css";
+}
+
 .title {
   color: hsl(var(--color1), 100%, 30%);
 }

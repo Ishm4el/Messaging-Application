@@ -23,6 +23,11 @@
   background-color: hsl(var(--color2), 50%, 85%);
 }
 
+.section-dark {
+  composes: section;
+  background-color: hsl(var(--color2), 50%, 15%);
+}
+
 .card {
   display: flex;
   flex-flow: column;
