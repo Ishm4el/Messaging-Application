@@ -43,9 +43,7 @@ const getAllFriends: RequestHandler = async (req: Request, res: Response) => {
     select: { friends: true },
   });
 
-  console.log(userFriends);
-
-  res.status(200).json({ friends: userFriends });
+  res.status(200).json(userFriends);
 };
 
 const findUser: RequestValidateAndHandler = [

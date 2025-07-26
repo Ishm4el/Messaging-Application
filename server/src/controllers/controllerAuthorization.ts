@@ -71,7 +71,10 @@ const login: RequestValidateAndHandler = [
   }),
   async (req: Request, res: Response) => {
     gaurdRequestAuthorized(req);
-    res.json({ username: req.user.username, settings: req.user.settings });
+    res.json({
+      username: req.user.username,
+      settings: req.user.settings ?? {},
+    });
   },
 ];
 

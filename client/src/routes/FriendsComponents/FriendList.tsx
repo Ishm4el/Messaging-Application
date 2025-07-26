@@ -93,21 +93,19 @@ export default function FriendList() {
     if (
       fetchedData &&
       typeof fetchedData === "object" &&
-      "error" in fetchedData &&
       "friends" in fetchedData &&
       typeof fetchedData.friends === "object" &&
       fetchedData.friends &&
-      "friends" in fetchedData.friends &&
-      Array.isArray(fetchedData.friends.friends)
+      Array.isArray(fetchedData.friends)
     ) {
-      if (loading === false && fetchedData.error) {
+      if (loading === false && "error" in fetchedData && fetchedData.error) {
         localStorage.clear();
         return;
       }
       if (loading === false) {
         console.log("render");
 
-        const friends: { username: string }[] = fetchedData.friends.friends;
+        const friends: { username: string }[] = fetchedData.friends;
         if (Array.isArray(friends))
           console.log("checking if friends is an array");
 
@@ -122,7 +120,7 @@ export default function FriendList() {
         }
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filterFriendsOn, fetchedData, refreshFriendList]);
 
   if (loading) return <>Loading</>;
