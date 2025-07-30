@@ -1,0 +1,14 @@
+.main-error {
+  background-color: white;
+  color: black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100dvh;
+}
+
+.main-error-dark {
+  composes: main-error;
+  background-color: black;
+  color: white;
+}
