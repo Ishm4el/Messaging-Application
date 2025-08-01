@@ -1,6 +1,6 @@
 .main {
   composes: main from "./main.module.css";
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 }
 
@@ -17,8 +17,9 @@
 
 .section {
   composes: section from "./main.module.css";
+  background-color: hsla(var(--color1), 100%, 99%, 50%);
   gap: 0;
-  padding: 3dvh;
+
 }
 
 .input-container {

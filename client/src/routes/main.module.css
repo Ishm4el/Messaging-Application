@@ -1,33 +1,33 @@
-
-
 .main {
-  padding: 0 20dvw;
+  padding: 5dvh 20dvw;
   min-height: var(--main-height);
   width: 100dvw;
   display: flex;
   flex-flow: column;
   gap: 3dvh;
-  background-color: blue;
+  background-color: var(--bgcolorl);
+  color: var(--titlecolorl);
 }
 
 .main-dark {
   composes: main;
-  background-color: darkblue;
+  background-color: var(--bgcolord);
+  color: var(--titlecolord);
 }
 
 .section {
   position: relative;
   display: flex;
   flex-flow: column;
-  margin: 0 0;
   padding: 1dvh 1dvw;
   gap: 3dvh;
-  background-color: hsl(var(--color2), 50%, 85%);
+  /* background-color: hsl(var(--color2), 50%, 85%); */
+  background-color: white;
 }
 
 .section-dark {
   composes: section;
-  background-color: hsl(var(--color2), 50%, 15%);
+  background-color: var(--sectioncolord);
 }
 
 .card {
@@ -35,9 +35,16 @@
   flex-flow: column;
   padding: 1dvh 1dvw;
   gap: 2dvh;
-  background-color: white;
-  border: 1dvh solid hsl(var(--color3), 100%, 50%);
-  border-radius: 20px;
+  background-color: var(--cardcolorl);
+  color: var(--fontcolorl);
+  /* border: 1dvh solid hsl(var(--color3), 100%, 50%); */
+  /* border-radius: 20px; */
+}
+
+.card-dark {
+  composes: card;
+  background-color: var(--cardcolord);
+  color: var(--fontcolord);
 }
 
 @media (max-width: 800px) {

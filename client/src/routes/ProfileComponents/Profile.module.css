@@ -6,12 +6,34 @@
   composes: main-dark from "./../main.module.css";
 }
 
+.section-settings {
+  margin-bottom: 5dvh;
+}
+
 .section {
   composes: section from "./../main.module.css";
+  composes: section-settings;
+}
+
+.section-dark {
+  composes: section-dark from "./../main.module.css";
+  composes: section-settings;
+}
+
+.article {
+  background-color: var(--secitoncolorl);
+}
+
+.article-dark {
+  background-color: var(--sectioncolord);
 }
 
 .card {
   composes: card from "./../main.module.css";
+}
+
+.card-dark {
+  composes: card-dark from "./../main.module.css";
 }
 
 .notification-show {
@@ -28,4 +50,12 @@
 .friend-options button {
   flex: 1;
   cursor: pointer;
+}
+
+.form label {
+  margin-right: 1dvw;
+}
+
+.form select:last-of-type {
+  margin-bottom: 1dvh;
 }

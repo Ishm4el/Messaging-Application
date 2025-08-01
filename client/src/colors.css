@@ -6,4 +6,19 @@
   --ccolor1: 11.06;
   --ccolor2: 41.18;
   --ccolor3: 341.18;
+
+  --bgcolorl: hsl(var(--color2), 100%, 95%);
+  --bgcolord: hsl(var(--color2), 100%, 10%);
+
+  --sectioncolorl: hsl(var(--color3), 100%, 95%);
+  --sectioncolord: hsl(var(--color3), 20%, 50%);
+
+  --cardcolorl: hsl(var(--color3), 100%, 90%);
+  --cardcolord: hsl(var(--color3), 20%, 55%);
+
+  --titlecolorl: hsl(var(--color2), 100%, 75%);
+  --titlecolord: hsl(var(--color2), 100%, 95%);
+
+  --fontcolorl: hsl(var(--color1), 100%, 77%);
+  --fontcolord: hsl(var(--color1), 100%, 92%);
 }

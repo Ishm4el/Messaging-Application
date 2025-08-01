@@ -1,10 +1,10 @@
-import { mainStyle } from "../utility/cssDetermine";
+import { mainStyle, sectionStyle } from "../utility/cssDetermine";
 import styles from "./About.module.css";
 
 export default function About() {
   return (
     <main className={styles[mainStyle]}>
-      <section className={styles.section}>
+      <section className={styles[sectionStyle]}>
         <h1>About</h1>
         <article>
           <h2>History</h2>

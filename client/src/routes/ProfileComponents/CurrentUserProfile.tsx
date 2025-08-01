@@ -2,17 +2,29 @@ import styles from "./Profile.module.css";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
 import { useNavigate } from "react-router-dom";
 import fetchPost from "../../components/fetchPost";
+import {
+  cardStyle,
+  genericStyle,
+  sectionStyle,
+} from "../../utility/cssDetermine";
 
-export function CurrentUserProfile() {
+function BioProfile({ fetchedData }) {
+  return (
+    <section className={styles[sectionStyle]}>
+      <h2 className={styles["section-title"]}>Personal Profile</h2>
+      {fetchedData !== null && (
+        <div className={styles[cardStyle]}>
+          <h3 className={styles["cool"]}>Username: {fetchedData.username}</h3>
+          <h3>Created: {fetchedData.createdAt.toString()}</h3>
+          <h3>Online: {fetchedData.online.toString()}</h3>
+        </div>
+      )}
+    </section>
+  );
+}
+
+function SettingsProfile() {
   const navigate = useNavigate();
-  const { error, fetchedData, loading } = UseFetchGetInternal<{
-    username: string;
-    online: boolean;
-    createdAt: Date;
-  } | null>({
-    link: "profile/primary_profile",
-  });
-
   const formUpdateUserSettings = (ev: React.FormEvent<HTMLFormElement>) => {
     ev.preventDefault();
     const formData = new FormData(ev.currentTarget);
@@ -43,45 +55,49 @@ export function CurrentUserProfile() {
       });
   };
 
+  return (
+    <section className={styles[sectionStyle]}>
+      <h2>Profile Settings</h2>
+      <div className={styles[cardStyle]}>
+        <form className={styles["form"]} onSubmit={formUpdateUserSettings}>
+          <label htmlFor="background-color-settings">
+            Background Color Settings
+          </label>
+          <select
+            name="background-color-settings"
+            id="background-color-settings"
+            defaultValue={
+              localStorage.getItem("backgroundColorSettings") || "main"
+            }
+          >
+            <option value="">Light</option>
+            <option value="dark">Dark</option>
+          </select>
+          <br />
+          <button type="submit">Apply Settings</button>
+        </form>
+      </div>
+    </section>
+  );
+}
+
+export function CurrentUserProfile() {
+  const { error, fetchedData, loading } = UseFetchGetInternal<{
+    username: string;
+    online: boolean;
+    createdAt: Date;
+  } | null>({
+    link: "profile/primary_profile",
+  });
+
   if (loading) return <>Loading!</>;
   if (error) return <>Error: {JSON.stringify(error)}</>;
   if (fetchedData) {
     return (
-      <>
-        <section className={styles["section"]}>
-          <h2 className={styles["section-title"]}>Personal Profile</h2>
-          {fetchedData !== null && (
-            <div className={styles["card"]}>
-              <h3 className={styles["cool"]}>
-                Username: {fetchedData.username}
-              </h3>
-              <h3>Created: {fetchedData.createdAt.toString()}</h3>
-              <h3>Online: {fetchedData.online.toString()}</h3>
-            </div>
-          )}
-        </section>
-        <section className={styles["section"]}>
-          <h2>Profile Settings</h2>
-          <div className={styles["card"]}>
-            <form className={styles["form"]} onSubmit={formUpdateUserSettings}>
-              <label htmlFor="background-color-settings">
-                Background Color Settings
-              </label>
-              <select
-                name="background-color-settings"
-                id="background-color-settings"
-                defaultValue={
-                  localStorage.getItem("backgroundColorSettings") || "main"
-                }
-              >
-                <option value="">Light</option>
-                <option value="dark">Dark</option>
-              </select>
-              <button type="submit">Apply Settings</button>
-            </form>
-          </div>
-        </section>
-      </>
+      <article className={styles[`article${genericStyle}`]}>
+        <BioProfile fetchedData={fetchedData} />
+        <SettingsProfile />
+      </article>
     );
   }
 

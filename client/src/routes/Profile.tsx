@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { OtherUserProfile } from "./ProfileComponents/OtherUserProfile";
 import { CurrentUserProfile } from "./ProfileComponents/CurrentUserProfile";
 import { mainStyle } from "../utility/cssDetermine";
+// import { mainStyle } from "../utility/cssDetermine";
 
 export default function Profile() {
   const { username } = useParams();

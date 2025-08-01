@@ -13,3 +13,7 @@
 .card {
   composes: card from "./main.module.css";
 }
+
+.link {
+  width: fit-content;
+}
