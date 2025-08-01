@@ -5,8 +5,14 @@
   padding: 1dvh 1dvw;
   gap: 3dvh;
   background-color: hsl(var(--color2), 50%, 85%);
+  /* background-color: black; */
   /* border: 1dvh solid hsl(var(--color1), 100%, 30%);
   border-radius: 10px; */
+}
+
+.section-dark {
+  composes: section;
+  background-color: hsl(var(--color2), 50%, 40%);
 }
 
 .list {

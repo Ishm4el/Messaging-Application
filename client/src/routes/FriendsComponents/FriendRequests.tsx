@@ -1,5 +1,6 @@
 import fetchPut from "../../components/fetchPut";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
+import { sectionStyle } from "../../utility/cssDetermine";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import styles from "./FriendRequests.module.css";
 
@@ -146,7 +147,7 @@ export default function FriendRequests() {
     );
   if (error) return <span>Error</span>;
   return (
-    <section className={styles["friend-request-section"]}>
+    <section className={styles[sectionStyle]}>
       <h2>Your Friend Requests</h2>
       {(fetchedData !== null &&
         fetchedData !== undefined &&

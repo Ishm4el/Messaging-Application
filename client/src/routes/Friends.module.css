@@ -8,15 +8,20 @@
 .ul {
   list-style: none;
   display: flex;
-  margin: 0;
   padding: 0;
+  margin-bottom: 1dvh;
 }
 
 .container {
-  background-color: hsl(var(--color3), 100%, 67%);
+  background-color: var(--sectioncolorl);
   padding: 3dvh;
   /* border: solid hsl(var(--color1), 100%, 40%) 1dvh;
   border-radius: 10px; */
+}
+
+.container-dark {
+  composes: container;
+  background-color: var(--sectioncolord);
 }
 
 .main {

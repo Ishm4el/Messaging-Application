@@ -87,7 +87,7 @@ function MessageBody({ username }: { username: string | undefined }) {
 
   if (!username) return <p>Loading...</p>;
   return (
-    <section className={styles[sectionStyle]}>
+    <section className={styles[`section${genericStyle}`]}>
       <h1 className={styles[`title${genericStyle}`]}>Messaging {username}</h1>
       <MessageList
         username={username}
@@ -102,6 +102,8 @@ function MessageBody({ username }: { username: string | undefined }) {
 
 export default function Message() {
   const { username } = useParams();
+  console.log("printing section style: ");
+  console.log(sectionStyle);
   return (
     <main className={styles[mainStyle]}>
       <MessageBody username={username} />

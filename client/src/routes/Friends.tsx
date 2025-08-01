@@ -6,7 +6,7 @@ import FriendList from "./FriendsComponents/FriendList";
 import { UseFetchGetExternal } from "../components/useFetchGet";
 import { FriendContext } from "./FriendsComponents/FriendContext";
 import { useState } from "react";
-import { mainStyle } from "../utility/cssDetermine";
+import { genericStyle, mainStyle } from "../utility/cssDetermine";
 
 function FriendsMain({
   friendList,
@@ -19,7 +19,7 @@ function FriendsMain({
   friendRequestCount,
 }) {
   return (
-    <div className={styles["container"]}>
+    <div className={styles[`container${genericStyle}`]} id="friend-dashboard">
       <h1>Braid</h1>
       <FriendContext.Provider
         value={{

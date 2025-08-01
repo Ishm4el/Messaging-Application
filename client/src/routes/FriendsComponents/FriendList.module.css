@@ -2,6 +2,10 @@
   composes: section from "./friendInterface.module.css";
 }
 
+.section-dark {
+  composes: section-dark from "./friendInterface.module.css";
+}
+
 .friend-list {
   composes: list from "./friendInterface.module.css";
 }

@@ -1,5 +1,10 @@
-.friend-request-section {
+.section {
   composes: section from "./friendInterface.module.css";
+}
+
+.section-dark {
+  composes: section-dark from "./friendInterface.module.css";
+  background-color: #fff;
 }
 
 .friend-request-list {

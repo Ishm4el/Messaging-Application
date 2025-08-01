@@ -3,6 +3,7 @@ import styles from "./FriendList.module.css";
 import { UseFetchGetExternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
+import { sectionStyle } from "../../utility/cssDetermine";
 
 function filterList({ list, search, filterOnProperty }: NewType) {
   if (search !== "") {
@@ -71,7 +72,7 @@ function FriendListSection({
   friendList,
 }: FriendListSection) {
   return (
-    <section className={styles.section}>
+    <section className={styles[sectionStyle]}>
       <h2 id="Page-Title">Friend List</h2>
       <SearchFilter setFilterFriendsOn={setFilterFriendsOn} />
       <FriendListContainer friendList={friendList} />
@@ -126,7 +127,7 @@ export default function FriendList() {
   if (loading) return <>Loading</>;
   if (error)
     return (
-      <section>
+      <section className={styles[sectionStyle]}>
         <span>You are currently not signed in! </span>
         <Link to="/log_in">Log in here</Link>
         <span> or </span>
