@@ -4,7 +4,7 @@
   margin: 0 0;
   padding: 1dvh 1dvw;
   gap: 3dvh;
-  background-color: hsl(var(--color2), 50%, 85%);
+  background-color: hsl(var(--color2), 50%, 90%);
   /* background-color: black; */
   /* border: 1dvh solid hsl(var(--color1), 100%, 30%);
   border-radius: 10px; */
@@ -19,7 +19,7 @@
   list-style: none;
   padding: 0;
   background-color: hsl(var(--color1), 100%, 70%);
-  border: 1dvh solid hsl(var(--color3), 50%, 30%);
+  border: 1dvh solid hsl(var(--color3), 50%, 90%);
   border-radius: 10px;
   display: flex;
   flex-flow: column;

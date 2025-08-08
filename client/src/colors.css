@@ -21,7 +21,7 @@
   --itemcolorlh: hsl(var(--color3), 90%, 90%);
   --itemcolordh: hsl(var(--color3), 60%, 50%);
 
-  --titlecolorl: hsl(var(--color2), 100%, 75%);
+  --titlecolorl: hsl(var(--color2), 60%, 40%);
   --titlecolord: hsl(var(--color2), 100%, 95%);
 
   --fontcolorl: hsl(var(--color1), 100%, 0%);
