@@ -3,18 +3,18 @@
   justify-self: center;
   justify-content: center;
   align-items: center;
+  justify-content: start;
 }
 
 .main {
   composes: main from "./main.module.css";
   composes: main-settings;
-  gap: 10dvh;
+  padding-top: 0px;
 }
-
 .main-dark {
   composes: main-dark from "./main.module.css";
   composes: main-settings;
-  gap: 10dvh;
+  padding-top: 0px;
 }
 
 .section-settings {
@@ -23,11 +23,13 @@
   align-items: center;
   gap: 0;
   border-radius: 8px;
+  padding-top: 0px;
 }
 
 .section {
   composes: section from "./main.module.css";
   composes: section-settings;
+  padding-top: 0px;
 }
 
 .section-dark {
@@ -60,13 +62,16 @@
   display: flex;
   justify-content: end;
   width: 100%;
+  padding-right: 1dvw;
   text-overflow: ellipsis;
   word-break: break-all;
   hyphens: auto;
+  color: black;
 }
 .message-primary-dark {
   composes: message-primary;
   background-color: hsla(var(--ccolor2), 100%, 40%, 30%);
+  color: white;
 }
 
 .message-other {
@@ -74,13 +79,16 @@
   display: flex;
   justify-content: start;
   width: 100%;
+  padding-left: 1dvw;
   text-overflow: ellipsis;
   word-break: break-all;
   hyphens: auto;
+  color: black;
 }
 .message-other-dark {
   composes: message-other;
   background-color: hsla(var(--color2), 100%, 40%, 30%);
+  color: white;
 }
 
 .input-container {
@@ -100,7 +108,7 @@
   flex: 1;
   resize: none;
   height: 8dvh;
-  background-color: lightslategray;
+  background-color: lightgray;
   color: black;
   border-bottom: 2px solid var(--bgcolord);
   border-right: 2px solid var(--bgcolord);
@@ -112,7 +120,7 @@
     border-right: 2px solid var(--bgcolorl);
     border-left: 2px solid var(--bgcolord);
     border-top: 2px solid var(--bgcolord);
-    background-color: lightgray;
+    background-color: rgb(243, 243, 243);
     outline: 1px solid darkblue;
   }
 }
