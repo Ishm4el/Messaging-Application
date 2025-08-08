@@ -17,7 +17,9 @@
   --cardcolord: hsl(var(--color3), 20%, 55%);
 
   --itemcolorl: hsl(var(--color3), 100%, 93%);
-  --itemcolord: hsl(var(--color3), 100%, 53%);
+  --itemcolord: hsl(var(--color3), 70%, 40%);
+  --itemcolorlh: hsl(var(--color3), 90%, 90%);
+  --itemcolordh: hsl(var(--color3), 60%, 50%);
 
   --titlecolorl: hsl(var(--color2), 100%, 75%);
   --titlecolord: hsl(var(--color2), 100%, 95%);

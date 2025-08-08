@@ -1,5 +1,7 @@
 .main {
-  padding: 5dvh 20dvw;
+  padding-left: var(--main-padding-left);
+  padding-right: var(--main-padding-right);
+  padding-top: var(--main-padding-top);
   min-height: var(--main-height);
   width: 100dvw;
   display: flex;

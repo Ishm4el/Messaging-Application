@@ -91,4 +91,7 @@ h6 {
 :root {
   --navigation-height: 5dvh;
   --main-height: 95dvh;
+  --main-padding-top: 2dvh;
+  --main-padding-left: 20dvw;
+  --main-padding-right: var(--main-padding-left);
 }

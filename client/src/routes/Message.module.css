@@ -8,11 +8,13 @@
 .main {
   composes: main from "./main.module.css";
   composes: main-settings;
+  gap: 10dvh;
 }
 
 .main-dark {
   composes: main-dark from "./main.module.css";
   composes: main-settings;
+  gap: 10dvh;
 }
 
 .section-settings {
@@ -33,10 +35,6 @@
   composes: section-settings;
 }
 
-.title {
-  color: hsl(var(--color1), 100%, 30%);
-}
-
 .list {
   padding: 1dvh 1dvw;
   gap: 2dvh;
@@ -51,6 +49,11 @@
   display: flex;
   flex-flow: column-reverse nowrap;
 }
+.list-dark {
+  composes: list;
+  background-color: black;
+  border-color: hsl(var(--color2), 50%, 40%);
+}
 
 .message-primary {
   background-color: hsla(var(--ccolor2), 100%, 50%, 30%);
@@ -60,6 +63,10 @@
   text-overflow: ellipsis;
   word-break: break-all;
   hyphens: auto;
+}
+.message-primary-dark {
+  composes: message-primary;
+  background-color: hsla(var(--ccolor2), 100%, 40%, 30%);
 }
 
 .message-other {
@@ -71,39 +78,92 @@
   word-break: break-all;
   hyphens: auto;
 }
+.message-other-dark {
+  composes: message-other;
+  background-color: hsla(var(--color2), 100%, 40%, 30%);
+}
 
 .input-container {
   width: 100%;
   height: 3dvh;
-  border-color: hsl(var(--color2), 50%, 80%);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 3dvh;
   gap: 1dvw;
 }
+.input-container-dark {
+  composes: input-container;
+}
 
 .input-text {
   flex: 1;
   resize: none;
-  outline: 1px solid hsl(var(--color1), 100%, 50%);
-  height: 6dvh;
+  height: 8dvh;
+  background-color: lightslategray;
+  color: black;
+  border-bottom: 2px solid var(--bgcolord);
+  border-right: 2px solid var(--bgcolord);
+  border-left: 2px solid var(--bgcolorl);
+  border-top: 2px solid var(--bgcolorl);
+  outline: 1px solid slateblue;
+  &:focus {
+    border-bottom: 2px solid var(--bgcolorl);
+    border-right: 2px solid var(--bgcolorl);
+    border-left: 2px solid var(--bgcolord);
+    border-top: 2px solid var(--bgcolord);
+    background-color: lightgray;
+    outline: 1px solid darkblue;
+  }
+}
+.input-text-dark {
+  composes: input-text;
+  background-color: dimgray;
+  color: white;
+  border-bottom: 2px solid var(--bgcolord);
+  border-right: 2px solid var(--bgcolord);
+  border-left: 2px solid var(--bgcolorl);
+  border-top: 2px solid var(--bgcolorl);
+  outline: 1px solid slateblue;
+  &:focus {
+    background-color: black;
+    outline: 1px solid darkblue;
+  }
 }
 
 .send-button {
   flex: 0.25;
-  height: 6dvh;
-  outline: 1px solid hsl(var(--color1), 100%, 50%);
+  height: 8dvh;
+  background-color: var(--itemcolorl);
+  outline: 1px solid slateblue;
+  border-bottom: 2px solid var(--bgcolord);
+  border-right: 2px solid var(--bgcolord);
+  border-left: 2px solid var(--bgcolorl);
+  border-top: 2px solid var(--bgcolorl);
   &:focus {
+    border-bottom: 2px solid var(--bgcolorl);
+    border-right: 2px solid var(--bgcolorl);
+    border-left: 2px solid var(--bgcolord);
+    border-top: 2px solid var(--bgcolord);
+    outline: 1px solid darkblue;
     background-color: hsla(var(--color1), 100%, 90%, 10%);
+    content: "Braid";
+  }
+}
+.send-button-dark {
+  composes: send-button;
+  background-color: var(--itemcolord);
+  color: var(--fontcolord);
+  &:focus {
+    background-color: var(--itemcolordh);
     content: "Braid";
   }
 }
 
 .title {
-  color: black;
+  color: var(--titlecolorl);
 }
 
 .title-dark {
-  color: lightslategray;
+  color: var(--titlecolord);
 }

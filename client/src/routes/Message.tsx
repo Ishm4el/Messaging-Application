@@ -12,7 +12,7 @@ function MessageList({ loading, error, messages }: MessageList) {
   console.log(messages);
 
   return (
-    <ul className={styles["list"]}>
+    <ul className={styles[`list${genericStyle}`]} tabIndex={2}>
       {messages.map((message) => {
         return (
           <li
@@ -20,8 +20,8 @@ function MessageList({ loading, error, messages }: MessageList) {
             className={
               styles[
                 message.author.username === localStorage.getItem("username")
-                  ? "message-primary"
-                  : "message-other"
+                  ? `message-primary${genericStyle}`
+                  : `message-other${genericStyle}`
               ]
             }
           >
@@ -36,7 +36,7 @@ function MessageList({ loading, error, messages }: MessageList) {
 function MessageInput({ username, setMessages }: MessageInput) {
   return (
     <form
-      className={styles["input-container"]}
+      className={styles[`input-container${genericStyle}`]}
       onSubmit={(ev) => {
         ev.preventDefault();
         const form = ev.currentTarget;
@@ -66,11 +66,15 @@ function MessageInput({ username, setMessages }: MessageInput) {
         placeholder={`write a message to ${username}`}
         required
         name="text"
-        className={styles["input-text"]}
+        className={styles[`input-text${genericStyle}`]}
         tabIndex={1}
         autoFocus
       />
-      <button type="submit" className={styles["send-button"]} tabIndex={1}>
+      <button
+        type="submit"
+        className={styles[`send-button${genericStyle}`]}
+        tabIndex={1}
+      >
         Send
       </button>
     </form>
