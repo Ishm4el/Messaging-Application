@@ -11,10 +11,22 @@
   composes: list from "./friendInterface.module.css";
 }
 
+.friend-request-list-dark {
+  composes: list-dark from "./friendInterface.module.css";
+}
+
 .friend-request-list-item {
   composes: list-item from "./friendInterface.module.css";
 }
 
+.friend-request-list-item-dark {
+  composes: list-item-dark from "./friendInterface.module.css";
+}
+
 .friend-request-list-username {
   composes: list-item-element from "./friendInterface.module.css";
+}
+
+.friend-request-list-username-dark {
+  composes: list-item-element-dark from "./friendInterface.module.css";
 }

@@ -15,8 +15,18 @@
   cursor: pointer;
 }
 
+.search-user-list-item-dark {
+  composes: list-item-dark from "./friendInterface.module.css";
+  cursor: pointer;
+}
+
 .search-user-list-username {
   composes: list-item-element from "./friendInterface.module.css";
+  cursor: pointer;
+}
+
+.search-user-list-username-dark {
+  composes: list-item-element-dark from "./friendInterface.module.css";
   cursor: pointer;
 }
 
@@ -26,6 +36,14 @@
   gap: 5px;
 }
 
+.search-user-form-dark {
+  composes: search-user-form;
+}
+
 .search-user-form > div {
+  flex: 1 1 auto;
+}
+
+.search-user-form-dark > div {
   flex: 1 1 auto;
 }

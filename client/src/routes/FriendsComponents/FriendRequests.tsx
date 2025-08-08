@@ -1,6 +1,6 @@
 import fetchPut from "../../components/fetchPut";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
-import { sectionStyle } from "../../utility/cssDetermine";
+import { genericStyle, sectionStyle } from "../../utility/cssDetermine";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import styles from "./FriendRequests.module.css";
 
@@ -105,10 +105,15 @@ function FriendRequestList({
   >;
 }) {
   return (
-    <ul className={styles["friend-request-list"]}>
+    <ul className={styles[`friend-request-list${genericStyle}`]}>
       {fetchedData.requests.map((value, index) => (
-        <li key={value.username} className={styles["friend-request-list-item"]}>
-          <span className={styles["friend-request-list-username"]}>
+        <li
+          key={value.username}
+          className={styles[`friend-request-list-item${genericStyle}`]}
+        >
+          <span
+            className={styles[`friend-request-list-username${genericStyle}`]}
+          >
             {value.username}
           </span>
           <FriendRequestButton

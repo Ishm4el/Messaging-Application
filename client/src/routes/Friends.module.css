@@ -1,15 +1,51 @@
-.friend-requests-button {
-  background-color: gray;
-  &:hover {
-    background-color: darkgray;
-  }
-}
-
 .ul {
   list-style: none;
   display: flex;
   padding: 0;
   margin-bottom: 1dvh;
+}
+
+.li {
+  & > button {
+    margin-right: 0.25dvw;
+    background-color: hsl(var(--ccolor1), 100%, 60%);
+    color: black;
+    border-right: 0.15rem solid var(--bgcolord);
+    border-bottom: 0.15rem solid var(--bgcolord);
+    border-top: 0.15rem solid var(--bgcolorl);
+    border-left: 0.15rem solid var(--bgcolorl);
+    &:hover {
+      background-color: hsl(var(--ccolor1), 100%, 50%);
+      cursor: pointer;
+    }
+  }
+}
+
+.li-dark {
+  composes: li;
+  & > button {
+    background-color: hsl(var(--ccolor1), 100%, 10%);
+    color: white;
+    border-right: 0.15rem solid var(--bgcolord);
+    border-bottom: 0.15rem solid var(--bgcolord);
+    border-top: 0.15rem solid var(--bgcolorl);
+    border-left: 0.15rem solid var(--bgcolorl);
+    &:hover {
+      background-color: hsl(var(--ccolor1), 100%, 20%);
+      cursor: pointer;
+      border-right: 0.15rem solid var(--bgcolorl);
+      border-bottom: 0.15rem solid var(--bgcolorl);
+      border-top: 0.15rem solid var(--bgcolord);
+      border-left: 0.15rem solid var(--bgcolord);
+    }
+  }
+}
+
+.friend-requests-button {
+  background-color: gray;
+  &:hover {
+    background-color: darkgray;
+  }
 }
 
 .container {

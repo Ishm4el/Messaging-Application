@@ -1,7 +1,7 @@
 import { createContext, useContext, useState } from "react";
 import styles from "./SearchUser.module.css";
 import { useNavigate } from "react-router-dom";
-import { sectionStyle } from "../../utility/cssDetermine";
+import { genericStyle, sectionStyle } from "../../utility/cssDetermine";
 
 function PutButton({
   username,
@@ -58,9 +58,12 @@ function DisplaySearch({ found }: { found: FoundArray }) {
     <div className={styles["search-user-list-container"]}>
       <ul className={styles["search-user-list"]}>
         {found.map((e, index, array) => (
-          <li className={styles["search-user-list-item"]} key={e.username}>
+          <li
+            className={styles[`search-user-list-item${genericStyle}`]}
+            key={e.username}
+          >
             <span
-              className={styles["search-user-list-username"]}
+              className={styles[`search-user-list-username${genericStyle}`]}
               onClick={() => navigate(`/profile/${e.username}`)}
             >
               {e.username}
@@ -192,10 +195,7 @@ export default function SearchUser() {
 
   return (
     <FoundContext.Provider value={{ found, setFound }}>
-      <section
-        className={styles[sectionStyle]}
-        about="Search for a new friend"
-      >
+      <section className={styles[sectionStyle]} about="Search for a new friend">
         <h2 className={styles["search-user-title"]}>Search User</h2>
         <SearchForm
           seekingUser={seekingUser}

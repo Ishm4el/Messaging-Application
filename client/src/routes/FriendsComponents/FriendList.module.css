@@ -10,14 +10,31 @@
   composes: list from "./friendInterface.module.css";
 }
 
+.friend-list-dark {
+  composes: list-dark from "./friendInterface.module.css";
+}
+
+.friend-list-item-settings {
+  cursor: pointer;
+  padding: 0.25rem;
+}
+
 .friend-list-item {
   composes: list-item from "./friendInterface.module.css";
-  padding: 0.25rem;
-  cursor: pointer;
+  composes: friend-list-item-settings;
+}
+
+.friend-list-item-dark {
+  composes: list-item-dark from "./friendInterface.module.css";
+  composes: friend-list-item-settings;
 }
 
 .friend-list-item-value {
   cursor: pointer;
+}
+
+.friend-list-item-value-dark {
+  composes: friend-list-item-value;
 }
 
 .search-user-list-username {

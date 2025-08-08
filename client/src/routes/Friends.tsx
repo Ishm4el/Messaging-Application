@@ -31,7 +31,7 @@ function FriendsMain({
         }}
       >
         <ul className={styles["ul"]}>
-          <li className={styles["li"]}>
+          <li className={styles[`li${genericStyle}`]}>
             <button
               value="Friend List"
               onClick={(e) => setView(e.currentTarget.value)}
@@ -39,7 +39,7 @@ function FriendsMain({
               Friends
             </button>
           </li>
-          <li>
+          <li className={styles[`li${genericStyle}`]}>
             <button
               value="Search"
               onClick={(e) => setView(e.currentTarget.value)}
@@ -47,7 +47,7 @@ function FriendsMain({
               Search User
             </button>
           </li>
-          <li>
+          <li className={styles[`li${genericStyle}`]}>
             <button
               className={
                 styles[friendRequestCount > 0 ? "friend-requests-button" : ""]

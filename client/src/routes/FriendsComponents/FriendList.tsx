@@ -3,7 +3,7 @@ import styles from "./FriendList.module.css";
 import { UseFetchGetExternal } from "../../components/useFetchGet";
 import { useFriendContext } from "../FriendsComponents/FriendContext";
 import { Link, useNavigate } from "react-router-dom";
-import { sectionStyle } from "../../utility/cssDetermine";
+import { genericStyle, sectionStyle } from "../../utility/cssDetermine";
 
 function filterList({ list, search, filterOnProperty }: NewType) {
   if (search !== "") {
@@ -36,18 +36,18 @@ function SearchFilter({
 function FriendListContainer({ friendList }: { friendList: FriendList }) {
   const navigate = useNavigate();
   return (
-    <div className={styles["friend-list-container"]}>
+    <div className={styles[`friend-list-container${genericStyle}`]}>
       {friendList.length !== 0 ? (
-        <ul className={styles["friend-list"]}>
+        <ul className={styles[`friend-list${genericStyle}`]}>
           {friendList.map((value) => {
             return (
               <li
                 key={value.username}
-                className={styles["friend-list-item"]}
+                className={styles[`friend-list-item${genericStyle}`]}
                 onClick={() => navigate(`/message/${value.username}`)}
               >
                 <span
-                  className={styles["friend-list-item-value"]}
+                  className={styles[`friend-list-item-value${genericStyle}`]}
                   onClick={() => navigate(`/profile/${value.username}`)}
                 >
                   {value.username}

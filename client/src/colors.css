@@ -11,14 +11,17 @@
   --bgcolord: hsl(var(--color2), 100%, 10%);
 
   --sectioncolorl: hsl(var(--color3), 100%, 95%);
-  --sectioncolord: hsl(var(--color3), 20%, 50%);
+  --sectioncolord: hsl(var(--color3), 20%, 30%);
 
   --cardcolorl: hsl(var(--color3), 100%, 90%);
   --cardcolord: hsl(var(--color3), 20%, 55%);
 
+  --itemcolorl: hsl(var(--color3), 100%, 93%);
+  --itemcolord: hsl(var(--color3), 100%, 53%);
+
   --titlecolorl: hsl(var(--color2), 100%, 75%);
   --titlecolord: hsl(var(--color2), 100%, 95%);
 
-  --fontcolorl: hsl(var(--color1), 100%, 77%);
-  --fontcolord: hsl(var(--color1), 100%, 92%);
+  --fontcolorl: hsl(var(--color1), 100%, 0%);
+  --fontcolord: hsl(var(--color1), 100%, 100%);
 }
