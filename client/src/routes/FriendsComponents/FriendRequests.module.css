@@ -7,6 +7,21 @@
   background-color: #fff;
 }
 
+.section-header {
+  display: flex;
+  gap: 1dvw;
+  & > button {
+    background-color: hsl(var(--color1), 90%, 50%);
+    cursor: pointer;
+    &:hover {
+      background-color: hsl(var(--color1), 90%, 70%);
+    }
+  }
+}
+.section-header-dark {
+  composes: section-header;
+}
+
 .friend-request-list {
   composes: list from "./friendInterface.module.css";
 }

@@ -1,3 +1,4 @@
+import { useReducer } from "react";
 import fetchPut from "../../components/fetchPut";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
 import { genericStyle, sectionStyle } from "../../utility/cssDetermine";
@@ -140,7 +141,7 @@ function FriendRequestList({
   );
 }
 
-export default function FriendRequests() {
+function FriendRequestContent() {
   const { error, fetchedData, loading, setFetchedData } = UseFetchGetInternal({
     link: "friends/requests",
   });
@@ -151,27 +152,39 @@ export default function FriendRequests() {
       <></>
     );
   if (error) return <span>Error</span>;
+
+  return (
+    (fetchedData !== null &&
+      fetchedData !== undefined &&
+      typeof fetchedData === "object" &&
+      "requests" in fetchedData &&
+      Array.isArray(fetchedData.requests) &&
+      fetchedData.requests.length > 0 && (
+        <FriendRequestList
+          fetchedData={
+            fetchedData as {
+              [key: string]: unknown;
+              requests: { username: string }[];
+            }
+          }
+          setFetchedData={setFetchedData}
+        />
+      )) || (
+      <h3>You currently do not have any friend requests at this moment</h3>
+    )
+  );
+}
+
+export default function FriendRequests() {
+  const [, forceUpdate] = useReducer((x) => x + 1, 0);
+
   return (
     <section className={styles[sectionStyle]}>
-      <h2>Your Friend Requests</h2>
-      {(fetchedData !== null &&
-        fetchedData !== undefined &&
-        typeof fetchedData === "object" &&
-        "requests" in fetchedData &&
-        Array.isArray(fetchedData.requests) &&
-        fetchedData.requests.length > 0 && (
-          <FriendRequestList
-            fetchedData={
-              fetchedData as {
-                [key: string]: unknown;
-                requests: { username: string }[];
-              }
-            }
-            setFetchedData={setFetchedData}
-          />
-        )) || (
-        <h3>You currently do not have any friend requests at this moment</h3>
-      )}
+      <div className={styles[`section-header${genericStyle}`]}>
+        <h2>Your Friend Requests</h2>
+        <button onClick={forceUpdate}>Reload &#x27F3;</button>
+      </div>
+      <FriendRequestContent />
     </section>
   );
 }
