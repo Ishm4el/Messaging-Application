@@ -3,27 +3,48 @@
   justify-content: flex-start;
   align-items: center;
 }
+.main-dark {
+  composes: main-dark from "./main.module.css";
+  justify-content: flex-start;
+  align-items: center;
+}
 
 .form {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: lavender;
+  background-color: #e6e6fa;
   padding: 5dvh 0;
   gap: 3dvh;
   margin: 1dvh 0 0 0;
+}
+.form-dark {
+  composes: form;
+  background-color: var(--cardcolord);
 }
 
 .section {
   composes: section from "./main.module.css";
   background-color: hsla(var(--color1), 100%, 99%, 50%);
   gap: 0;
-
+}
+.section-dark {
+  composes: section-dark from "./main.module.css";
+  background-color: hsla(var(--color1), 100%, 33%, 50%);
+  gap: 0;
 }
 
 .input-container {
   display: flex;
   gap: 1dvw;
-  padding: 2dvh
+  padding: 2dvh;
+  color: black;
+}
+.input-container-dark {
+  composes: input-container;
+  color: white;
+  & > input {
+    background-color: lightgray;
+  }
 }

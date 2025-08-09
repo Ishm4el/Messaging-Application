@@ -1,6 +1,7 @@
 import styles from "./LogIn.module.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
+import { genericStyle, mainStyle, sectionStyle } from "../utility/cssDetermine";
 export default function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -43,11 +44,14 @@ export default function LogIn() {
   };
 
   return (
-    <main className={styles["main"]}>
-      <section className={styles["section"]}>
+    <main className={styles[mainStyle]}>
+      <section className={styles[sectionStyle]}>
         <h1 className={styles["header"]}>Logging In</h1>
-        <form className={styles["form"]} onSubmit={formHandlerLogin}>
-          <div className={styles["input-container"]}>
+        <form
+          className={styles[`form${genericStyle}`]}
+          onSubmit={formHandlerLogin}
+        >
+          <div className={styles[`input-container${genericStyle}`]}>
             <label htmlFor="username">Username:</label>
             <input
               type="username"
@@ -58,7 +62,7 @@ export default function LogIn() {
               required
             />
           </div>
-          <div className={styles["input-container"]}>
+          <div className={styles[`input-container${genericStyle}`]}>
             <label htmlFor="password">Password:</label>
             <input
               type="password"

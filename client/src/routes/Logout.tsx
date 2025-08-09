@@ -4,7 +4,7 @@ import { Navigate, useOutletContext } from "react-router-dom";
 export default function Logout() {
   const outProps: { setLogged: React.Dispatch<React.SetStateAction<boolean>> } =
     useOutletContext();
-  localStorage.clear();
+  localStorage.removeItem("username");
   useEffect(() => {
     fetch("http://localhost:3000/authorization/logout", {
       method: "POST",
