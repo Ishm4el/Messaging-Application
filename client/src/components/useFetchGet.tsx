@@ -14,7 +14,7 @@ interface UseFetchExternalArguments<T> extends UseFetchInternalArguments {
 
 interface UseFetchExternal {
   loading: boolean;
-  error: object | null;
+  error: FetchError | null;
 }
 
 interface UseFetchInternal<T> extends UseFetchExternal {
@@ -28,7 +28,7 @@ export function UseFetchGetExternal<T>({
   setFetchedData,
 }: UseFetchExternalArguments<T>): UseFetchExternal {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<object | null>(null);
+  const [error, setError] = useState<FetchError | null>(null);
   const navigate = useNavigate();
   const { setLogged } = useAuthorizedContext();
   useEffect(() => {
@@ -43,7 +43,7 @@ export function UseFetchGetExternal<T>({
         console.log(resJson);
         setFetchedData(resJson);
       })
-      .catch((err) => {
+      .catch((err: FetchError) => {
         if (
           err.status === 403 &&
           err.message === "User must be signed in to access this route"
@@ -65,13 +65,20 @@ export function UseFetchGetInternal<T>({
   dependecy = [null],
 }: UseFetchInternalArguments): UseFetchInternal<T> {
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<object | null>(null);
+  const [error, setError] = useState<FetchError | null>(null);
   const [fetchedData, setFetchedData] = useState<T | null>(null);
   useEffect(() => {
     fetchGet(link)
       .then((res) => res.json())
-      .then((resJson) => setFetchedData(resJson))
-      .catch((err: object) => setError(err))
+      .then((resJson) => {
+        if (
+          resJson.status === 403 &&
+          resJson.message === "User must be signed in to access this route"
+        ) {
+          throw resJson;
+        } else setFetchedData(resJson);
+      })
+      .catch((err: FetchError) => setError(err))
       .finally(() => setLoading(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [...dependecy]);

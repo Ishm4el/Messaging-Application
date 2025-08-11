@@ -1,6 +1,6 @@
 import styles from "./Profile.module.css";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import fetchPost from "../../components/fetchPost";
 import {
   cardStyle,
@@ -91,7 +91,21 @@ export function CurrentUserProfile() {
   });
 
   if (loading) return <>Loading!</>;
-  if (error) return <>Error: {JSON.stringify(error)}</>;
+
+  if (error !== null) {
+    localStorage.removeItem("username");
+    return (
+      <article>
+        <h1>{error.name}</h1>
+        <h2>
+          {error.message}; it is possible that the cookie has expired - please
+          try signing in again.
+        </h2>
+        <Link to={"/log_in"}>Click here to go to the sign in page.</Link>
+      </article>
+    );
+  }
+
   if (fetchedData) {
     return (
       <article className={styles[`article${genericStyle}`]}>

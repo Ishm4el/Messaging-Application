@@ -2,6 +2,7 @@ import { useCallback, useState } from "react";
 import fetchPut from "../../components/fetchPut";
 import { UseFetchGetInternal } from "../../components/useFetchGet";
 import styles from "./Profile.module.css";
+import { Link } from "react-router-dom";
 
 export function OtherUserProfile({ username }: { username: string }) {
   const [notificationMessage, setNotifcationMessage] = useState("");
@@ -24,7 +25,17 @@ export function OtherUserProfile({ username }: { username: string }) {
   );
 
   if (loading) return <span>loading</span>;
-  if (error) return <span>error!</span>;
+  if (error)
+    return (
+      <article>
+        <h1>{error.name}</h1>
+        <h2>
+          {error.message}; it is possible that the cookie has expired - please
+          try signing in again.
+        </h2>
+        <Link to={"/log_in"}>Click here to go to the sign in page.</Link>
+      </article>
+    );
   if (fetchedData) {
     return (
       <section className={styles["section"]}>

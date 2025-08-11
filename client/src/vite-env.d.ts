@@ -76,3 +76,9 @@ type NewType = {
   search: string;
   filterOnProperty: string;
 };
+
+interface FetchError {
+  status: number;
+  message: string;
+  name: string;
+}
