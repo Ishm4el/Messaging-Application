@@ -1,17 +1,46 @@
 .main {
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+  composes: main from "./main.module.css";
+  justify-content: flex-start;
   align-items: center;
-  background-color: azure;
-  padding: 5dvh 0 10dvh;
+}
+
+.main-dark {
+  composes: main-dark from "./main.module.css";
+  justify-content: flex-start;
+  align-items: center;
+}
+
+.section {
+  composes: section from "./main.module.css";
+  background-color: hsla(var(--color1), 100%, 99%, 50%);
+  gap: 0;
+}
+.section-dark {
+  composes: section-dark from "./main.module.css";
+  background-color: hsla(var(--color1), 100%, 33%, 50%);
+  gap: 0;
 }
 
 .form {
+  composes: form from "./main.module.css";
+}
+
+.form-dark {
+  composes: form-dark from "./main.module.css";
+}
+
+.input-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: lavender;
-  width: 50dvw;
+  justify-content: space-between;
+  width: 100%;
+  gap: 1dvw;
+  padding: 2dvh;
+  color: black;
+}
+.input-container-dark {
+  composes: input-container;
+  color: white;
+  & > input {
+    background-color: lightgray;
+  }
 }

@@ -10,18 +10,10 @@
 }
 
 .form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background-color: #e6e6fa;
-  padding: 5dvh 0;
-  gap: 3dvh;
-  margin: 1dvh 0 0 0;
+  composes: form from "./main.module.css";
 }
 .form-dark {
-  composes: form;
-  background-color: var(--cardcolord);
+  composes: form-dark from "./main.module.css";
 }
 
 .section {
@@ -37,9 +29,11 @@
 
 .input-container {
   display: flex;
+  justify-content: space-between;
   gap: 1dvw;
   padding: 2dvh;
   color: black;
+  width: 100%;
 }
 .input-container-dark {
   composes: input-container;

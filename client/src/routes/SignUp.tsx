@@ -1,36 +1,37 @@
 import styles from "./SignUp.module.css";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-export default function SignUp() {
+import { genericStyle, mainStyle, sectionStyle } from "../utility/cssDetermine";
+
+function SignUpForm() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  return (
-    <main className={styles["main"]}>
-      <h1>Sign Up Form</h1>
-      <form
-        className={styles["form"]}
-        onSubmit={async (event) => {
-          event.preventDefault();
-          // alert(email + " " + username + " " + password);
-          const response = await fetch(
-            "http://localhost:3000/authorization/sign_up",
-            {
-              method: "POST",
-              mode: "cors",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ username, password, email }),
-            }
-          );
 
-          // const res = await response.json();
-          if (response.status === 200) {
-            navigate("/");
-          }
-        }}
-      >
-        <label htmlFor="email">Email</label>
+  const formHandler: React.FormEventHandler = async (
+    event: React.FormEvent
+  ) => {
+    event.preventDefault();
+    const response = await fetch(
+      "http://localhost:3000/authorization/sign_up",
+      {
+        method: "POST",
+        mode: "cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, email }),
+      }
+    );
+
+    if (response.status === 200) {
+      navigate("/");
+    }
+  };
+
+  return (
+    <form className={styles[`form${genericStyle}`]} onSubmit={formHandler}>
+      <div className={styles[`input-container${genericStyle}`]}>
+        <label htmlFor="email">Email: </label>
         <input
           type="email"
           id="userEmail"
@@ -39,7 +40,9 @@ export default function SignUp() {
           onChange={(event) => setEmail(event.target.value)}
           required
         />
-        <label htmlFor="username">Username</label>
+      </div>
+      <div className={styles[`input-container${genericStyle}`]}>
+        <label htmlFor="username">Username: </label>
         <input
           type="text"
           id="username"
@@ -48,7 +51,9 @@ export default function SignUp() {
           onChange={(event) => setUsername(event.target.value)}
           required
         />
-        <label htmlFor="password">Password</label>
+      </div>
+      <div className={styles[`input-container${genericStyle}`]}>
+        <label htmlFor="password">Password: </label>
         <input
           type="password"
           name="password"
@@ -57,8 +62,19 @@ export default function SignUp() {
           onChange={(event) => setPassword(event.target.value)}
           required
         />
-        <button type="submit">Sign Up</button>
-      </form>
+      </div>
+      <button type="submit">Sign Up</button>
+    </form>
+  );
+}
+
+export default function SignUp() {
+  return (
+    <main className={styles[mainStyle]}>
+      <section className={styles[sectionStyle]}>
+        <h1>Sign Up Form</h1>
+        <SignUpForm />
+      </section>
     </main>
   );
 }

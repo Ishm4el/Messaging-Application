@@ -22,9 +22,14 @@
   display: flex;
   flex-flow: column;
   padding: 1dvh 1dvw;
-  gap: 3dvh;
-  /* background-color: hsl(var(--color2), 50%, 85%); */
+  gap: 1dvh;
+  background-color: hsl(var(--color2), 50%, 85%);
   background-color: white;
+
+  & > h1 {
+    text-align: center;
+    margin-top: 1dvh;
+  }
 }
 
 .section-dark {
@@ -47,6 +52,21 @@
   composes: card;
   background-color: var(--cardcolord);
   color: var(--fontcolord);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #e6e6fa;
+  padding: 5dvh 0;
+  gap: 3dvh;
+  margin: 1dvh 0 0 0;
+}
+.form-dark {
+  composes: form;
+  background-color: var(--cardcolord);
 }
 
 @media (max-width: 800px) {
