@@ -2,6 +2,8 @@ import styles from "./LogIn.module.css";
 import { useNavigate, useOutletContext } from "react-router-dom";
 import { useState } from "react";
 import { genericStyle, mainStyle, sectionStyle } from "../utility/cssDetermine";
+import { Bounce, ToastContainer, toast } from "react-toastify";
+
 export default function LogIn() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -9,6 +11,19 @@ export default function LogIn() {
   const outProps: {
     setLogged: React.Dispatch<React.SetStateAction<boolean>>;
   } = useOutletContext();
+
+  const notfiy = () =>
+    toast.error("Failed to log in", {
+      position: "top-right",
+      autoClose: 5000,
+      hideProgressBar: false,
+      closeOnClick: false,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: `${genericStyle === "" ? "light" : "dark"}`,
+      transition: Bounce,
+    });
 
   const formHandlerLogin = async (event) => {
     event.preventDefault();
@@ -28,8 +43,9 @@ export default function LogIn() {
     console.log(res);
 
     if (status === 401) {
-      if (res.message === "username") alert("No matching username");
-      if (res.message === "password") alert("Incorrect password");
+      // if (res.message === "username") alert("No matching username");
+      // if (res.message === "password") alert("Incorrect password");
+      notfiy();
     }
 
     if (status === 200) {
@@ -76,6 +92,7 @@ export default function LogIn() {
           <button type="submit">Log In</button>
         </form>
       </section>
+      <ToastContainer />
     </main>
   );
 }

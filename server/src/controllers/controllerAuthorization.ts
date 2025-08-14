@@ -59,8 +59,8 @@ const login: RequestValidateAndHandler = [
     if (!errors.isEmpty()) {
       throw new ExpressError(
         "Sign in form is not filled out",
-        "Incomplete Form",
-        400
+        errors.array()[0].msg,
+        401
       );
     }
     next();
