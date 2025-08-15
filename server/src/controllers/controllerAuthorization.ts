@@ -15,30 +15,45 @@ import {
   validateLogin,
 } from "./validators/validateAuthorization";
 import { RequestValidateAndHandler } from "./controllers-env";
+import { PrismaClientKnownRequestError } from "@prisma/client/runtime/library";
 
 const signUp: RequestValidateAndHandler = [
   ...signUpValidator,
   async (req: Request, res: Response) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      throw new ExpressError(
-        "email, password, or username is missing",
-        "Icomplete Form",
-        400
-      );
+    const error = validationResult(req).array({ onlyFirstError: true })[0];
+
+    if (error) {
+      throw new ExpressError(error.msg, "Invalid input", 400);
     }
 
     const data = matchedData<SignUpReqData>(req);
 
     const hashedPassword: string = await bcrypt.hash(data.password, 10);
 
-    const row = await prisma.user.create({
-      data: {
-        email: data.email,
-        password: hashedPassword,
-        username: data.username,
-      },
-    });
+    const row = await prisma.user
+      .create({
+        data: {
+          email: data.email,
+          password: hashedPassword,
+          username: data.username,
+        },
+      })
+      .catch((e: PrismaClientKnownRequestError) => {
+        // console.log(e);
+        if (
+          e.code === "P2002" &&
+          e.meta?.target &&
+          Array.isArray(e.meta.target) &&
+          e.meta.target.length > 0
+        ) {
+          const target: string = e.meta.target[0];
+          throw new ExpressError(
+            `${target} is not unique, please enter something different`,
+            target,
+            409
+          );
+        }
+      });
 
     if (!row) {
       throw new ExpressError(

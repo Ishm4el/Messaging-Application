@@ -9,6 +9,11 @@ type SignUpReqData = username & password & email;
 const createUsernameChain = () =>
   body("username").trim().escape().isAlphanumeric().withMessage("username");
 
+const createUsernameSignUpChain = () => 
+  createUsernameChain().custom(async inputUsername => {
+    
+  })
+
 const createEmailChain = () =>
   body("email").trim().escape().isEmail().withMessage("email");
 

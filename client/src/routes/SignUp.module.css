@@ -44,3 +44,13 @@
     background-color: lightgray;
   }
 }
+
+.password-requirements {
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+}
+
+.valid {
+  color: green
+}
