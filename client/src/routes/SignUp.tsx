@@ -3,6 +3,14 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { genericStyle, mainStyle, sectionStyle } from "../utility/cssDetermine";
 import { Bounce, toast, ToastContainer, ToastOptions } from "react-toastify";
+import {
+  ValidPasswordProvider,
+  ValidPasswordRequirements,
+} from "../utility/ValidPasswordProvider";
+import {
+  checkValidPassword,
+  useValidPasswordContext,
+} from "../utility/ValidPasswordContext";
 
 const notifySettings: ToastOptions = {
   position: "top-right",
@@ -19,14 +27,8 @@ const notifySettings: ToastOptions = {
 function SignUpForm() {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [validPassword, setValidPassword] = useState({
-    uppercase: false,
-    lowercase: false,
-    number: false,
-    special: false,
-    length: false,
-  });
+  const { validPassword, password, setPassword } = useValidPasswordContext();
+
   const navigate = useNavigate();
 
   const formHandler: React.FormEventHandler = async (
@@ -34,16 +36,15 @@ function SignUpForm() {
   ) => {
     event.preventDefault();
 
-    for (const e in validPassword) {
-      if (validPassword[e] === false) {
-        const notfiy = () =>
-          toast.error(
-            `${e} requirement in password is not met`,
-            notifySettings
-          );
-        notfiy();
-        return;
-      }
+    const anyPasswordError = checkValidPassword({ validPassword });
+    if (anyPasswordError) {
+      const notfiy = () =>
+        toast.error(
+          `${anyPasswordError} requirement in password is not met`,
+          notifySettings
+        );
+      notfiy();
+      return;
     }
 
     const response = await fetch(
@@ -71,47 +72,6 @@ function SignUpForm() {
   };
 
   useEffect(() => {
-    if (/[A-Z]/.test(password)) {
-      setValidPassword((value) => {
-        return { ...value, uppercase: true };
-      });
-    } else {
-      setValidPassword((value) => {
-        return { ...value, uppercase: false };
-      });
-    }
-    if (/[a-z]/.test(password))
-      setValidPassword((value) => {
-        return { ...value, lowercase: true };
-      });
-    else
-      setValidPassword((value) => {
-        return { ...value, lowercase: false };
-      });
-    if (/[0-9]/.test(password))
-      setValidPassword((value) => {
-        return { ...value, number: true };
-      });
-    else
-      setValidPassword((value) => {
-        return { ...value, number: false };
-      });
-    if (/[#?!@$%^&*-]/.test(password))
-      setValidPassword((value) => {
-        return { ...value, special: true };
-      });
-    else
-      setValidPassword((value) => {
-        return { ...value, special: false };
-      });
-    if (/^.{6,}$/.test(password))
-      setValidPassword((value) => {
-        return { ...value, length: true };
-      });
-    else
-      setValidPassword((value) => {
-        return { ...value, length: false };
-      });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [password]);
 
@@ -151,24 +111,21 @@ function SignUpForm() {
             required
           />
         </div>
-        <div className={styles[`password-requirements${genericStyle}`]}>
-          <h5>Password Requirements:</h5>
-          <h6 className={styles[validPassword.length ? "valid" : "invalid"]}>
-            * Must be atleast 6 characters length
-          </h6>
-          <h6 className={styles[validPassword.lowercase ? "valid" : "invalid"]}>
-            * Must contain 1 lowercase letter
-          </h6>
-          <h6 className={styles[validPassword.uppercase ? "valid" : "invalid"]}>
-            * Must contain 1 uppercase letter
-          </h6>
-          <h6 className={styles[validPassword.number ? "valid" : "invalid"]}>
-            * Must contain 1 number
-          </h6>
-          <h6 className={styles[validPassword.special ? "valid" : "invalid"]}>
-            * Must contain 1 special character
-          </h6>
-        </div>
+        <ValidPasswordRequirements
+          divClassName={styles[`password-requirements${genericStyle}`]}
+          h5ClassName=""
+          h6ClassNameLength={styles[validPassword.length ? "valid" : "invalid"]}
+          h6ClassNameLowercase={
+            styles[validPassword.lowercase ? "valid" : "invalid"]
+          }
+          h6ClassNameUppercase={
+            styles[validPassword.uppercase ? "valid" : "invalid"]
+          }
+          h6ClassNameNumber={styles[validPassword.number ? "valid" : "invalid"]}
+          h6ClassNameSpecial={
+            styles[validPassword.special ? "valid" : "invalid"]
+          }
+        />
       </div>
       <button type="submit">Sign Up</button>
       <ToastContainer />
@@ -178,11 +135,13 @@ function SignUpForm() {
 
 export default function SignUp() {
   return (
-    <main className={styles[mainStyle]}>
-      <section className={styles[sectionStyle]}>
-        <h1>Sign Up Form</h1>
-        <SignUpForm />
-      </section>
-    </main>
+    <ValidPasswordProvider>
+      <main className={styles[mainStyle]}>
+        <section className={styles[sectionStyle]}>
+          <h1>Sign Up Form</h1>
+          <SignUpForm />
+        </section>
+      </main>
+    </ValidPasswordProvider>
   );
 }

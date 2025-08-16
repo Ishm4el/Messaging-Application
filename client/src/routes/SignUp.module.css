@@ -50,7 +50,14 @@
   margin-right: auto;
   width: fit-content;
 }
+.password-requirements-dark {
+  composes: password-requirements;
+}
 
 .valid {
-  color: green
+  color: green;
+}
+
+.invalid {
+  color: red;
 }
